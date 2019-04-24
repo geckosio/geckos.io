@@ -8,10 +8,12 @@
 
 #### Geckos&#46;io offers real-time client/server communication over UDP using WebRTC and Node.js
 
-[![Dependency Status](https://david-dm.org/geckosio/geckos.io/status.svg?path=packages/server)](https://david-dm.org/geckosio/geckos.io?path=packages%2Fserver)
-[![devDependency Status](https://david-dm.org/geckosio/geckos.io/dev-status.svg?path=packages/server)](https://david-dm.org/geckosio/geckos.io?path=packages%2Fserver&type=dev)
-[![NPM version](https://img.shields.io/npm/v/@geckos.io/server.svg?color=%230fc625)](https://www.npmjs.com/package/@geckos.io/server)
-[![Downloads](https://img.shields.io/npm/dm/@geckos.io/server.svg?style=flat)](https://www.npmjs.com/package/@geckos.io/server)
+[![Dependency Status](https://david-dm.org/geckosio/geckos.io/status.svg?path=packages/server&style=flat-square)](https://david-dm.org/geckosio/geckos.io?path=packages%2Fserver)
+[![devDependency Status](https://david-dm.org/geckosio/geckos.io/dev-status.svg?path=packages/server&style=flat-square)](https://david-dm.org/geckosio/geckos.io?path=packages%2Fserver&type=dev)
+[![NPM version](https://img.shields.io/npm/v/@geckos.io/server.svg?style=flat-square)](https://www.npmjs.com/package/@geckos.io/server)
+[![Downloads](https://img.shields.io/npm/dm/@geckos.io/server.svg?style=flat-square)](https://www.npmjs.com/package/@geckos.io/server)
+![Node version](https://img.shields.io/node/v/@geckos.io/server.svg?style=flat-square)
+![Code style](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)
 
 </div>
 
