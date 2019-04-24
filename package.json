@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "bundle": "cd packages/client && npm run bundle:latest",
     "preinstall": "npm link @geckos.io/client && npm link @geckos.io/server",
     "watch:client": "tsc --build --watch packages/client/tsconfig.json",
     "watch:common": "tsc --build --watch packages/common/tsconfig.json",

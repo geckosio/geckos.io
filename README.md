@@ -14,6 +14,7 @@
 [![Downloads](https://img.shields.io/npm/dm/@geckos.io/server.svg?style=flat-square)](https://www.npmjs.com/package/@geckos.io/server)
 ![Node version](https://img.shields.io/node/v/@geckos.io/server.svg?style=flat-square)
 ![Code style](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)
+[![Minified bundle](https://img.shields.io/github/size/geckosio/geckos.io/bundles/latest/geckos.io-client.latest.min.js.svg?label=minified%20bundle&style=flat-square)](https://github.com/geckosio/geckos.io/tree/master/bundles/versions)
 
 </div>
 
@@ -37,6 +38,9 @@ npm install @geckos.io/client @geckos.io/server
 
 ```js
 import geckos from '@geckos.io/client'
+
+// or add a minified version to your index.html file
+// https://github.com/geckosio/geckos.io/tree/master/bundles/versions
 
 const channel = geckos()
 

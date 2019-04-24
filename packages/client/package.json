@@ -34,9 +34,12 @@
     "node": ">=10.0.0"
   },
   "scripts": {
+    "bundle:latest": "../../node_modules/.bin/webpack --config webpack/webpack.prod.js  --packageVersion=latest",
+    "bundle:version": "../../node_modules/.bin/webpack --config webpack/webpack.prod.js  --packageVersion=${npm_package_version}",
     "install:dev": "npm link @geckos.io/common && npm i",
     "build": "tsc --build tsconfig.json",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "postpublish": "npm run bundle:version && npm run bundle:latest"
   },
   "dependencies": {
     "@geckos.io/common": "0.0.2"
