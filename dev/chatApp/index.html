@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <style>
+      html,
+      body {
+        font-family: BlinkMacSystemFont, -apple-system, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans',
+          'Droid Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        background-color: #2c2e38;
+        color: #f8f8f2;
+      }
+    </style>
+    <h1>
+      geckos.io dev
+    </h1>
+    <form>
+      <input type="text" name="text" id="text" value="" />
+      <input type="submit" value="submit" id="button" />
+    </form>
+    <script>
+      let input = document.getElementById('button')
+      if (input)
+        input.addEventListener('click', e => {
+          e.preventDefault()
+        })
+    </script>
+    <ul id="list"></ul>
+  </body>
+</html>

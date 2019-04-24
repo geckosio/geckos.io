@@ -1,0 +1,8 @@
+/.vscode
+/dev/dist
+/node_modules
+*node_modules*
+/lib
+*/client/lib*
+*/common/lib*
+*/server/lib*

@@ -1,0 +1,35 @@
+{
+  "name": "@geckos.io/server",
+  "version": "0.0.1",
+  "description": "Real-time client/server communication over UDP using WebRTC and Node.js",
+  "main": "lib/index.js",
+  "author": "Yannick Deubel (https://github.com/yandeu)",
+  "license": "BSD-3-Clause",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/geckosio/geckos.io.git"
+  },
+  "bugs": {
+    "url": "https://github.com/geckosio/geckos.io/issues"
+  },
+  "homepage": "https://github.com/geckosio/geckos.io#readme",
+  "directories": {
+    "lib": "lib"
+  },
+  "engines": {
+    "node": "^10.0.0"
+  },
+  "scripts": {
+    "install:dev": "npm link @geckos.io/common && npm i",
+    "build": "tsc --build tsconfig.json",
+    "prepublish": "npm run build"
+  },
+  "dependencies": {
+    "eventemitter3": "^3.1.0",
+    "@geckos.io/common": "*",
+    "wrtc": "^0.3.7"
+  },
+  "devDependencies": {
+    "@types/node": "^11.13.7"
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "name": "geckos.io",
+  "description": "Real-time client/server communication over UDP using WebRTC and Node.js",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "preinstall": "npm link @geckos.io/client && npm link @geckos.io/server",
+    "watch:client": "tsc --build --watch packages/client/tsconfig.json",
+    "watch:common": "tsc --build --watch packages/common/tsconfig.json",
+    "watch:server": "tsc --build --watch packages/server/tsconfig.json",
+    "dev": "npm-run-all --parallel dev:* watch:*",
+    "dev:webpack-client": "webpack --config dev/webpack/webpack.client.js --watch",
+    "dev:webpack-server": "webpack --config dev/webpack/webpack.server.js --watch",
+    "dev:nodemon": "nodemon dev/dist/server/server.js",
+    "prettier": "prettier --write 'src/**/*.ts' && prettier --write 'dev/chatApp/**/*.ts'"
+  },
+  "keywords": [
+    "realtime",
+    "framework",
+    "webrtc",
+    "nodejs",
+    "udp",
+    "sctp",
+    "events",
+    "io"
+  ],
+  "author": "Yannick Deubel (https://github.com/yandeu)",
+  "license": "BSD-3-Clause",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/geckosio/geckos.io.git"
+  },
+  "bugs": {
+    "url": "https://github.com/geckosio/geckos.io/issues"
+  },
+  "homepage": "https://github.com/geckosio/geckos.io#readme",
+  "directories": {
+    "lib": "lib"
+  },
+  "engines": {
+    "node": "^10.0.0"
+  },
+  "dependencies": {
+    "@geckos.io/client": "*",
+    "@geckos.io/server": "*",
+    "source-map-support": "^0.5.11"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.4",
+    "@types/express": "^4.16.1",
+    "@types/node": "^11.13.0",
+    "@types/uuid": "^3.4.4",
+    "copy-webpack-plugin": "^5.0.2",
+    "express": "^4.16.4",
+    "html-webpack-plugin": "^3.2.0",
+    "nodemon": "^1.18.11",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^1.17.0",
+    "ts-loader": "^5.3.3",
+    "typescript": "^3.4.2",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0",
+    "webpack-node-externals": "^1.7.2"
+  }
+}
