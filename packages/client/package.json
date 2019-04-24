@@ -5,9 +5,23 @@
   "main": "lib/index.js",
   "author": "Yannick Deubel (https://github.com/yandeu)",
   "license": "BSD-3-Clause",
+  "keywords": [
+    "real-time",
+    "framework",
+    "webrtc",
+    "wrtc",
+    "nodejs",
+    "udp",
+    "sctp",
+    "multiplayer",
+    "game",
+    "io",
+    "server"
+  ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/geckosio/geckos.io.git"
+    "url": "git://github.com/geckosio/geckos.io.git",
+    "directory": "packages/client"
   },
   "bugs": {
     "url": "https://github.com/geckosio/geckos.io/issues"
@@ -17,7 +31,7 @@
     "lib": "lib"
   },
   "engines": {
-    "node": "^10.0.0"
+    "node": ">=10.0.0"
   },
   "scripts": {
     "install:dev": "npm link @geckos.io/common && npm i",
