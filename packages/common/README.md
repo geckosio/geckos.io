@@ -1,5 +1,5 @@
-## geckos.io
+# @geckos.io/common
 
-Real-time client/server communication over UDP using WebRTC and Node.js.
+> This is the common module used by [@geckos.io/client](https://www.npmjs.com/package/@geckos.io/client) and [@geckos.io/server](https://www.npmjs.com/package/@geckos.io/server).
 
-Read the [docs on github](https://github.com/geckosio/geckos.io).
+Read the [documentation](https://github.com/geckosio/geckos.io) for more information.
