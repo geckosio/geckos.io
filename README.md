@@ -179,7 +179,8 @@ io.onConnection((channel: Channel) => {
 
 ## Examples
 
-- [Multiplayer Game with phaser.io](https://github.com/geckosio/phaser3-multiplayer-game-example)
+- [Multiplayer Game with phaser.io](https://github.com/geckosio/phaser3-multiplayer-game-example#readme)
+- [Simple Chat App Example](https://github.com/geckosio/simple-chat-app-example#readme)
 
 ## socket&#46;io vs geckos&#46;io vs peerjs
 
@@ -194,7 +195,7 @@ _TODO: Note some differences here._
 | Turn based Multiplayer Game<br>(_with authoritative server_)    |    &#9679;    |               |         |
 | Turn based Multiplayer Game<br>(_without authoritative server_) |    &#9679;    |               | &#9679; |
 | Chat App                                                        |    &#9679;    |               | &#9679; |
-| Any other App with Real-Time communication                      |    &#9679;    |               | &#9679; |
+| Any other App with Real-Time communication                      |    &#9679;    |    &#9679;    | &#9679; |
 
 ## License
 
