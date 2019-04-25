@@ -31,7 +31,7 @@
     "lib": "lib"
   },
   "engines": {
-    "node": ">=10.0.0"
+    "node": "8.x || 10.x || 11.x"
   },
   "scripts": {
     "bundle:latest": "../../node_modules/.bin/webpack --config webpack/webpack.prod.js  --packageVersion=latest",
