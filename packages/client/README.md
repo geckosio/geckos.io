@@ -5,7 +5,6 @@
 # @geckos.io/client
 
 [![Dependency Status](https://david-dm.org/geckosio/geckos.io/status.svg?path=packages/client&style=flat-square)](https://david-dm.org/geckosio/geckos.io?path=packages%2Fclient)
-[![devDependency Status](https://david-dm.org/geckosio/geckos.io/dev-status.svg?path=packages/client&style=flat-square)](https://david-dm.org/geckosio/geckos.io?path=packages%2Fclient&type=dev)
 [![NPM version](https://img.shields.io/npm/v/@geckos.io/client.svg?style=flat-square)](https://www.npmjs.com/package/@geckos.io/client)
 [![Downloads](https://img.shields.io/npm/dm/@geckos.io/client.svg?style=flat-square)](https://www.npmjs.com/package/@geckos.io/client)
 ![Node version](https://img.shields.io/node/v/@geckos.io/client.svg?style=flat-square)
