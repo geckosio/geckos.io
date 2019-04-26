@@ -39,7 +39,7 @@
     "lib": "lib"
   },
   "engines": {
-    "node": "8.x || 10.x || 11.x"
+    "node": "^8 || ^10 || ^11"
   },
   "dependencies": {
     "@geckos.io/client": "*",
