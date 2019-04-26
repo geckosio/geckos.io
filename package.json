@@ -38,9 +38,6 @@
   "directories": {
     "lib": "lib"
   },
-  "engines": {
-    "node": "^8 || ^10 || ^11"
-  },
   "dependencies": {
     "@geckos.io/client": "*",
     "@geckos.io/server": "*",

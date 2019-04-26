@@ -30,6 +30,9 @@
   "directories": {
     "lib": "lib"
   },
+  "engines": {
+    "node": "^8 || ^10 || ^11"
+  },
   "scripts": {
     "install:dev": "npm link @geckos.io/common && npm i",
     "build": "tsc --build tsconfig.json",
