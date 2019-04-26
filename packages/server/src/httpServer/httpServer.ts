@@ -10,15 +10,24 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
   const root = `/${prefix}/${version}`
   const rootRegEx = new RegExp(`/${prefix}/${version}`)
 
+  const evs = server.listeners('request').slice(0)
+  server.removeAllListeners('request')
+
   server.on('request', async (req: http.IncomingMessage, res: http.ServerResponse) => {
     const pathname = req.url ? url.parse(req.url, true).pathname : undefined
     const method = req.method
 
+    // if the request is not part of the rootRegEx,
+    // trigger the other server's (Express) events.
+    if (!pathname || !rootRegEx.test(pathname)) {
+      for (var i = 0; i < evs.length; i++) {
+        evs[i].call(server, req, res)
+      }
+    }
+
     if (pathname && rootRegEx.test(pathname)) {
       const path1 = pathname === `${root}/connections`
       const path2 = new RegExp(`${prefix}\/${version}\/connections\/[0-9a-zA-Z]+\/remote-description`).test(pathname)
-
-      if (!path1 && !path2) return
 
       SetCORS(res)
 
@@ -111,6 +120,10 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
               return
             }
           }
+        } else {
+          res.writeHead(404)
+          res.end()
+          return
         }
       }
     }

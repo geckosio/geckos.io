@@ -101,7 +101,6 @@ io.listen()
 ### Node.js HTTP Server
 
 ```js
-// TODO(yandeu) addServer() does not work yet
 const geckos = require('@geckos.io/server').default
 const http = require('http')
 const server = http.createServer()
@@ -115,7 +114,6 @@ server.listen(3000)
 ### Express
 
 ```js
-// TODO(yandeu) addServer() does not work yet
 const geckos = require('@geckos.io/server').default
 const http = require('http')
 const express = require('express')
@@ -125,7 +123,7 @@ const io = geckos()
 
 io.addServer(server)
 io.onConnection( channel => { ... })
-server.listen(3000);
+server.listen(3000)
 ```
 
 ## Deployment

@@ -38,17 +38,23 @@ export class GeckosServer {
 
     // start the server
     server.listen(port, () => {
-      console.log(`geckos signaling server is running on http://localhost:${port}`)
+      console.log(`Geckos.io signaling server is running on http://localhost:${port}`)
       server.once('close', () => {
         this.connectionsManager.connections.forEach((connection: Connection) => connection.close())
       })
     })
   }
 
-  // TODO(yandeu) this does not work yet
+  /**
+   * Add a existing http server.
+   * @param server Your http.Server.
+   */
   public addServer(server: http.Server) {
-    console.log(`NOTE: addServer() does not work well yet!`)
     HttpServer(server, this.connectionsManager)
+
+    server.once('close', () => {
+      this.connectionsManager.connections.forEach((connection: Connection) => connection.close())
+    })
   }
 
   get port() {

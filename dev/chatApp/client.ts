@@ -1,6 +1,6 @@
 import geckos, { Data, RawMessage } from '@geckos.io/client'
 
-const channel = geckos()
+const channel = geckos({ port: 3000 })
 
 const button = document.getElementById('button')
 const text = document.getElementById('text') as HTMLInputElement

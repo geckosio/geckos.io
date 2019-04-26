@@ -5,6 +5,7 @@ const ParseBody = async (req: http.IncomingMessage) => {
     let body: any = []
     req
       .on('error', error => {
+        console.log('ParseBody error: ', error.message)
         reject(error)
       })
       .on('data', chunk => {
