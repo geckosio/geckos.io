@@ -11,7 +11,8 @@ import {
   ChannelId,
   EventName,
   ConnectionEventCallbackServer,
-  EventCallbackRawMessage
+  EventCallbackRawMessage,
+  ServerOptions
 } from '@geckos.io/common/lib/typings'
 import SendMessage from '@geckos.io/common/lib/sendMessage'
 
@@ -21,13 +22,21 @@ export default class ServerChannel {
   private dataChannel: RTCDataChannel
   eventEmitter = new EventEmitter()
 
-  constructor(webrtcConnection: WebRTCConnection) {
+  constructor(webrtcConnection: WebRTCConnection, dataChannelOptions: ServerOptions) {
     this._id = webrtcConnection.id
     this._roomId = undefined
 
-    this.dataChannel = webrtcConnection.peerConnection.createDataChannel('geckos.io', {
-      ordered: false,
-      maxRetransmits: 0
+    const {
+      label = 'geckos.io',
+      ordered = false,
+      maxRetransmits = 0,
+      maxPacketLifeTime = undefined
+    } = dataChannelOptions
+
+    this.dataChannel = webrtcConnection.peerConnection.createDataChannel(label, {
+      ordered: ordered,
+      maxRetransmits: maxRetransmits,
+      maxPacketLifeTime: maxPacketLifeTime
     })
 
     this.dataChannel.onopen = () => {
@@ -79,6 +88,11 @@ export default class ServerChannel {
   /** Emit a message to all channels in the same room. */
   get room() {
     return {
+      /**
+       * Emit a message to the current room.
+       * @param eventName The event name.
+       * @param data The data to send.
+       */
       emit: (eventName: EventName, data: Data) => {
         bridge.emit(
           EVENTS.SEND_TO_ROOM,
@@ -95,6 +109,11 @@ export default class ServerChannel {
   /** Broadcast a message to all channels in the same room, except the sender's. */
   get broadcast() {
     return {
+      /**
+       * Emit a broadcasted message.
+       * @param eventName The event name.
+       * @param data The data to send.
+       */
       emit: (eventName: EventName, data: Data) => {
         bridge.emit(
           EVENTS.BROADCAST_MESSAGE,
@@ -114,6 +133,11 @@ export default class ServerChannel {
    */
   forward(roomId: RoomId) {
     return {
+      /**
+       * Emit a forwarded message.
+       * @param eventName The event name.
+       * @param data The data to send.
+       */
       emit: (eventName: EventName, data: Data) => {
         bridge.emit(
           EVENTS.FORWARD_MESSAGE,
@@ -146,6 +170,10 @@ export default class ServerChannel {
   /** Send a raw message. */
   get raw() {
     return {
+      /**
+       * Emit a raw message.
+       * @param rawMessage The raw message. Can be of type 'USVString | ArrayBuffer | ArrayBufferView'
+       */
       emit: (rawMessage: RawMessage) => this.emit(EVENTS.RAW_MESSAGE, rawMessage)
     }
   }

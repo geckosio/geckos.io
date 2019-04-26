@@ -13,7 +13,7 @@
     "strictPropertyInitialization": false,
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "removeComments": true,
+    "removeComments": false,
     "noUnusedParameters": true,
     "noUnusedLocals": true,
     "noImplicitThis": true,

@@ -9,6 +9,14 @@ export type Data = string | number | Object
 export type Payload = { [eventName: string]: Data }
 export type RawMessage = USVString | ArrayBuffer | ArrayBufferView
 
+export interface ServerOptions {
+  iceServers?: RTCIceServer[]
+  label?: string
+  ordered?: boolean
+  maxRetransmits?: number
+  maxPacketLifeTime?: number
+}
+
 export interface EventCallbackClient {
   (data: Data): void
 }

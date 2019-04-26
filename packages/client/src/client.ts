@@ -16,9 +16,9 @@ export class ClientChannel {
   private connectionsManager: ConnectionsManagerClient
   private url: string
 
-  constructor(url: string, port: number) {
+  constructor(url: string, port: number, label: string) {
     this.url = `${url}:${port}`
-    this.connectionsManager = new ConnectionsManagerClient(this.url)
+    this.connectionsManager = new ConnectionsManagerClient(this.url, label)
   }
 
   private onconnectionstatechange() {
@@ -42,6 +42,10 @@ export class ClientChannel {
   /** Emit a raw message to the server */
   get raw() {
     return {
+      /**
+       * Emit a raw message.
+       * @param rawMessage The raw message. Can be of type 'USVString | ArrayBuffer | ArrayBufferView'
+       */
       emit: (rawMessage: RawMessage) => this.emit(EVENTS.RAW_MESSAGE, rawMessage)
     }
   }
@@ -97,12 +101,13 @@ export class ClientChannel {
 
 /**
  * The geckos.io client library.
- * @param options.url The url of the server. Default is \`${location.protocol}//${location.hostname}\`
- * @param options.port The port of the server. Default is 9208.
+ * @param options.url The url of the server. Default: \`${location.protocol}//${location.hostname}\`.
+ * @param options.port The port of the server. Default: 9208.
+ * @param options.label The label of the DataChannel. Default: 'geckos.io'.
  */
-const geckosClient = (options: { url?: string; port?: number } = {}) => {
-  const { url = `${location.protocol}//${location.hostname}`, port = 9208 } = options
-  return new ClientChannel(url, port)
+const geckosClient = (options: { url?: string; port?: number; label?: string } = {}) => {
+  const { url = `${location.protocol}//${location.hostname}`, port = 9208, label = 'geckos.io' } = options
+  return new ClientChannel(url, port, label)
 }
 
 export default geckosClient

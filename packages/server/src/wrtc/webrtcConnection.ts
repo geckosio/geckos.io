@@ -1,7 +1,7 @@
 import DefaultConnection from './defaultConnection'
 import CreateDataChannel from './channel'
 import Channel from './channel'
-import { ChannelId } from '@geckos.io/common/lib/typings'
+import { ChannelId, ServerOptions } from '@geckos.io/common/lib/typings'
 
 const DefaultRTCPeerConnection: RTCPeerConnection = require('wrtc').RTCPeerConnection
 const TIME_TO_HOST_CANDIDATES = 5000
@@ -11,14 +11,15 @@ export default class WebRTCConnection extends DefaultConnection {
   channel: Channel
   private options: any
 
-  constructor(id: ChannelId, iceServers: RTCIceServer[], options: any = {}) {
+  constructor(id: ChannelId, serverOptions: ServerOptions) {
     super(id)
+
+    const { iceServers = [], ...dataChannelOptions } = serverOptions
 
     this.options = {
       clearTimeout,
       setTimeout,
-      timeToHostCandidates: TIME_TO_HOST_CANDIDATES,
-      ...options
+      timeToHostCandidates: TIME_TO_HOST_CANDIDATES
     }
 
     let configuration: RTCConfiguration = {
@@ -33,7 +34,7 @@ export default class WebRTCConnection extends DefaultConnection {
       if (this.peerConnection.connectionState === 'disconnected') this.close()
     }
 
-    this.channel = new CreateDataChannel(this)
+    this.channel = new CreateDataChannel(this, dataChannelOptions)
   }
 
   async doOffer() {

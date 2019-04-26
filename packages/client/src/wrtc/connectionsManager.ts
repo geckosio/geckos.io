@@ -19,12 +19,12 @@ export default class ConnectionsManagerClient {
     SendMessage(this.dataChannel, eventName, data)
   }
 
-  constructor(public url: string) {}
+  constructor(public url: string, public label: string) {}
 
   onDataChannel = (ev: RTCDataChannelEvent) => {
     const { channel } = ev
 
-    if (channel.label !== 'geckos.io') return
+    if (channel.label !== this.label) return
 
     this.dataChannel = channel
 

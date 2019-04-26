@@ -1,13 +1,12 @@
 import WebRTCConnection from './webrtcConnection'
 import bridge from '@geckos.io/common/lib/bridge'
-import { EventOptions, ChannelId, Payload } from '@geckos.io/common/lib/typings'
+import { EventOptions, ChannelId, Payload, ServerOptions } from '@geckos.io/common/lib/typings'
 import { EVENTS } from '@geckos.io/common/lib/constants'
 
 export default class ConnectionsManagerServer {
   connections = new Map()
-  iceServers: RTCIceServer[] = []
 
-  constructor() {
+  constructor(public options: ServerOptions) {
     // forward a message (includes the channel id of the sender)
     bridge.on(EVENTS.FORWARD_MESSAGE, (payload: Payload, options: EventOptions) => {
       let eventName = Object.keys(payload)[0]
@@ -86,7 +85,7 @@ export default class ConnectionsManagerServer {
   }
 
   async createConnection() {
-    const connection = new WebRTCConnection(this.createId(), this.iceServers)
+    const connection = new WebRTCConnection(this.createId(), this.options)
     const pc = connection.peerConnection
 
     pc.onconnectionstatechange = () => {

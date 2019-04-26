@@ -8,7 +8,8 @@ import {
   EventCallbackServer,
   ConnectionEventCallbackServer,
   EventOptions,
-  EventName
+  EventName,
+  ServerOptions
 } from '@geckos.io/common/lib/typings'
 import Connection from './wrtc/defaultConnection'
 import ConnectionsManagerServer from './wrtc/connectionsManager'
@@ -18,10 +19,8 @@ export class GeckosServer {
   private connectionsManager: ConnectionsManagerServer
   private _port: number
 
-  constructor(options: { iceServers?: RTCIceServer[] }) {
-    const { iceServers = [] } = options
-    this.connectionsManager = new ConnectionsManagerServer()
-    this.connectionsManager.iceServers = iceServers
+  constructor(options: ServerOptions) {
+    this.connectionsManager = new ConnectionsManagerServer(options)
   }
 
   /**
@@ -111,8 +110,12 @@ export class GeckosServer {
 /**
  * The geckos.io server library.
  * @param options.iceServers An array of RTCIceServers. See https://developer.mozilla.org/en-US/docs/Web/API/RTCIceServer.
+ * @param options.label A human-readable name for the channel. This string may not be longer than 65,535 bytes. Default: 'geckos.io'.
+ * @param options.ordered Indicates whether or not messages sent on the RTCDataChannel are required to arrive at their destination in the same order in which they were sent (true), or if they're allowed to arrive out-of-order (false). Default: false.
+ * @param options.maxPacketLifeTime The maximum number of milliseconds that attempts to transfer a message may take in unreliable mode. While this value is a 16-bit unsigned number, each user agent may clamp it to whatever maximum it deems appropriate. Default: null.
+ * @param options.maxRetransmits The maximum number of times the user agent should attempt to retransmit a message which fails the first time in unreliable mode. While this value is a16-bit unsigned number, each user agent may clamp it to whatever maximum it deems appropriate. Default: 0.
  */
-const geckosServer = (options: { iceServers?: RTCIceServer[] } = {}) => {
+const geckosServer = (options: ServerOptions = {}) => {
   return new GeckosServer(options)
 }
 
