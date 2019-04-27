@@ -34,7 +34,6 @@
     "node": "^8 || ^10 || ^11"
   },
   "scripts": {
-    "install:dev": "npm link @geckos.io/common && npm i",
     "build": "tsc --build tsconfig.json",
     "prepublishOnly": "npm run build",
     "preinstall": "npm link ../common"
