@@ -37,8 +37,9 @@
     "bundle:latest": "../../node_modules/.bin/webpack --config webpack/webpack.prod.js  --packageVersion=latest",
     "bundle:version": "../../node_modules/.bin/webpack --config webpack/webpack.prod.js  --packageVersion=${npm_package_version}",
     "install:dev": "npm link @geckos.io/common && npm i",
+    "preinstall": "npm link ../common",
     "build": "tsc --build tsconfig.json",
-    "prepublish": "npm run build",
+    "prepublishOnly": "npm run build",
     "postpublish": "npm run bundle:version && npm run bundle:latest"
   },
   "dependencies": {
