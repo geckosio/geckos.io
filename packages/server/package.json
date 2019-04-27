@@ -35,8 +35,7 @@
   },
   "scripts": {
     "build": "tsc --build tsconfig.json",
-    "prepublishOnly": "npm run build",
-    "preinstall": "npm link ../common"
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "eventemitter3": "^3.1.0",
