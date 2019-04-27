@@ -50,8 +50,6 @@
     "lib": "lib"
   },
   "dependencies": {
-    "@geckos.io/client": "*",
-    "@geckos.io/server": "*",
     "source-map-support": "^0.5.11"
   },
   "devDependencies": {
