@@ -1,4 +1,5 @@
 package-lock.json
+*package-lock.json*
 /.vscode
 /dev/dist
 /node_modules
