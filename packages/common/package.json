@@ -1,10 +1,13 @@
 {
   "name": "@geckos.io/common",
   "version": "0.0.5",
-  "description": "Real-time client/server communication over UDP using WebRTC and Node.js",
+  "description": "The common module for @geckos.io/server and @geckos.io/client.",
   "main": "lib",
   "author": "Yannick Deubel (https://github.com/yandeu)",
   "license": "BSD-3-Clause",
+  "keywords": [
+    "@gecko.io"
+  ],
   "repository": {
     "type": "git",
     "url": "git://github.com/geckosio/geckos.io.git",
