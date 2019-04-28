@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Chat App with geckos.io</title>
+    <script src="./static/geckos.io-client.latest.min.js"></script>
+  </head>
+  <body>
+    <h1>Simple Chat App with geckos.io</h1>
+
+    <script>
+      'use strict'
+
+      var channel = geckos({ port: 3033 })
+
+      channel.onConnect(function(error) {
+        if (error) {
+          console.error(error.message)
+          return
+        }
+
+        channel.on('chat message 2', () => {
+          channel.emit('chat message 2', 'Hello 2')
+        })
+
+        channel.emit('chat message 1', 'Hello 1')
+      })
+    </script>
+  </body>
+</html>
