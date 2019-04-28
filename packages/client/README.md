@@ -14,7 +14,7 @@ Real-time client/server communication over UDP using **WebRTC** and **Node.js**.
 
 This framework fits perfectly with your next **HTML5 real-time multiplayer games** or chat app.
 
-Read the [**documentation**](https://github.com/geckosio/geckos.io) for more information.
+Read the [documentation](https://github.com/geckosio/geckos.io) for more information.
 
 ## Install
 
