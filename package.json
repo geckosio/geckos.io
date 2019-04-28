@@ -24,7 +24,11 @@
     "dev:webpack-client": "webpack --config dev/webpack/webpack.client.js --watch",
     "dev:webpack-server": "webpack --config dev/webpack/webpack.server.js --watch",
     "dev:nodemon": "nodemon dev/dist/server/server.js",
-    "prettier": "prettier --write 'src/**/*.ts' && prettier --write 'dev/chatApp/**/*.ts'"
+    "prettier": "prettier --write 'src/**/*.ts' && prettier --write 'dev/chatApp/**/*.ts'",
+    "publish:common": "cd packages/common/ && npm publish",
+    "publish:server": "cd packages/server/ && npm publish",
+    "publish:client": "cd packages/client/ && npm publish",
+    "publish-packages": "npm-run-all publish:*"
   },
   "keywords": [
     "realtime",
