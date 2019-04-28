@@ -10,12 +10,38 @@
 ![Node version](https://img.shields.io/node/v/@geckos.io/client.svg?style=flat-square)
 [![Minified bundle](https://img.shields.io/github/size/geckosio/geckos.io/bundles/latest/geckos.io-client.latest.min.js.svg?label=minified%20bundle&style=flat-square)](https://github.com/geckosio/geckos.io/tree/master/bundles/versions)
 
-Real-time client/server communication over UDP using WebRTC and Node.js.
+Real-time client/server communication over UDP using **WebRTC** and **Node.js**.
 
-Read the [documentation](https://github.com/geckosio/geckos.io) for more information.
+This framework fits perfectly with your next **HTML5 real-time multiplayer games** or chat app.
+
+Read the [**documentation**](https://github.com/geckosio/geckos.io) for more information.
 
 ## Install
 
 ```console
 npm install @geckos.io/client
+```
+
+## Use
+
+```js
+import geckos from '@geckos.io/client'
+
+// or add a minified version to your index.html file
+// https://github.com/geckosio/geckos.io/tree/master/bundles/versions
+
+const channel = geckos()
+
+channel.onConnect(error => {
+  if (error) {
+    console.error(error.message)
+    return
+  }
+
+  channel.on('chat message', data => {
+    console.log(`You got the message ${data}`)
+  })
+
+  channel.emit('chat message', 'a short message sent to the server')
+})
 ```

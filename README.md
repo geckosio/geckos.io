@@ -6,7 +6,9 @@
 
 # geckos.io
 
-#### Geckos&#46;io offers real-time client/server communication over UDP using WebRTC and Node.js
+### Geckos&#46;io offers real-time client/server communication over UDP using WebRTC and Node.js
+
+#### _Geckos&#46;io fits perfectly with your next HTML5 real-time multiplayer games or chat app._
 
 [![Dependency Status](https://david-dm.org/geckosio/geckos.io/status.svg?path=packages/server&style=flat-square)](https://david-dm.org/geckosio/geckos.io?path=packages%2Fserver)
 [![devDependency Status](https://david-dm.org/geckosio/geckos.io/dev-status.svg?path=packages/server&style=flat-square)](https://david-dm.org/geckosio/geckos.io?path=packages%2Fserver&type=dev)
