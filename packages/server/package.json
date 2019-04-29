@@ -19,7 +19,7 @@
     "sctp",
     "multiplayer",
     "game",
-    "client"
+    "server"
   ],
   "repository": {
     "type": "git",
