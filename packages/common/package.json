@@ -1,6 +1,6 @@
 {
   "name": "@geckos.io/common",
-  "version": "0.0.6",
+  "version": "1.0.0",
   "description": "The common module for @geckos.io/server and @geckos.io/client.",
   "main": "lib",
   "author": "Yannick Deubel (https://github.com/yandeu)",
