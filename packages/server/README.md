@@ -9,6 +9,7 @@
 [![Downloads](https://img.shields.io/npm/dm/@geckos.io/server.svg?style=flat-square)](https://www.npmjs.com/package/@geckos.io/server)
 ![Node version](https://img.shields.io/node/v/@geckos.io/server.svg?style=flat-square)
 ![Snyk Vulnerabilities for GitHub Repo (Specific Manifest)](https://img.shields.io/snyk/vulnerabilities/github/geckosio/geckos.io/packages/server/package.json.svg?style=flat-square)
+![NPM](https://img.shields.io/npm/l/@geckos.io/server.svg?style=flat-square)
 
 Real-time client/server communication over UDP using **WebRTC** and **Node.js**.
 
