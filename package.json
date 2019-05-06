@@ -1,7 +1,7 @@
 {
   "name": "geckos.io",
   "description": "Real-time client/server communication over UDP using WebRTC and Node.js",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "scripts": {
     "link:common": "cd packages/common/ && npm link",
