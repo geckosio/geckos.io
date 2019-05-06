@@ -46,6 +46,20 @@ pipeline {
       }
     }
 
+    stage("NodeJS 12") {
+      tools {
+        nodejs "NodeJS 12"
+      }
+      steps {
+        git 'https://github.com/geckosio/geckos.io'
+        sh 'node --version'
+        sh 'npm --version'
+        sh 'npm install'
+        sh 'sleep 1m'
+        cleanWs()
+      }
+    }
+
   }
 
   post {
