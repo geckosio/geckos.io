@@ -196,6 +196,10 @@ _TODO: Note some differences here._
 | Chat App                                                        |    &#9679;    |               | &#9679; |
 | Any other App with Real-Time communication                      |    &#9679;    |    &#9679;    | &#9679; |
 
+## Development
+
+To help developing geckos.io, install this repository via **`npm install`** and **`npm run installdev`**. Test it with **`npm test`**. Then start the development server with **`npm run dev`**.
+
 ## License
 
 The BSD 3-Clause License (BSD-3-Clause) 2019 - [Yannick Deubel](https://github.com/yandeu). Please have a look at the [LICENSE](LICENSE) for more details.

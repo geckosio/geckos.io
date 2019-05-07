@@ -10,13 +10,13 @@
     "link-set:client": "cd packages/client/ && npm link @geckos.io/common",
     "link-set:server": "cd packages/server/ && npm link @geckos.io/common",
     "link-set:root": "npm link @geckos.io/client && npm link @geckos.io/server",
-    "link": "npm-run-all link:* link-set:*",
-    "postinstall": "npm run link && npm run build",
+    "link": "npm run link:common && npm run link:server && npm run link:client && npm run link-set:client && npm run link-set:server && npm run link-set:root",
+    "installdev": "npm run link && npm run build",
     "bundle": "cd packages/client && npm run bundle:latest",
     "build:common": "tsc --build packages/common/tsconfig.json",
     "build:client": "tsc --build packages/client/tsconfig.json",
     "build:server": "tsc --build packages/server/tsconfig.json",
-    "build": "npm-run-all build:*",
+    "build": "npm run build:common && npm run build:client && npm run build:server",
     "watch:common": "tsc --build --watch packages/common/tsconfig.json",
     "watch:client": "tsc --build --watch packages/client/tsconfig.json",
     "watch:server": "tsc --build --watch packages/server/tsconfig.json",
@@ -29,7 +29,7 @@
     "publish:server": "cd packages/server/ && npm publish",
     "publish:client": "cd packages/client/ && npm publish",
     "publish-packages": "npm-run-all publish:*",
-    "test": "jest --config jest.config.js --detectOpenHandles"
+    "test": "jest --config jest.config.js --detectOpenHandles --runInBand --forceExit"
   },
   "keywords": [
     "realtime",
