@@ -14,7 +14,7 @@ export default class WebRTCConnection extends DefaultConnection {
   constructor(id: ChannelId, serverOptions: ServerOptions) {
     super(id)
 
-    const { iceServers = [], ...dataChannelOptions } = serverOptions
+    const { iceServers = [], iceTransportPolicy = 'all', ...dataChannelOptions } = serverOptions
 
     this.options = {
       clearTimeout,
@@ -24,7 +24,7 @@ export default class WebRTCConnection extends DefaultConnection {
 
     let configuration: RTCConfiguration = {
       iceServers: iceServers,
-      iceCandidatePoolSize: iceServers.length
+      iceTransportPolicy: iceTransportPolicy
     }
 
     // @ts-ignore

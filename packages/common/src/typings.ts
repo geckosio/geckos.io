@@ -11,6 +11,7 @@ export type RawMessage = USVString | ArrayBuffer | ArrayBufferView
 
 export interface ServerOptions {
   iceServers?: RTCIceServer[]
+  iceTransportPolicy?: RTCIceTransportPolicy
   label?: string
   ordered?: boolean
   maxRetransmits?: number
