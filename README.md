@@ -148,6 +148,8 @@ import geckos, { iceServers } from '@geckos.io/server'
 const io = geckos(null, TESTING_LOCALLY ? [] : iceServers)
 ```
 
+Watch a useful video about ICE Servers on [YouTube](https://youtu.be/JrxSDIJv5xs).
+
 ## TypeScript
 
 Geckos&#46;io is written in TypeScript. If you import geckos&#46;io with the `import` statement, the types will be imported as well.
