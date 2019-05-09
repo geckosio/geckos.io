@@ -7,8 +7,7 @@ import { join } from 'path'
 const app = express()
 const server = http.createServer(app)
 const io = geckos({
-  iceServers: process.env.NODE_ENV === 'production' ? iceServers : [],
-  iceTransportPolicy: 'all'
+  iceServers: process.env.NODE_ENV === 'production' ? iceServers : iceServers
 })
 
 io.addServer(server)

@@ -4,7 +4,10 @@ import Channel from './channel'
 import { ChannelId, ServerOptions } from '@geckos.io/common/lib/typings'
 
 const DefaultRTCPeerConnection: RTCPeerConnection = require('wrtc').RTCPeerConnection
-const TIME_TO_HOST_CANDIDATES = 5000
+
+// strangely something it takes a long time
+// so I set it to 10 seconds
+const TIME_TO_HOST_CANDIDATES = 10000
 
 export default class WebRTCConnection extends DefaultConnection {
   peerConnection: RTCPeerConnection
@@ -105,6 +108,8 @@ export default class WebRTCConnection extends DefaultConnection {
       return
     }
 
+    let totalIceCandidates = 0
+
     const { timeToHostCandidates } = options
     const deferred: any = {}
 
@@ -115,11 +120,22 @@ export default class WebRTCConnection extends DefaultConnection {
 
     const timeout = options.setTimeout(() => {
       peerConnection.removeEventListener('icecandidate', onIceCandidate)
-      deferred.reject(new Error('Timed out waiting for host candidates State: ' + peerConnection.iceGatheringState))
+
+      // if time is up but we found some iceCandidates
+      if (totalIceCandidates > 0) {
+        // console.log('Timed out waiting for all host candidates, will continue with what we have so far.')
+        deferred.resolve()
+      } else {
+        deferred.reject(new Error('Timed out waiting for host candidates State: ' + peerConnection.iceGatheringState))
+      }
     }, timeToHostCandidates)
 
     const onIceCandidate = (ev: RTCPeerConnectionIceEvent) => {
       const { candidate } = ev
+
+      // if (candidate) console.log('candidate nr.', totalIceCandidates, 'type', candidate.type)
+
+      totalIceCandidates++
 
       if (!candidate) {
         options.clearTimeout(timeout)

@@ -126,6 +126,7 @@ const geckosServer = (options: ServerOptions = {}) => {
   const { iceTransportPolicy } = options
   if (iceTransportPolicy === 'relay') {
     console.error(`WARNING: iceTransportPolicy "relay" does not work yet on the server!`)
+    options.iceTransportPolicy = 'all'
   }
 
   return new GeckosServer(options)
