@@ -19,7 +19,7 @@ export default class ConnectionsManagerClient {
     SendMessage(this.dataChannel, eventName, data)
   }
 
-  constructor(public url: string, public label: string) {}
+  constructor(public url: string, public label: string, public rtcConfiguration: RTCConfiguration) {}
 
   onDataChannel = (ev: RTCDataChannelEvent) => {
     const { channel } = ev
@@ -54,7 +54,11 @@ export default class ConnectionsManagerClient {
 
     const { id, localDescription } = this.remotePeerConnection
 
-    const configuration: RTCConfiguration = {}
+    const configuration: RTCConfiguration = {
+      // @ts-ignore
+      sdpSemantics: 'unified-plan',
+      ...this.rtcConfiguration
+    }
 
     const RTCPc =
       RTCPeerConnection ||

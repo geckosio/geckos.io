@@ -18,6 +18,14 @@ export interface ServerOptions {
   maxPacketLifeTime?: number
 }
 
+export interface ClientOptions {
+  iceServers?: RTCIceServer[]
+  iceTransportPolicy?: RTCIceTransportPolicy
+  url?: string
+  port?: number
+  label?: string
+}
+
 export interface EventCallbackClient {
   (data: Data): void
 }

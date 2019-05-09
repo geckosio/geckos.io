@@ -23,6 +23,8 @@ export default class WebRTCConnection extends DefaultConnection {
     }
 
     let configuration: RTCConfiguration = {
+      // @ts-ignore
+      sdpSemantics: 'unified-plan',
       iceServers: iceServers,
       iceTransportPolicy: iceTransportPolicy
     }

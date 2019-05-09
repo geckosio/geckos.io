@@ -123,6 +123,11 @@ export class GeckosServer {
  * @param options.maxRetransmits The maximum number of times the user agent should attempt to retransmit a message which fails the first time in unreliable mode. While this value is a16-bit unsigned number, each user agent may clamp it to whatever maximum it deems appropriate. Default: 0.
  */
 const geckosServer = (options: ServerOptions = {}) => {
+  const { iceTransportPolicy } = options
+  if (iceTransportPolicy === 'relay') {
+    console.error(`WARNING: iceTransportPolicy "relay" does not work yet on the server!`)
+  }
+
   return new GeckosServer(options)
 }
 

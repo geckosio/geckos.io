@@ -8,7 +8,8 @@ import {
   EventName,
   EventCallbackClient,
   ConnectionEventCallbackClient,
-  EventCallbackRawMessage
+  EventCallbackRawMessage,
+  ClientOptions
 } from '@geckos.io/common/lib/typings'
 
 export class ClientChannel {
@@ -16,9 +17,9 @@ export class ClientChannel {
   private connectionsManager: ConnectionsManagerClient
   private url: string
 
-  constructor(url: string, port: number, label: string) {
+  constructor(url: string, port: number, label: string, rtcConfiguration: RTCConfiguration) {
     this.url = `${url}:${port}`
-    this.connectionsManager = new ConnectionsManagerClient(this.url, label)
+    this.connectionsManager = new ConnectionsManagerClient(this.url, label, rtcConfiguration)
   }
 
   private onconnectionstatechange() {
@@ -104,10 +105,18 @@ export class ClientChannel {
  * @param options.url The url of the server. Default: \`${location.protocol}//${location.hostname}\`.
  * @param options.port The port of the server. Default: 9208.
  * @param options.label The label of the DataChannel. Default: 'geckos.io'.
+ * @param options.iceServers An array of RTCIceServers. See https://developer.mozilla.org/en-US/docs/Web/API/RTCIceServer.
+ * @param options.iceTransportPolicy RTCIceTransportPolicy enum defines string constants which can be used to limit the transport policies of the ICE candidates to be considered during the connection process.
  */
-const geckosClient = (options: { url?: string; port?: number; label?: string } = {}) => {
-  const { url = `${location.protocol}//${location.hostname}`, port = 9208, label = 'geckos.io' } = options
-  return new ClientChannel(url, port, label)
+const geckosClient = (options: ClientOptions = {}) => {
+  const {
+    iceServers = [],
+    iceTransportPolicy = 'all',
+    url = `${location.protocol}//${location.hostname}`,
+    port = 9208,
+    label = 'geckos.io'
+  } = options
+  return new ClientChannel(url, port, label, { iceServers, iceTransportPolicy })
 }
 
 export default geckosClient

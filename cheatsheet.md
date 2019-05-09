@@ -8,9 +8,11 @@ import geckos from '@geckos.io/client'
 
 /**
  * start geckos client with these options
- * @param {string} options.url default is `${location.protocol}//${location.hostname}`
- * @param {number} options.port default is 9208
- * @param {string} label Default: 'geckos.io'.
+ * @param options.url default is `${location.protocol}//${location.hostname}`
+ * @param options.port default is 9208
+ * @param options.label Default: 'geckos.io'.
+ * @param options.iceServers Default: [].
+ * @param options.iceTransportPolicy Default: 'all'.
  */
 const channel = geckos(options)
 
@@ -38,6 +40,7 @@ import geckos from '@geckos.io/server'
 /**
  * start geckos server with these options
  * @param options.iceServers Default: [].
+ * @param options.iceTransportPolicy Default: 'all'.
  * @param options.label Default: 'geckos.io'.
  * @param options.ordered Default: false.
  * @param options.maxPacketLifeTime Default: null.
