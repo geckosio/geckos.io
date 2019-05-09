@@ -145,7 +145,7 @@ import geckos, { iceServers } from '@geckos.io/server'
 
 // use an empty array if you are developing locally
 // use the default iceServers if you are testing it on your server
-const io = geckos(null, TESTING_LOCALLY ? [] : iceServers)
+const io = geckos({ iceServers: null, TESTING_LOCALLY ? [] : iceServers })
 ```
 
 Watch a useful video about ICE Servers on [YouTube](https://youtu.be/JrxSDIJv5xs).
@@ -158,7 +158,7 @@ Geckos&#46;io is written in TypeScript. If you import geckos&#46;io with the `im
 // client.js
 import geckos, { Data } from '@geckos.io/client'
 
-const channel = geckos('YOUR_SERVER_URL')
+const channel = geckos({ url: 'YOUR_SERVER_URL' })
 
 channel.onConnect(() => {
   channel.on('chat message', (data: Data) => {
