@@ -1,3 +1,4 @@
 module.exports = {
-  preset: 'jest-puppeteer'
+  preset: 'jest-puppeteer',
+  coverageReporters: ['text', 'cobertura']
 }

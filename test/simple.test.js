@@ -1,16 +1,15 @@
 const geckos = require('@geckos.io/server').default
-const http = require('http')
+const io = geckos()
+
 const express = require('express')
 const path = require('path')
 const app = express()
-const server = http.createServer(app)
-const io = geckos({ iceTransportPolicy: 'relay' })
 
 app.use('/static', express.static(path.join(__dirname, '../bundles/latest')))
-app.get('/server.html', (req, res) => res.sendFile(path.join(__dirname, 'server.html')))
+app.get('/simple.html', (req, res) => res.sendFile(path.join(__dirname, 'simple.html')))
 
-io.addServer(server)
-server.listen(3034)
+app.listen(3033)
+io.listen(8888)
 jest.setTimeout(5000)
 
 let channel
@@ -33,26 +32,12 @@ describe('connection', () => {
         done()
       })
     })
-
-    test('to room loopback should be "OK"', done => {
-      channel.room.emit('chat message', 'Hello everyone in this room')
-      channel.on('room test', data => {
-        if (data === 'OK') done()
-      })
-    })
-
-    test('raw message should be "123"', done => {
-      channel.onRaw(rawMessage => {
-        expect(rawMessage).toBe('123')
-        done()
-      })
-    })
   })
 })
 
-page.goto('http://localhost:3034/server.html')
+page.goto('http://localhost:3033/simple.html')
 
 afterAll(async () => {
-  server.close()
-  server.removeAllListeners()
+  app.removeAllListeners()
+  page.close()
 })

@@ -29,7 +29,7 @@
     "publish:server": "cd packages/server/ && npm publish",
     "publish:client": "cd packages/client/ && npm publish",
     "publish-packages": "npm-run-all publish:*",
-    "test": "jest --config jest.config.js --detectOpenHandles --runInBand --forceExit"
+    "test": "jest --config jest.config.js --detectOpenHandles --runInBand --forceExit --coverage --coverageDirectory=output/coverage/jest"
   },
   "keywords": [
     "realtime",

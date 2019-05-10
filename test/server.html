@@ -13,7 +13,7 @@
     <script>
       'use strict'
 
-      var channel = geckos({ port: 3033 })
+      var channel = geckos({ port: 3034 })
 
       channel.onConnect(function(error) {
         if (error) {
@@ -21,11 +21,20 @@
           return
         }
 
+        channel.on('chat message', data => {
+          if (data === 'Hello everyone in this room') channel.emit('room test', 'OK')
+        })
+
         channel.on('chat message 2', () => {
           channel.emit('chat message 2', 'Hello 2')
         })
 
         channel.emit('chat message 1', 'Hello 1')
+
+        // only send messages after a small pause
+        setTimeout(() => {
+          channel.raw.emit('123')
+        }, 500)
       })
     </script>
   </body>

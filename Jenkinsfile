@@ -9,9 +9,11 @@ pipeline {
         nodejs 'NodeJS 8'
       }
       steps {
-        timeout(15) {
-          sh 'npm install'
-          sh 'npm run installdev'
+        timeout(10) {
+          retry(3) {
+            sh 'npm install'
+            sh 'npm run installdev'
+          }
         }
       }
     }
@@ -21,9 +23,8 @@ pipeline {
         nodejs 'NodeJS 8'
       }
       steps {
-        timeout(5) {
+        timeout(1) {
           retry(3) {
-            sleep 10
             sh 'node --version'
             sh 'npm --version'
             sh 'npm test'
@@ -37,9 +38,8 @@ pipeline {
         nodejs 'NodeJS 10'
       }
       steps {
-        timeout(5) {
+        timeout(1) {
           retry(3) {
-            sleep 10
             sh 'node --version'
             sh 'npm --version'
             sh 'npm test'
@@ -53,9 +53,8 @@ pipeline {
         nodejs 'NodeJS 11'
       }
       steps {
-        timeout(5) {
+        timeout(1) {
           retry(3) {
-            sleep 10
             sh 'node --version'
             sh 'npm --version'
             sh 'npm test'
@@ -68,15 +67,20 @@ pipeline {
       tools {
         nodejs 'NodeJS 12'
       }
-      steps{
-        timeout(5) {
+      steps {
+        timeout(1) {
           retry(3) {
-            sleep 10
             sh 'node --version'
             sh 'npm --version'
             sh 'npm test'
           }
         }
+      }
+    }
+
+    stage('Code Coverage') {
+      steps {
+        cobertura autoUpdateHealth: false, autoUpdateStability: false, classCoverageTargets: '80, 0, 40', coberturaReportFile: 'output/coverage/jest/cobertura-coverage.xml', conditionalCoverageTargets: '80, 0, 40', enableNewApi: true, failUnhealthy: false, failUnstable: false, fileCoverageTargets: '80, 0, 40', lineCoverageTargets: '80, 0, 40', maxNumberOfBuilds: 0, methodCoverageTargets: '80, 0, 40', onlyStable: false, packageCoverageTargets: '80, 0, 40', sourceEncoding: 'ASCII', zoomCoverageChart: false
       }
     }
 
