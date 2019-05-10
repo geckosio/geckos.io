@@ -10,7 +10,11 @@ const isObject = (data: Data) => {
 
 const isJSONString = (data: Data) => {
   try {
+    // check if it is a string
     if (typeof data !== 'string') return false
+    // check if it is a number as a string
+    if (!isNaN(parseInt(data))) return false
+    // check if it is a JSON object
     JSON.parse(data)
     return true
   } catch (error) {
