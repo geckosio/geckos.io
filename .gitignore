@@ -2,6 +2,7 @@ package-lock.json
 *package-lock.json*
 /.vscode
 /dev/dist
+/output
 /node_modules
 *node_modules*
 /lib
