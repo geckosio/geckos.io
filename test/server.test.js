@@ -1,11 +1,10 @@
 const geckos = require('@geckos.io/server').default
-const { iceServers } = require('@geckos.io/server')
 const http = require('http')
 const express = require('express')
 const path = require('path')
 const app = express()
 const server = http.createServer(app)
-const io = geckos({ iceServers })
+const io = geckos()
 
 app.use('/static', express.static(path.join(__dirname, '../bundles/latest')))
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')))
