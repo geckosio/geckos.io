@@ -5,7 +5,9 @@
   "private": true,
   "scripts": {
     "lerna:ls": "lerna ls",
-    "lerna:version": "lerna version --conventional-commits --no-push && cd packages/client && npm run bundle",
+    "lerna:diff": "lerna diff",
+    "lerna:changed": "lerna changed",
+    "lerna:version": "lerna version --no-changelog --no-push && cd packages/client && npm run bundle",
     "build:common": "tsc --build packages/common/tsconfig.json",
     "build:client": "tsc --build packages/client/tsconfig.json",
     "build:server": "tsc --build packages/server/tsconfig.json",
