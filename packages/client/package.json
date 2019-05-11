@@ -37,11 +37,11 @@
     "node": "^8 || ^10 || ^11 || ^12"
   },
   "scripts": {
+    "bundle": "npm run bundle:version && npm run bundle:latest",
     "bundle:latest": "../../node_modules/.bin/webpack --config webpack/webpack.prod.js  --packageVersion=latest",
     "bundle:version": "../../node_modules/.bin/webpack --config webpack/webpack.prod.js  --packageVersion=${npm_package_version}",
     "build": "tsc --build tsconfig.json",
-    "prepublishOnly": "npm run build",
-    "postpublish": "npm run bundle:version && npm run bundle:latest"
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "@geckos.io/common": "^1.1.4"
