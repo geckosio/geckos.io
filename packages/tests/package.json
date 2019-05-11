@@ -1,6 +1,6 @@
 {
   "name": "tests",
-  "version": "1.0.0",
+  "version": "1.1.4",
   "description": "",
   "private": true,
   "scripts": {
@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@geckos.io/client": "^1.0.0",
-    "@geckos.io/server": "^1.0.0"
+    "@geckos.io/client": "^1.1.4",
+    "@geckos.io/server": "^1.1.4"
   }
 }
