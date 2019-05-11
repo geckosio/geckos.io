@@ -1,11 +1,11 @@
-const geckos = require('@geckos.io/server').default
+const geckos = require('../../server/lib').default
 const io = geckos()
 
 const express = require('express')
 const path = require('path')
 const app = express()
 
-app.use('/static', express.static(path.join(__dirname, '../bundles/latest')))
+app.use('/static', express.static(path.join(__dirname, '../../../bundles/latest')))
 app.get('/simple.html', (req, res) => res.sendFile(path.join(__dirname, 'simple.html')))
 
 app.listen(3033)

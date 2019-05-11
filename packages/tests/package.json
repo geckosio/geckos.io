@@ -1,0 +1,15 @@
+{
+  "name": "tests",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "test": "jest --config jest.config.js --detectOpenHandles --runInBand --forceExit --coverage --coverageDirectory=output/coverage/jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@geckos.io/client": "^1.0.0",
+    "@geckos.io/server": "^1.0.0"
+  }
+}

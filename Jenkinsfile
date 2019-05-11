@@ -11,8 +11,7 @@ pipeline {
       steps {
         timeout(10) {
           retry(3) {
-            sh 'npm install'
-            sh 'npm run installdev'
+            sh 'npm install --unsafe-perm'
           }
         }
       }
@@ -80,7 +79,8 @@ pipeline {
 
     stage('Code Coverage') {
       steps {
-        cobertura autoUpdateHealth: false, autoUpdateStability: false, classCoverageTargets: '80, 0, 40', coberturaReportFile: 'output/coverage/jest/cobertura-coverage.xml', conditionalCoverageTargets: '80, 0, 40', enableNewApi: true, failUnhealthy: false, failUnstable: false, fileCoverageTargets: '80, 0, 40', lineCoverageTargets: '80, 0, 40', maxNumberOfBuilds: 0, methodCoverageTargets: '80, 0, 40', onlyStable: false, packageCoverageTargets: '80, 0, 40', sourceEncoding: 'ASCII', zoomCoverageChart: false
+        //cobertura autoUpdateHealth: false, autoUpdateStability: false, classCoverageTargets: '80, 0, 40', coberturaReportFile: 'output/coverage/jest/cobertura-coverage.xml', conditionalCoverageTargets: '80, 0, 40', enableNewApi: true, failUnhealthy: false, failUnstable: false, fileCoverageTargets: '80, 0, 40', lineCoverageTargets: '80, 0, 40', maxNumberOfBuilds: 0, methodCoverageTargets: '80, 0, 40', onlyStable: false, packageCoverageTargets: '80, 0, 40', sourceEncoding: 'ASCII', zoomCoverageChart: false
+        publishCoverage adapters: [coberturaAdapter('output/coverage/jest/cobertura-coverage.xml')], sourceFileResolver: sourceFiles('STORE_LAST_BUILD')
       }
     }
 

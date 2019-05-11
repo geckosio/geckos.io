@@ -9,7 +9,7 @@ module.exports = {
   node: {
     __dirname: false
   },
-  entry: './dev/chatApp/server.ts',
+  entry: './src/server.ts',
   output: {
     filename: 'server.js',
     path: path.resolve(__dirname, '../dist/server')

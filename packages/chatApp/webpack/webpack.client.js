@@ -6,7 +6,7 @@ const webpack = require('webpack')
 module.exports = {
   mode: 'development',
   devtool: 'inline-source-map',
-  entry: ['./dev/chatApp/client.ts'],
+  entry: ['./src/client.ts'],
   output: {
     publicPath: 'static/client',
     path: path.resolve(__dirname, '../dist/client'),
@@ -38,7 +38,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'dev/chatApp/index.html'
+      template: 'src/index.html'
     })
   ]
 }

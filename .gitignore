@@ -1,8 +1,9 @@
 package-lock.json
 *package-lock.json*
 /.vscode
-/dev/dist
+/packages/chatApp/dist
 /output
+packages/tests/output
 /node_modules
 *node_modules*
 /lib
