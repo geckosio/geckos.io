@@ -6,9 +6,9 @@ const path = require('path')
 module.exports = (env, argv) => {
   return {
     mode: 'production',
-    entry: './src/bundle.ts',
+    entry: path.resolve(__dirname, '../src/bundle.ts'),
     output: {
-      path: path.resolve(__dirname, `../../../bundles/${argv.packageVersion === 'latest' ? 'latest' : 'versions'}`),
+      path: path.resolve(__dirname, `${argv.path}`),
       filename: `geckos.io-client.${argv.packageVersion}.min.js`,
       library: 'geckos',
       libraryExport: 'default'

@@ -4,5 +4,5 @@ module.exports = {
   coverageDirectory: 'output/coverage/jest',
   preset: 'jest-puppeteer',
   coverageReporters: ['text', 'cobertura'],
-  roots: ['packages/']
+  roots: ['test/']
 }

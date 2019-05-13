@@ -10,3 +10,5 @@ packages/tests/output
 */client/lib*
 */common/lib*
 */server/lib*
+bundles/test*
+*/.tmp/*

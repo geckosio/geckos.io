@@ -1,4 +1,4 @@
-const geckos = require('../../server/lib').default
+const geckos = require('../packages/server/lib').default
 const http = require('http')
 const express = require('express')
 const path = require('path')
@@ -6,7 +6,7 @@ const app = express()
 const server = http.createServer(app)
 const io = geckos({ iceTransportPolicy: 'relay' })
 
-app.use('/static', express.static(path.join(__dirname, '../../../bundles/latest')))
+app.use('/', express.static(path.join(__dirname, '../')))
 app.get('/server.html', (req, res) => res.sendFile(path.join(__dirname, 'server.html')))
 
 io.addServer(server)
