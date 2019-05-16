@@ -149,7 +149,7 @@ import geckos, { iceServers } from '@geckos.io/server'
 const io = geckos({ iceServers: null, TESTING_LOCALLY ? [] : iceServers })
 ```
 
-Watch a useful video about ICE Servers on [YouTube](https://youtu.be/JrxSDIJv5xs).
+Watch a useful video about ICE Servers on [YouTube](https://youtu.be/Y1mx7cx6ckI).
 
 ## TypeScript
 
