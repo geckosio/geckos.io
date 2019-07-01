@@ -15,7 +15,7 @@
 [![Downloads](https://img.shields.io/npm/dm/@geckos.io/server.svg?style=flat-square)](https://www.npmjs.com/package/@geckos.io/server)
 ![Node version](https://img.shields.io/node/v/@geckos.io/server.svg?style=flat-square)
 ![Code style](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)
-[![Minified bundle](https://img.shields.io/github/size/geckosio/geckos.io/bundles/latest/geckos.io-client.latest.min.js.svg?label=minified%20bundle&style=flat-square)](https://github.com/geckosio/geckos.io/tree/master/bundles/versions)
+[![Minified bundle](https://img.shields.io/github/size/geckosio/geckos.io/bundles/latest/geckos.io-client.latest.min.js.svg?label=minified%20bundle&style=flat-square)](https://github.com/geckosio/geckos.io/tree/master/bundles)
 [![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg?style=flat-square)](https://lerna.js.org/)
 
 </div>
@@ -201,7 +201,7 @@ _TODO: Note some differences here._
 
 ## Development
 
-To help developing geckos.io, install this repository via **`npm install`** and **`npm run installdev`**. Test it with **`npm test`**. Then start the development server with **`npm run dev`**.
+To help developing geckos.io, install this repository via **`npm install`**. Test it with **`npm test`**. Then start the development server with **`npm run dev`**.
 
 ## License
 
