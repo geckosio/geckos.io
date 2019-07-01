@@ -42,10 +42,10 @@
   },
   "dependencies": {
     "@geckos.io/common": "^1.1.4",
-    "eventemitter3": "^3.1.0",
-    "wrtc": "^0.4.0"
+    "eventemitter3": "^4.0.0",
+    "wrtc": "^0.4.1"
   },
   "devDependencies": {
-    "@types/node": "^12.0.0"
+    "@types/node": "^12.0.10"
   }
 }
