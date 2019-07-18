@@ -1,6 +1,6 @@
 {
   "name": "@geckos.io/client",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "Real-time client/server communication over UDP using WebRTC and Node.js",
   "main": "lib/index.js",
   "author": "Yannick Deubel (https://github.com/yandeu)",
@@ -44,6 +44,6 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@geckos.io/common": "^1.1.5"
+    "@geckos.io/common": "^1.1.6"
   }
 }
