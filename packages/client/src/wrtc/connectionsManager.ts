@@ -28,6 +28,10 @@ export default class ConnectionsManagerClient {
 
     this.dataChannel = channel
 
+    // set default binaryType to arraybuffer
+    // https://github.com/node-webrtc/node-webrtc/issues/441
+    this.dataChannel.binaryType = 'arraybuffer'
+
     this.dataChannel.onmessage = (ev: MessageEvent) => {
       const { key, data } = ParseMessage(ev)
       bridge.emit(key, data)
