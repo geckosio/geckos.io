@@ -1,7 +1,7 @@
 {
   "name": "chat-app",
   "description": "Real-time client/server communication over UDP using WebRTC and Node.js",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "main": "dist",
   "private": true,
   "scripts": {
@@ -37,8 +37,8 @@
     "lib": "lib"
   },
   "dependencies": {
-    "@geckos.io/client": "^1.1.6",
-    "@geckos.io/server": "^1.1.6",
+    "@geckos.io/client": "^1.1.7",
+    "@geckos.io/server": "^1.1.7",
     "source-map-support": "^0.5.11"
   },
   "devDependencies": {
