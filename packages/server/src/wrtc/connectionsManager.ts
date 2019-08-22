@@ -89,7 +89,7 @@ export default class ConnectionsManagerServer {
     const pc = connection.peerConnection
 
     pc.onconnectionstatechange = () => {
-      if (pc.connectionState === 'disconnected') {
+      if (pc.connectionState === 'disconnected' || pc.connectionState === 'failed') {
         connection.channel.eventEmitter.emit(EVENTS.DISCONNECT)
         this.deleteConnection(connection)
       }
