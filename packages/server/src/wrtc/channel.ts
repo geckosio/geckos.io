@@ -39,6 +39,8 @@ export default class ServerChannel {
       maxPacketLifeTime: maxPacketLifeTime
     })
 
+    this.dataChannel.binaryType = 'arraybuffer'
+
     this.dataChannel.onopen = () => {
       this.dataChannel.onmessage = (ev: MessageEvent) => {
         const { key, data } = ParseMessage(ev)
