@@ -203,6 +203,11 @@ _TODO: Note some differences here._
 
 To help developing geckos.io, install this repository via **`npm install`**. Test it with **`npm test`**. Then start the development server with **`npm run dev`**.
 
+## Automated Tests
+
+We do run automated tests for Node.js
+8, 10, 11 and 12 using Docker on Jenkins on localhost with the Dockerfiles in [./dockerfiles](dockerfiles) using [this Jenkins setup](https://github.com/yandeu/jenkins-puppeteer-docker).
+
 ## License
 
 The BSD 3-Clause License (BSD-3-Clause) 2019 - [Yannick Deubel](https://github.com/yandeu). Please have a look at the [LICENSE](LICENSE) for more details.
