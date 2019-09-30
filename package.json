@@ -7,7 +7,7 @@
     "lerna:ls": "lerna ls",
     "lerna:diff": "lerna diff",
     "lerna:changed": "lerna changed",
-    "lerna:version": "lerna version --no-changelog --no-push && cd packages/client && npm run bundle",
+    "lerna:version": "lerna version --no-changelog --no-push --no-git-tag-version --no-commit-hooks && cd packages/client && npm run bundle",
     "build:common": "tsc --build packages/common/tsconfig.json",
     "build:client": "tsc --build packages/client/tsconfig.json",
     "build:server": "tsc --build packages/server/tsconfig.json",
