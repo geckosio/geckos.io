@@ -45,6 +45,8 @@ import geckos from '@geckos.io/server'
  * @param options.ordered Default: false.
  * @param options.maxPacketLifeTime Default: null.
  * @param options.maxRetransmits Default: 0.
+ * @param options.cors
+ * @param options.cors.origin String | (req) => string. Default '*'
  */
 io = geckos(options)
 

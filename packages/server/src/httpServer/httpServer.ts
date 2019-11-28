@@ -3,8 +3,9 @@ import http from 'http'
 import ConnectionsManagerServer from '../wrtc/connectionsManager'
 import SetCORS from './setCors'
 import ParseBody from './parseBody'
+import { CorsOptions } from '@geckos.io/common/lib/typings'
 
-const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerServer) => {
+const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerServer, cors: CorsOptions) => {
   const prefix = '.wrtc'
   const version = 'v1'
   const root = `/${prefix}/${version}`
@@ -29,7 +30,7 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
       const path1 = pathname === `${root}/connections`
       const path2 = new RegExp(`${prefix}\/${version}\/connections\/[0-9a-zA-Z]+\/remote-description`).test(pathname)
 
-      SetCORS(res)
+      SetCORS(req, res, cors)
 
       if (req.method === 'OPTIONS') {
         res.writeHead(200)

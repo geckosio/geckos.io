@@ -9,7 +9,8 @@ import {
   ConnectionEventCallbackServer,
   EventOptions,
   EventName,
-  ServerOptions
+  ServerOptions,
+  CorsOptions
 } from '@geckos.io/common/lib/typings'
 import Connection from './wrtc/defaultConnection'
 import ConnectionsManagerServer from './wrtc/connectionsManager'
@@ -18,9 +19,11 @@ import HttpServer from './httpServer/httpServer'
 export class GeckosServer {
   private connectionsManager: ConnectionsManagerServer
   private _port: number
+  private _cors: CorsOptions = { origin: '*' }
 
   constructor(options: ServerOptions) {
     this.connectionsManager = new ConnectionsManagerServer(options)
+    this._cors = { ...this._cors, ...options.cors }
   }
 
   /**
@@ -34,7 +37,7 @@ export class GeckosServer {
     let server = http.createServer()
 
     // add all routes
-    HttpServer(server, this.connectionsManager)
+    HttpServer(server, this.connectionsManager, this._cors)
 
     // start the server
     server.listen(port, () => {
@@ -50,7 +53,7 @@ export class GeckosServer {
    * @param server Your http.Server.
    */
   public addServer(server: http.Server) {
-    HttpServer(server, this.connectionsManager)
+    HttpServer(server, this.connectionsManager, this._cors)
 
     server.once('close', () => {
       this.connectionsManager.connections.forEach((connection: Connection) => connection.close())
@@ -115,12 +118,15 @@ export class GeckosServer {
 
 /**
  * The geckos.io server library.
+ * @param options Pass the geckos.io server options.
  * @param options.iceServers An array of RTCIceServers. See https://developer.mozilla.org/en-US/docs/Web/API/RTCIceServer.
  * @param options.iceTransportPolicy RTCIceTransportPolicy enum defines string constants which can be used to limit the transport policies of the ICE candidates to be considered during the connection process.
  * @param options.label A human-readable name for the channel. This string may not be longer than 65,535 bytes. Default: 'geckos.io'.
  * @param options.ordered Indicates whether or not messages sent on the RTCDataChannel are required to arrive at their destination in the same order in which they were sent (true), or if they're allowed to arrive out-of-order (false). Default: false.
  * @param options.maxPacketLifeTime The maximum number of milliseconds that attempts to transfer a message may take in unreliable mode. While this value is a 16-bit unsigned number, each user agent may clamp it to whatever maximum it deems appropriate. Default: null.
  * @param options.maxRetransmits The maximum number of times the user agent should attempt to retransmit a message which fails the first time in unreliable mode. While this value is a16-bit unsigned number, each user agent may clamp it to whatever maximum it deems appropriate. Default: 0.
+ * @param options.cors Set the CORS options.
+ * @param options.cors.origin String OR (req: http.IncomingMessage) => string. Default '*'
  */
 const geckosServer = (options: ServerOptions = {}) => {
   const { iceTransportPolicy } = options

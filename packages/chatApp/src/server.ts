@@ -8,6 +8,13 @@ const app = express()
 const server = http.createServer(app)
 const io = geckos({
   iceServers: process.env.NODE_ENV === 'production' ? iceServers : []
+  // cors: { origin: 'http://localhost:8080' }
+  // cors: {
+  //   origin: req => {
+  //     // do some work and return a string
+  //     return 'http://localhost:8080'
+  //   }
+  // }
 })
 
 io.addServer(server)

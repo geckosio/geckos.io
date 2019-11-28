@@ -1,3 +1,5 @@
+import http from 'http'
+
 const ArrayBufferView = Object.getPrototypeOf(Object.getPrototypeOf(new Uint8Array())).constructor
 export { ArrayBufferView }
 
@@ -16,6 +18,7 @@ export interface ServerOptions {
   ordered?: boolean
   maxRetransmits?: number
   maxPacketLifeTime?: number
+  cors?: CorsOptions
 }
 
 export interface ClientOptions {
@@ -24,6 +27,11 @@ export interface ClientOptions {
   url?: string
   port?: number
   label?: string
+}
+
+type CorsOptionsOriginFunction = (req: http.IncomingMessage) => string
+export interface CorsOptions {
+  origin: string | CorsOptionsOriginFunction
 }
 
 export interface EventCallbackClient {
