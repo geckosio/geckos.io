@@ -73,6 +73,9 @@ io.onConnection(channel => {
   // channel leaves a room
   channel.leave()
 
+  // channel closes the webRTC connection
+  channel.close()
+
   // will trigger a specific event on all channels in a
   // specific room and add the senderId as a second parameter
   channel.forward(channel.sroomId).emit('chat message', 'Hello!')

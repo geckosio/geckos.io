@@ -22,7 +22,7 @@ export default class ServerChannel {
   private dataChannel: RTCDataChannel
   eventEmitter = new EventEmitter()
 
-  constructor(webrtcConnection: WebRTCConnection, dataChannelOptions: ServerOptions) {
+  constructor(public webrtcConnection: WebRTCConnection, dataChannelOptions: ServerOptions) {
     this._id = webrtcConnection.id
     this._roomId = undefined
 
@@ -75,6 +75,11 @@ export default class ServerChannel {
       let cb: ConnectionEventCallbackServer = channel => callback(channel)
       cb(channel)
     })
+  }
+
+  /** Close the webRTC connection. */
+  close() {
+    this.webrtcConnection.close()
   }
 
   /** Join a room by its id. */
