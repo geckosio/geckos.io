@@ -12,6 +12,7 @@
     "build:client": "tsc --build packages/client/tsconfig.json",
     "build:server": "tsc --build packages/server/tsconfig.json",
     "build": "npm run build:common && npm run build:client && npm run build:server",
+    "publish": "npm-run-all publish:*",
     "publish:common": "cd packages/common/ && npm publish",
     "publish:server": "cd packages/server/ && npm publish",
     "publish:client": "cd packages/client/ && npm publish",
