@@ -10,11 +10,14 @@ import {
   EventOptions,
   EventName,
   ServerOptions,
-  CorsOptions
+  CorsOptions,
+  EmitOptions
 } from '@geckos.io/common/lib/typings'
+import { makeReliable } from '@geckos.io/common/lib/reliableMessage'
 import Connection from './wrtc/defaultConnection'
 import ConnectionsManagerServer from './wrtc/connectionsManager'
 import HttpServer from './httpServer/httpServer'
+import WebRTCConnection from './wrtc/webrtcConnection'
 
 export class GeckosServer {
   private connectionsManager: ConnectionsManagerServer
@@ -24,6 +27,11 @@ export class GeckosServer {
   constructor(options: ServerOptions) {
     this.connectionsManager = new ConnectionsManagerServer(options)
     this._cors = { ...this._cors, ...options.cors }
+  }
+
+  // @ts-ignore
+  private get connections() {
+    return this.connectionsManager.connections
   }
 
   /**
@@ -68,9 +76,22 @@ export class GeckosServer {
    * Emit a message to all channels.
    * @param eventName The event name.
    * @param data The data you want to send.
+   * @param options EmitOptions
    */
-  emit(eventName: EventName, data: Data) {
-    bridge.emit(EVENTS.SEND_TO_ALL, { [eventName]: data })
+  emit(eventName: EventName, data: Data, options?: EmitOptions) {
+    this.connections.forEach((connection: WebRTCConnection) => {
+      const { channel } = connection
+
+      if (options && options.reliable) {
+        makeReliable(options, (id: string) =>
+          channel.emit(eventName, {
+            MESSAGE: data,
+            RELIABLE: 1,
+            ID: id
+          })
+        )
+      } else channel.emit(eventName, data)
+    })
   }
 
   /**

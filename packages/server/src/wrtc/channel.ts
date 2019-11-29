@@ -12,9 +12,11 @@ import {
   EventName,
   ConnectionEventCallbackServer,
   EventCallbackRawMessage,
-  ServerOptions
+  ServerOptions,
+  EmitOptions
 } from '@geckos.io/common/lib/typings'
 import SendMessage from '@geckos.io/common/lib/sendMessage'
+import { makeReliable } from '@geckos.io/common/lib/reliableMessage'
 
 export default class ServerChannel {
   private _roomId: RoomId
@@ -150,8 +152,8 @@ export default class ServerChannel {
           EVENTS.FORWARD_MESSAGE,
           { [eventName]: data },
           {
-            roomId: roomId,
-            id: this._id
+            id: this._id,
+            roomId: roomId
           }
         )
       }
@@ -162,9 +164,20 @@ export default class ServerChannel {
    * Emit a message to the channel.
    * @param eventName The event name.
    * @param data The data to send.
+   * @param options EmitOptions
    */
-  emit(eventName: EventName, data: Data | null = null) {
-    this._emit(eventName, data)
+  emit(eventName: EventName, data: Data | null = null, options?: EmitOptions) {
+    if (options && options.reliable) {
+      makeReliable(options, (id: string) =>
+        this._emit(eventName, {
+          MESSAGE: data,
+          RELIABLE: 1,
+          ID: id
+        })
+      )
+    } else {
+      this._emit(eventName, data)
+    }
   }
 
   private _emit(eventName: EventName, data: Data | RawMessage | null = null) {

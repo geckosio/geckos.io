@@ -16,6 +16,8 @@ export class ClientChannel {
   private peerConnection: PeerConnection
   private connectionsManager: ConnectionsManagerClient
   private url: string
+  // TODO (yandeu): remove old messages from this.receivedReliableMessages
+  private receivedReliableMessages: { date: Date; id: string }[] = []
 
   constructor(url: string, port: number, label: string, rtcConfiguration: RTCConfiguration) {
     this.url = `${url}:${port}`
@@ -94,8 +96,22 @@ export class ClientChannel {
    * @param callback The event callback.
    */
   on(eventName: EventName, callback: EventCallbackClient) {
-    bridge.on(eventName, (data: Data) => {
-      callback(data)
+    bridge.on(eventName, (data: any) => {
+      // check if message is reliable
+      // and reject it if it has already been submitted
+      const isReliableMessage: boolean =
+        data && typeof data.MESSAGE !== 'undefined' && data.RELIABLE === 1 && data.ID !== 'undefined'
+
+      if (isReliableMessage) {
+        if (this.receivedReliableMessages.filter(obj => obj.id === data.ID).length === 0) {
+          this.receivedReliableMessages.push({ date: new Date(), id: data.ID })
+          callback(data.MESSAGE)
+        } else {
+          // reject message
+        }
+      } else {
+        callback(data)
+      }
     })
   }
 }

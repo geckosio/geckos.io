@@ -44,6 +44,10 @@ channel.onConnect(error => {
     appendMessage(data)
   })
 
+  channel.on('some reliable event', (data: Data) => {
+    console.log(data)
+  })
+
   channel.emit('number', 33)
 
   channel.onRaw((rawMessage: RawMessage) => {

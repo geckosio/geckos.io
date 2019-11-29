@@ -8,7 +8,6 @@ const EVENTS = {
   ERROR: 'error',
   DATA_CHANNEL_IS_OPEN: 'dataChannelIsOpen',
   SEND_TO_ROOM: 'sendToRoom',
-  SEND_TO_ALL: 'sendToAll',
   FORWARD_MESSAGE: 'forwardMessage',
   BROADCAST_MESSAGE: 'broadcastMessage',
   RAW_MESSAGE: 'rawMessage'

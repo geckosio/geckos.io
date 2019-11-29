@@ -29,6 +29,12 @@ export interface ClientOptions {
   label?: string
 }
 
+export interface EmitOptions {
+  reliable?: boolean
+  interval?: number
+  runs?: number
+}
+
 type CorsOptionsOriginFunction = (req: http.IncomingMessage) => string
 export interface CorsOptions {
   origin: string | CorsOptionsOriginFunction

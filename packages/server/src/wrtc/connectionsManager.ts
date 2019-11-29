@@ -2,6 +2,7 @@ import WebRTCConnection from './webrtcConnection'
 import bridge from '@geckos.io/common/lib/bridge'
 import { EventOptions, ChannelId, Payload, ServerOptions } from '@geckos.io/common/lib/typings'
 import { EVENTS } from '@geckos.io/common/lib/constants'
+import makeRandomId from '@geckos.io/common/lib/makeRandomId'
 
 export default class ConnectionsManagerServer {
   connections = new Map()
@@ -46,29 +47,11 @@ export default class ConnectionsManagerServer {
         }
       })
     })
-    // send to all channels
-    bridge.on(EVENTS.SEND_TO_ALL, (payload: Payload) => {
-      let eventName = Object.keys(payload)[0]
-      let data = payload[eventName]
-      this.connections.forEach((connection: WebRTCConnection) => {
-        const { channel } = connection
-        channel.emit(eventName, data)
-      })
-    })
-  }
-
-  private makeRandomId(length: number = 24) {
-    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-    let id = ''
-    for (let i = 0; i < length; i++) {
-      id += possible.charAt(Math.floor(Math.random() * possible.length))
-    }
-    return id
   }
 
   private createId(): ChannelId {
     do {
-      const id = this.makeRandomId(24)
+      const id = makeRandomId(24)
       if (!this.connections.has(id)) {
         return id
       }
