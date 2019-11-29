@@ -88,6 +88,30 @@ io.onConnection(channel => {
 
 You will find all the available methos in the [cheatsheet](cheatsheet.md)!
 
+## Reliable Messages (experimental in v1.3.0)
+
+All emit function can send reliable message if needed. This is **NOT** meant to be used as the default. Just use it to send important messages back and forth. 
+
+It works by simply transferring multiple messages after each other. The receiver will simply reject a message if it has already been processed.
+
+```js
+channel.emit('end of game', {
+	points: 147,
+	time: 650,
+	achievements: ['crucial_hit','golden_trophy']
+}, {
+  // Set the reliable option
+  // Default: false
+  reliable: true,
+  // The interval between each message in ms (optional)
+  // Default: 150
+  interval: 150,
+  // How many times the message should be sent (optional)
+  // Default: 10
+  runs: 10
+})
+```
+
 ## Servers
 
 ### Standalone
