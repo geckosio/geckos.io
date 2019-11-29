@@ -35,13 +35,13 @@ io.onConnection((channel: ServerChannel) => {
 
   channel.emit('chat message', `Welcome to the chat ${channel.id}!`)
 
+  // send reliable messages to the client (experimental)
+  io.emit('some reliable event', 'very important message [io]', { reliable: true })
+  channel.emit('some reliable event', 'very important message [channel]', { reliable: true })
+
   channel.on('chat message', (data: Data) => {
     // emit to all
     io.emit('chat message', `ALL: ${data}`)
-
-    // send reliable messages to the client (experimental)
-    io.emit('some reliable event', 'very important message [io]', { reliable: true })
-    channel.emit('some reliable event', 'very important message [channel]', { reliable: true })
 
     // emit the "chat message" data to all channels in the same room
     channel.room.emit('chat message', `ROOM: ${data}`)
