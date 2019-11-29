@@ -101,13 +101,14 @@ export class GeckosServer {
   room(roomId: RoomId = undefined) {
     return {
       emit: (eventName: EventName, data: Data) => {
-        bridge.emit(
-          EVENTS.SEND_TO_ROOM,
-          { [eventName]: data },
-          {
-            roomId: roomId
+        this.connections.forEach((connection: WebRTCConnection) => {
+          const { channel } = connection
+          const { roomId: channelRoomId } = channel
+
+          if (roomId === channelRoomId) {
+            channel.emit(eventName, data)
           }
-        )
+        })
       }
     }
   }

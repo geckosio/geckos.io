@@ -7,9 +7,6 @@ const EVENTS = {
   CONNECT: 'connect',
   ERROR: 'error',
   DATA_CHANNEL_IS_OPEN: 'dataChannelIsOpen',
-  SEND_TO_ROOM: 'sendToRoom',
-  FORWARD_MESSAGE: 'forwardMessage',
-  BROADCAST_MESSAGE: 'broadcastMessage',
   RAW_MESSAGE: 'rawMessage'
 }
 

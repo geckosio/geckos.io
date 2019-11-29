@@ -1,53 +1,12 @@
 import WebRTCConnection from './webrtcConnection'
-import bridge from '@geckos.io/common/lib/bridge'
-import { EventOptions, ChannelId, Payload, ServerOptions } from '@geckos.io/common/lib/typings'
+import { ChannelId, ServerOptions } from '@geckos.io/common/lib/typings'
 import { EVENTS } from '@geckos.io/common/lib/constants'
 import makeRandomId from '@geckos.io/common/lib/makeRandomId'
 
 export default class ConnectionsManagerServer {
   connections = new Map()
 
-  constructor(public options: ServerOptions) {
-    // forward a message (includes the channel id of the sender)
-    bridge.on(EVENTS.FORWARD_MESSAGE, (payload: Payload, options: EventOptions) => {
-      let eventName = Object.keys(payload)[0]
-      let data = payload[eventName]
-      this.connections.forEach((connection: WebRTCConnection) => {
-        const { channel } = connection
-        const { roomId } = channel
-
-        if (roomId === options.roomId) {
-          channel.eventEmitter.emit(eventName, data, options.id)
-        }
-      })
-    })
-    // broadcast a message
-    bridge.on(EVENTS.BROADCAST_MESSAGE, (payload: Payload, options: EventOptions) => {
-      let eventName = Object.keys(payload)[0]
-      let data = payload[eventName]
-      this.connections.forEach((connection: WebRTCConnection) => {
-        const { channel } = connection
-        const { roomId, id } = channel
-
-        if (roomId === options.roomId && id !== options.id) {
-          channel.emit(eventName, data)
-        }
-      })
-    })
-    // send to all channels in a room
-    bridge.on(EVENTS.SEND_TO_ROOM, (payload: Payload, options: EventOptions) => {
-      let eventName = Object.keys(payload)[0]
-      let data = payload[eventName]
-      this.connections.forEach((connection: WebRTCConnection) => {
-        const { channel } = connection
-        const { roomId } = channel
-
-        if (roomId === options.roomId) {
-          channel.emit(eventName, data)
-        }
-      })
-    })
-  }
+  constructor(public options: ServerOptions) {}
 
   private createId(): ChannelId {
     do {
@@ -68,7 +27,7 @@ export default class ConnectionsManagerServer {
   }
 
   async createConnection() {
-    const connection = new WebRTCConnection(this.createId(), this.options)
+    const connection = new WebRTCConnection(this.createId(), this.options, this.connections)
     const pc = connection.peerConnection
 
     pc.onconnectionstatechange = () => {

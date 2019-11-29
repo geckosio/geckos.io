@@ -103,14 +103,14 @@ export default class ServerChannel {
        * @param data The data to send.
        */
       emit: (eventName: EventName, data: Data) => {
-        bridge.emit(
-          EVENTS.SEND_TO_ROOM,
-          { [eventName]: data },
-          {
-            id: this._id,
-            roomId: this._roomId
+        this.webrtcConnection.connections.forEach((connection: WebRTCConnection) => {
+          const { channel } = connection
+          const { roomId } = channel
+
+          if (roomId === this._roomId) {
+            channel.emit(eventName, data)
           }
-        )
+        })
       }
     }
   }
@@ -124,14 +124,14 @@ export default class ServerChannel {
        * @param data The data to send.
        */
       emit: (eventName: EventName, data: Data) => {
-        bridge.emit(
-          EVENTS.BROADCAST_MESSAGE,
-          { [eventName]: data },
-          {
-            id: this._id,
-            roomId: this._roomId
+        this.webrtcConnection.connections.forEach((connection: WebRTCConnection) => {
+          const { channel } = connection
+          const { roomId, id } = channel
+
+          if (roomId === this._roomId && id !== this._id) {
+            channel.emit(eventName, data)
           }
-        )
+        })
       }
     }
   }
@@ -148,14 +148,14 @@ export default class ServerChannel {
        * @param data The data to send.
        */
       emit: (eventName: EventName, data: Data) => {
-        bridge.emit(
-          EVENTS.FORWARD_MESSAGE,
-          { [eventName]: data },
-          {
-            id: this._id,
-            roomId: roomId
+        this.webrtcConnection.connections.forEach((connection: WebRTCConnection) => {
+          const { channel } = connection
+          const { roomId: channelRoomId } = channel
+
+          if (roomId === channelRoomId) {
+            channel.eventEmitter.emit(eventName, data, this._id)
           }
-        )
+        })
       }
     }
   }

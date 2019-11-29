@@ -14,7 +14,7 @@ export default class WebRTCConnection extends DefaultConnection {
   channel: Channel
   private options: any
 
-  constructor(id: ChannelId, serverOptions: ServerOptions) {
+  constructor(id: ChannelId, serverOptions: ServerOptions, public connections: Map<any, any>) {
     super(id)
 
     const { iceServers = [], iceTransportPolicy = 'all', ...dataChannelOptions } = serverOptions
