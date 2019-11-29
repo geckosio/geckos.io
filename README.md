@@ -88,7 +88,7 @@ io.onConnection(channel => {
 
 You will find all the available methos in the [cheatsheet](cheatsheet.md)!
 
-## Reliable Messages (experimental in v1.3.0)
+## Reliable Messages (experimental in v1.3.0-alpha.0)
 
 All emit function can send reliable message if needed. This is **NOT** meant to be used as the default. Just use it to send important messages back and forth. 
 
