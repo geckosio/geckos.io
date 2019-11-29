@@ -78,7 +78,7 @@ io.onConnection(channel => {
 
   // will trigger a specific event on all channels in a
   // specific room and add the senderId as a second parameter
-  channel.forward(channel.sroomId).emit('chat message', 'Hello!')
+  channel.forward(channel.roomId).emit('chat message', 'Hello!')
 
   // listen for a forwarded message
   channel.on('chat message', (data, senderId) => {
