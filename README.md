@@ -42,7 +42,7 @@ npm install @geckos.io/client @geckos.io/server
 import geckos from '@geckos.io/client'
 
 // or add a minified version to your index.html file
-// https://github.com/geckosio/geckos.io/tree/master/bundles/versions
+// https://github.com/geckosio/geckos.io/tree/master/bundles
 
 const channel = geckos()
 
