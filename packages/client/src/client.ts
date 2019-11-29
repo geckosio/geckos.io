@@ -1,4 +1,5 @@
 import bridge from '@geckos.io/common/lib/bridge'
+import { makeReliable } from '@geckos.io/common/lib/reliableMessage'
 import { EVENTS } from '@geckos.io/common/lib/constants'
 import PeerConnection from './wrtc/peerConnection'
 import ConnectionsManagerClient from './wrtc/connectionsManager'
@@ -9,7 +10,8 @@ import {
   EventCallbackClient,
   ConnectionEventCallbackClient,
   EventCallbackRawMessage,
-  ClientOptions
+  ClientOptions,
+  EmitOptions
 } from '@geckos.io/common/lib/typings'
 
 export class ClientChannel {
@@ -38,8 +40,18 @@ export class ClientChannel {
   }
 
   /** Emit a message to the server. */
-  emit(eventName: EventName, data: Data | null = null) {
-    this.connectionsManager.emit(eventName, data)
+  emit(eventName: EventName, data: Data | null = null, options?: EmitOptions) {
+    if (options && options.reliable) {
+      makeReliable(options, (id: string) =>
+        this.connectionsManager.emit(eventName, {
+          MESSAGE: data,
+          RELIABLE: 1,
+          ID: id
+        })
+      )
+    } else {
+      this.connectionsManager.emit(eventName, data)
+    }
   }
 
   /** Emit a raw message to the server */

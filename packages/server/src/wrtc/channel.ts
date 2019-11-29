@@ -23,6 +23,8 @@ export default class ServerChannel {
   private _id: ChannelId
   private dataChannel: RTCDataChannel
   eventEmitter = new EventEmitter()
+  // TODO (yandeu): remove old messages from this.receivedReliableMessages
+  private receivedReliableMessages: { date: Date; id: string }[] = []
 
   constructor(public webrtcConnection: WebRTCConnection, dataChannelOptions: ServerOptions) {
     this._id = webrtcConnection.id
@@ -102,13 +104,23 @@ export default class ServerChannel {
        * @param eventName The event name.
        * @param data The data to send.
        */
-      emit: (eventName: EventName, data: Data) => {
+      emit: (eventName: EventName, data: Data, options?: EmitOptions) => {
         this.webrtcConnection.connections.forEach((connection: WebRTCConnection) => {
           const { channel } = connection
           const { roomId } = channel
 
           if (roomId === this._roomId) {
-            channel.emit(eventName, data)
+            if (options && options.reliable) {
+              makeReliable(options, (id: string) =>
+                channel.emit(eventName, {
+                  MESSAGE: data,
+                  RELIABLE: 1,
+                  ID: id
+                })
+              )
+            } else {
+              channel.emit(eventName, data)
+            }
           }
         })
       }
@@ -123,13 +135,23 @@ export default class ServerChannel {
        * @param eventName The event name.
        * @param data The data to send.
        */
-      emit: (eventName: EventName, data: Data) => {
+      emit: (eventName: EventName, data: Data, options?: EmitOptions) => {
         this.webrtcConnection.connections.forEach((connection: WebRTCConnection) => {
           const { channel } = connection
           const { roomId, id } = channel
 
           if (roomId === this._roomId && id !== this._id) {
-            channel.emit(eventName, data)
+            if (options && options.reliable) {
+              makeReliable(options, (id: string) =>
+                channel.emit(eventName, {
+                  MESSAGE: data,
+                  RELIABLE: 1,
+                  ID: id
+                })
+              )
+            } else {
+              channel.emit(eventName, data)
+            }
           }
         })
       }
@@ -147,13 +169,27 @@ export default class ServerChannel {
        * @param eventName The event name.
        * @param data The data to send.
        */
-      emit: (eventName: EventName, data: Data) => {
+      emit: (eventName: EventName, data: Data, options?: EmitOptions) => {
         this.webrtcConnection.connections.forEach((connection: WebRTCConnection) => {
           const { channel } = connection
           const { roomId: channelRoomId } = channel
 
           if (roomId === channelRoomId) {
-            channel.eventEmitter.emit(eventName, data, this._id)
+            if (options && options.reliable) {
+              makeReliable(options, (id: string) =>
+                channel.eventEmitter.emit(
+                  eventName,
+                  {
+                    MESSAGE: data,
+                    RELIABLE: 1,
+                    ID: id
+                  },
+                  this._id
+                )
+              )
+            } else {
+              channel.eventEmitter.emit(eventName, data, this._id)
+            }
           }
         })
       }
@@ -215,9 +251,23 @@ export default class ServerChannel {
    * @param callback The event callback.
    */
   on(eventName: EventName, callback: EventCallbackServer) {
-    this.eventEmitter.on(eventName, (data: Data, senderId: ChannelId = undefined) => {
-      let cb: EventCallbackServer = (data: Data, senderId: ChannelId) => callback(data, senderId)
-      cb(data, senderId)
+    this.eventEmitter.on(eventName, (data: any, senderId: ChannelId = undefined) => {
+      let cb: EventCallbackServer = (data: any, senderId: ChannelId) => callback(data, senderId)
+      // check if message is reliable
+      // and reject it if it has already been submitted
+      const isReliableMessage: boolean =
+        data && typeof data.MESSAGE !== 'undefined' && data.RELIABLE === 1 && data.ID !== 'undefined'
+
+      if (isReliableMessage) {
+        if (this.receivedReliableMessages.filter(obj => obj.id === data.ID).length === 0) {
+          this.receivedReliableMessages.push({ date: new Date(), id: data.ID })
+          cb(data.MESSAGE, senderId)
+        } else {
+          // reject message
+        }
+      } else {
+        cb(data, senderId)
+      }
     })
   }
 }
