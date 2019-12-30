@@ -34,7 +34,7 @@
     "lib": "lib"
   },
   "engines": {
-    "node": "^8 || ^10 || ^11 || ^12"
+    "node": "^8 || ^10 || ^11 || ^12 || ^13"
   },
   "scripts": {
     "bundle": "npm run bundle:version && npm run bundle:latest",
