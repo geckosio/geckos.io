@@ -227,6 +227,10 @@ _TODO: Note some differences here._
 | Chat App                                                        |    &#9679;    |               | &#9679; |
 | Any other App with Real-Time communication                      |    &#9679;    |    &#9679;    | &#9679; |
 
+## Who is using geckos.io
+
+- [DatTank.io](https://dattank.io/) - is a free multiplayer browser online tank game.
+
 ## Development
 
 To help developing geckos.io, install this repository via **`npm install`**. Test it with **`npm test`**. Then start the development server with **`npm run dev`**.
