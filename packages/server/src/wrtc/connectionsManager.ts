@@ -32,7 +32,7 @@ export default class ConnectionsManagerServer {
 
     pc.onconnectionstatechange = () => {
       if (pc.connectionState === 'disconnected' || pc.connectionState === 'failed' || pc.connectionState === 'closed') {
-        connection.channel.eventEmitter.emit(EVENTS.DISCONNECT)
+        connection.channel.eventEmitter.emit(EVENTS.DISCONNECT, pc.connectionState)
         this.deleteConnection(connection)
       }
     }

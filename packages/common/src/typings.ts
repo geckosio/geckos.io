@@ -60,6 +60,10 @@ export interface ConnectionEventCallbackServer {
   (channel: any): void
 }
 
+export interface DisconnectEventCallbackServer {
+  (connectionState: 'disconnected' | 'failed' | 'closed'): void
+}
+
 export interface EventOptions {
   roomId?: RoomId
   senderId?: ChannelId

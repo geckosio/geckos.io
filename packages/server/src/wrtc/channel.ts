@@ -10,7 +10,7 @@ import {
   RawMessage,
   ChannelId,
   EventName,
-  ConnectionEventCallbackServer,
+  DisconnectEventCallbackServer,
   EventCallbackRawMessage,
   ServerOptions,
   EmitOptions
@@ -72,12 +72,13 @@ export default class ServerChannel {
 
   /**
    * Listen for the disconnect event.
-   * @param callback The event callback.
+   * Gets the connectionState 'disconnected', 'failed' or 'closed'. See https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/connectionState
+   * @param callback The connectionState.
    */
-  onDisconnect(callback: ConnectionEventCallbackServer) {
-    this.eventEmitter.on(EVENTS.DISCONNECT, (channel: ServerChannel) => {
-      let cb: ConnectionEventCallbackServer = channel => callback(channel)
-      cb(channel)
+  onDisconnect(callback: DisconnectEventCallbackServer) {
+    this.eventEmitter.on(EVENTS.DISCONNECT, (connectionState: 'disconnected' | 'failed' | 'closed') => {
+      let cb: DisconnectEventCallbackServer = connectionState => callback(connectionState)
+      cb(connectionState)
     })
   }
 
