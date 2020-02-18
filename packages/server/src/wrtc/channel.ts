@@ -23,8 +23,8 @@ export default class ServerChannel {
   private _id: ChannelId
   private dataChannel: RTCDataChannel
   eventEmitter = new EventEmitter()
-  // TODO (yandeu): remove old messages from this.receivedReliableMessages
-  private receivedReliableMessages: { date: Date; id: string }[] = []
+  // stores all reliable messages for about 15 seconds
+  private receivedReliableMessages: { id: string; timestamp: Date; expire: number }[] = []
 
   constructor(public webrtcConnection: WebRTCConnection, dataChannelOptions: ServerOptions) {
     this._id = webrtcConnection.id
@@ -259,9 +259,27 @@ export default class ServerChannel {
       const isReliableMessage: boolean =
         data && typeof data.MESSAGE !== 'undefined' && data.RELIABLE === 1 && data.ID !== 'undefined'
 
+      const expireTime = 15_000 // 15 seconds
+
+      const deleteExpiredReliableMessages = () => {
+        const currentTime = new Date().getTime()
+
+        this.receivedReliableMessages.forEach((msg, index, object) => {
+          if (msg.expire <= currentTime) {
+            object.splice(index, 1)
+          }
+        })
+      }
+
       if (isReliableMessage) {
+        deleteExpiredReliableMessages()
+
         if (this.receivedReliableMessages.filter(obj => obj.id === data.ID).length === 0) {
-          this.receivedReliableMessages.push({ date: new Date(), id: data.ID })
+          this.receivedReliableMessages.push({
+            id: data.ID,
+            timestamp: new Date(),
+            expire: new Date().getTime() + expireTime
+          })
           cb(data.MESSAGE, senderId)
         } else {
           // reject message
