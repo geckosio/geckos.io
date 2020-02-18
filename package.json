@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "start": "npm run dev",
     "lerna:ls": "lerna ls",
     "lerna:diff": "lerna diff",
     "lerna:changed": "lerna changed",
