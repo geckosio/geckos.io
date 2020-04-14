@@ -17,7 +17,7 @@ export default class WebRTCConnection extends DefaultConnection {
   constructor(id: ChannelId, serverOptions: ServerOptions, public connections: Map<any, any>) {
     super(id)
 
-    const { iceServers = [], iceTransportPolicy = 'all', ...dataChannelOptions } = serverOptions
+    const { iceServers = [], iceTransportPolicy = 'all', minimumSrflxCandidates = -1 ,...dataChannelOptions } = serverOptions
 
     this.options = {
       clearTimeout,
@@ -109,6 +109,7 @@ export default class WebRTCConnection extends DefaultConnection {
     }
 
     let totalIceCandidates = 0
+    let totalSrflxCandidates = 0;
 
     const { timeToHostCandidates } = options
     const deferred: any = {}
@@ -133,11 +134,12 @@ export default class WebRTCConnection extends DefaultConnection {
     const onIceCandidate = (ev: RTCPeerConnectionIceEvent) => {
       const { candidate } = ev
 
+      if (candidate.type === 'srflx') totalSrflxCandidates++
       // if (candidate) console.log('candidate nr.', totalIceCandidates, 'type', candidate.type)
 
       totalIceCandidates++
 
-      if (!candidate) {
+      if (!candidate || (minimumSrflxCandidates !== -1 && totalSrflxCandidates >= minimumSrflxCandidates)) {
         options.clearTimeout(timeout)
         peerConnection.removeEventListener('icecandidate', onIceCandidate)
         deferred.resolve()
