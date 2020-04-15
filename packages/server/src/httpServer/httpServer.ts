@@ -29,6 +29,7 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
     if (pathname && rootRegEx.test(pathname)) {
       const path1 = pathname === `${root}/connections`
       const path2 = new RegExp(`${prefix}\/${version}\/connections\/[0-9a-zA-Z]+\/remote-description`).test(pathname)
+      const closePath = new RegExp(`${prefix}\/${version}\/connections\/[0-9a-zA-Z]+\/close`).test(pathname)
 
       SetCORS(req, res, cors)
 
@@ -94,9 +95,7 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
             res.end()
             return
           }
-        }
-
-        if (method === 'POST' && path2) {
+        } else if (method === 'POST' && path2) {
           const ids = pathname.match(/[0-9a-zA-Z]{24}/g)
           if (ids && ids.length === 1) {
             const id = ids[0]
@@ -121,6 +120,15 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
               return
             }
           }
+        } else if (method === 'POST' && closePath) {
+          const ids = pathname.match(/[0-9a-zA-Z]{24}/g)
+          if (ids && ids.length === 1) {
+            const id = ids[0]
+            const connection = connectionsManager.getConnection(id)
+            connection?.close()
+          }
+          res.end()
+          return
         } else {
           res.writeHead(404)
           res.end()

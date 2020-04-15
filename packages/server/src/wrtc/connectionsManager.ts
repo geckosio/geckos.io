@@ -4,7 +4,7 @@ import { EVENTS } from '@geckos.io/common/lib/constants'
 import makeRandomId from '@geckos.io/common/lib/makeRandomId'
 
 export default class ConnectionsManagerServer {
-  connections = new Map()
+  connections: Map<ChannelId, WebRTCConnection> = new Map()
 
   constructor(public options: ServerOptions) {}
 

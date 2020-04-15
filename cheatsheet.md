@@ -28,6 +28,9 @@ channel.onConnect(error => {
 
   // emits a message to the server
   channel.emit('chat message', 'Hi!')
+
+  // closes the WebRTC connection
+  channel.close()
 })
 ```
 

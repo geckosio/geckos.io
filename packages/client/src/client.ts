@@ -39,6 +39,23 @@ export class ClientChannel {
     return this.peerConnection.id
   }
 
+  /** Close the WebRTC connection */
+  public close() {
+    this.peerConnection.localPeerConnection.close()
+
+    try {
+      const host = `${this.url}/.wrtc/v1`
+      fetch(`${host}/connections/${this.id}/close`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+    } catch (error) {
+      console.error(error.message)
+    }
+  }
+
   /** Emit a message to the server. */
   emit(eventName: EventName, data: Data | null = null, options?: EmitOptions) {
     if (options && options.reliable) {
