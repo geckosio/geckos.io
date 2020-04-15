@@ -132,8 +132,14 @@ io.onConnection(channel => {
 You can send and receive `USVString`, `ArrayBuffer` and `ArrayBufferView` using rawMessages.
 
 ```js
-// send a raw message
+// emit a raw message
 channel.raw.emit(rawMessage)
+
+// emit a raw message to all users in the same room
+channel.raw.room.emit(rawMessage)
+
+// broadcast a raw message
+channel.raw.broadcast.emit(rawMessage)
 
 // listen for a raw message
 channel.onRaw(rawMessage => {})

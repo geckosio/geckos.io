@@ -231,7 +231,9 @@ export default class ServerChannel {
        * Emit a raw message.
        * @param rawMessage The raw message. Can be of type 'USVString | ArrayBuffer | ArrayBufferView'
        */
-      emit: (rawMessage: RawMessage) => this.emit(EVENTS.RAW_MESSAGE, rawMessage)
+      emit: (rawMessage: RawMessage) => this.emit(EVENTS.RAW_MESSAGE, rawMessage),
+      room: { emit: (rawMessage: RawMessage) => this.room.emit(EVENTS.RAW_MESSAGE, rawMessage) },
+      broadcast: { emit: (rawMessage: RawMessage) => this.broadcast.emit(EVENTS.RAW_MESSAGE, rawMessage) }
     }
   }
 
