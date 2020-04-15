@@ -1,4 +1,4 @@
-import geckos, { ServerChannel, Data, RawMessage, iceServers } from '@geckos.io/server'
+import geckos, { ServerChannel, Data, RawMessage, iceServers, GeckosServer } from '@geckos.io/server'
 
 // using with express
 import express from 'express'
@@ -6,7 +6,7 @@ import http from 'http'
 import { join } from 'path'
 const app = express()
 const server = http.createServer(app)
-const io = geckos({
+const io: GeckosServer = geckos({
   iceServers: process.env.NODE_ENV === 'production' ? iceServers : []
   // cors: { origin: 'http://localhost:8080' }
   // cors: {
