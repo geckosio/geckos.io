@@ -18,6 +18,7 @@ export interface ServerOptions {
   ordered?: boolean
   maxRetransmits?: number
   maxPacketLifeTime?: number
+  minimumSrflxCandidates?: number
   cors?: CorsOptions
 }
 

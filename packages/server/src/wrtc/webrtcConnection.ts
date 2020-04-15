@@ -22,6 +22,7 @@ export default class WebRTCConnection extends DefaultConnection {
     this.options = {
       clearTimeout,
       setTimeout,
+      minimumSrflxCandidates,
       timeToHostCandidates: TIME_TO_HOST_CANDIDATES
     }
 
@@ -134,12 +135,12 @@ export default class WebRTCConnection extends DefaultConnection {
     const onIceCandidate = (ev: RTCPeerConnectionIceEvent) => {
       const { candidate } = ev
 
-      if (candidate.type === 'srflx') totalSrflxCandidates++
+      if (candidate && candidate.type === 'srflx') totalSrflxCandidates++
       // if (candidate) console.log('candidate nr.', totalIceCandidates, 'type', candidate.type)
 
       totalIceCandidates++
 
-      if (!candidate || (minimumSrflxCandidates !== -1 && totalSrflxCandidates >= minimumSrflxCandidates)) {
+      if (!candidate || (this.options.minimumSrflxCandidates !== -1 && totalSrflxCandidates >= this.options.minimumSrflxCandidates)) {
         options.clearTimeout(timeout)
         peerConnection.removeEventListener('icecandidate', onIceCandidate)
         deferred.resolve()
