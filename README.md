@@ -235,6 +235,12 @@ _TODO: Note some differences here._
 
 - [DatTank.io](https://dattank.io/) - is a free multiplayer browser online tank game.
 
+## Ads
+
+<a href="https://github.com/yandeu/enable3d#readme"><img src="readme/enable3d-logo.png" alt="enable3d logo" width="300"></a>
+
+Want to make a 3D HTML5 Game? Take a look at [enable3d](https://github.com/yandeu/enable3d#readme).
+
 ## Development
 
 To help developing geckos.io, install this repository via **`npm install`**. Test it with **`npm test`**. Then start the development server with **`npm run dev`**.
