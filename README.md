@@ -44,7 +44,7 @@ import geckos from '@geckos.io/client'
 // or add a minified version to your index.html file
 // https://github.com/geckosio/geckos.io/tree/master/bundles
 
-const channel = geckos()
+const channel = geckos({ port: 3000 }) // default port is 9208
 
 channel.onConnect(error => {
   if (error) {
@@ -69,7 +69,7 @@ import geckos from '@geckos.io/server'
 
 const io = geckos()
 
-io.listen()
+io.listen(3000) // default port is 9208
 
 io.onConnection(channel => {
   channel.onDisconnect(() => {
@@ -125,7 +125,7 @@ import geckos from '@geckos.io/server'
 const io = geckos()
 
 io.onConnection( channel => { ... })
-io.listen()
+io.listen(3000) // default port is 9208
 ```
 
 ### Node.js HTTP Server
@@ -138,6 +138,8 @@ const io = geckos()
 
 io.addServer(server)
 io.onConnection( channel => { ... })
+// make sure the client uses the same port
+// @geckos.io/client uses the port 9208 by default
 server.listen(3000)
 ```
 
@@ -153,14 +155,16 @@ const io = geckos()
 
 io.addServer(server)
 io.onConnection( channel => { ... })
+// make sure the client uses the same port
+// @geckos.io/client uses the port 9208 by default
 server.listen(3000)
 ```
 
 ## Deployment
 
-You have to make sure you deploy it to a server which forwards all traffic on ports **9208/tcp** and **0-65535/upd** to your application.
+You have to make sure you deploy it to a server which forwards all traffic on ports **9208/tcp** (or another port you define) and **0-65535/upd** to your application.
 
-Port 9208/tcp is used for the peer signaling. The peer connection itself will be on a random port between 0-65535/upd.
+Port 9208/tcp (or another port you define) is used for the peer signaling. The peer connection itself will be on a random port between 0-65535/upd.
 
 ## ICE Servers
 
