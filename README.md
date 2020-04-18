@@ -235,6 +235,10 @@ _TODO: Note some differences here._
 
 - [DatTank.io](https://dattank.io/) - is a free multiplayer browser online tank game.
 
+## New Technologies
+
+For now WebRTC in the best way to send fast (unordered and unreliable) messages between browser and server. But once a better technology will be widely available (for example [quic](https://caniuse.com/#search=quic)), we will implement it as well.
+
 ## Ads
 
 <a href="https://github.com/yandeu/enable3d#readme"><img src="readme/enable3d-logo.png" alt="enable3d logo" width="300"></a>
