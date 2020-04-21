@@ -48,6 +48,17 @@ describe('connection', () => {
       })
     })
   })
+
+  describe('close', () => {
+    test('server should close the connection', done => {
+      channel.onDisconnect(event => {
+        done()
+      })
+      setTimeout(() => {
+        channel.close()
+      }, 250)
+    })
+  })
 })
 
 page.goto('http://localhost:3034/server.html')

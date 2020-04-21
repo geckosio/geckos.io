@@ -33,6 +33,17 @@ describe('connection', () => {
       })
     })
   })
+
+  describe('close', () => {
+    test('client should close the connection', done => {
+      channel.onDisconnect(() => {
+        done()
+      })
+      setTimeout(() => {
+        channel.close()
+      }, 250)
+    })
+  })
 })
 
 page.goto('http://localhost:3033/simple.html')
