@@ -43,6 +43,9 @@ export class ClientChannel {
   public close() {
     this.peerConnection.localPeerConnection.close()
 
+    // fire the DISCONNECTED event manually
+    bridge.emit(EVENTS.DISCONNECTED)
+
     try {
       const host = `${this.url}/.wrtc/v1`
       fetch(`${host}/connections/${this.id}/close`, {
