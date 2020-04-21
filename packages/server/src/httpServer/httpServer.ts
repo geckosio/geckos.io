@@ -29,6 +29,7 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
     if (pathname && rootRegEx.test(pathname)) {
       const path1 = pathname === `${root}/connections`
       const path2 = new RegExp(`${prefix}\/${version}\/connections\/[0-9a-zA-Z]+\/remote-description`).test(pathname)
+      const path3 = new RegExp(`${prefix}\/${version}\/connections\/[0-9a-zA-Z]+\/additional-candidates`).test(pathname)
       const closePath = new RegExp(`${prefix}\/${version}\/connections\/[0-9a-zA-Z]+\/close`).test(pathname)
 
       SetCORS(req, res, cors)
@@ -111,6 +112,31 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
               await connection.applyAnswer(JSON.parse(body))
               let connectionJSON = connection.toJSON()
               res.write(JSON.stringify(connectionJSON.remoteDescription))
+              res.end()
+              return
+            } catch (error) {
+              console.error(error.message)
+              res.statusCode = 400
+              res.end()
+              return
+            }
+          }
+        } else if (method === 'GET' && path3) {
+          const ids = pathname.match(/[0-9a-zA-Z]{24}/g)
+          if (ids && ids.length === 1) {
+            const id = ids[0]
+            const connection = connectionsManager.getConnection(id)
+
+            if (!connection) {
+              res.statusCode = 404
+              res.end()
+              return
+            }
+
+            try {
+              const additionalCandidates = [...connection.additionalCandidates]
+              connection.additionalCandidates = []
+              res.write(JSON.stringify(additionalCandidates))
               res.end()
               return
             } catch (error) {

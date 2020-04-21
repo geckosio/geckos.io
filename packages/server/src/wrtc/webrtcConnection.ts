@@ -10,8 +10,9 @@ const DefaultRTCPeerConnection: RTCPeerConnection = require('wrtc').RTCPeerConne
 const TIME_TO_HOST_CANDIDATES = 10000
 
 export default class WebRTCConnection extends DefaultConnection {
-  peerConnection: RTCPeerConnection
-  channel: Channel
+  public peerConnection: RTCPeerConnection
+  public channel: Channel
+  public additionalCandidates: RTCIceCandidate[] = []
   private options: any
 
   constructor(id: ChannelId, serverOptions: ServerOptions, public connections: Map<any, any>) {
@@ -20,8 +21,6 @@ export default class WebRTCConnection extends DefaultConnection {
     const { iceServers = [], iceTransportPolicy = 'all', ...dataChannelOptions } = serverOptions
 
     this.options = {
-      clearTimeout,
-      setTimeout,
       timeToHostCandidates: TIME_TO_HOST_CANDIDATES
     }
 
@@ -46,7 +45,8 @@ export default class WebRTCConnection extends DefaultConnection {
     try {
       const offer: RTCSessionDescriptionInit = await this.peerConnection.createOffer()
       await this.peerConnection.setLocalDescription(offer)
-      await this.waitUntilIceGatheringStateComplete(this.peerConnection, this.options)
+      // we do not wait, since we request the missing candidates later
+      /*await*/ this.waitUntilIceGatheringStateComplete(this.peerConnection, this.options)
     } catch (error) {
       console.error(error.messages)
       this.close()
@@ -111,41 +111,39 @@ export default class WebRTCConnection extends DefaultConnection {
     let totalIceCandidates = 0
 
     const { timeToHostCandidates } = options
-    const deferred: any = {}
 
-    deferred.promise = new Promise((resolve, reject) => {
-      deferred.resolve = resolve
-      deferred.reject = reject
-    })
-
-    const timeout = options.setTimeout(() => {
-      peerConnection.removeEventListener('icecandidate', onIceCandidate)
-
-      // if time is up but we found some iceCandidates
-      if (totalIceCandidates > 0) {
-        // console.log('Timed out waiting for all host candidates, will continue with what we have so far.')
-        deferred.resolve()
-      } else {
-        deferred.reject(new Error('Timed out waiting for host candidates State: ' + peerConnection.iceGatheringState))
-      }
-    }, timeToHostCandidates)
-
-    const onIceCandidate = (ev: RTCPeerConnectionIceEvent) => {
-      const { candidate } = ev
-
-      // if (candidate) console.log('candidate nr.', totalIceCandidates, 'type', candidate.type)
-
-      totalIceCandidates++
-
-      if (!candidate) {
-        options.clearTimeout(timeout)
+    return new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
         peerConnection.removeEventListener('icecandidate', onIceCandidate)
-        deferred.resolve()
+
+        // if time is up but we found some iceCandidates
+        if (totalIceCandidates > 0) {
+          // console.log('Timed out waiting for all host candidates, will continue with what we have so far.')
+          resolve()
+        } else {
+          reject(new Error('Timed out waiting for host candidates State: ' + peerConnection.iceGatheringState))
+        }
+      }, timeToHostCandidates)
+
+      // peerConnection.addEventListener('icegatheringstatechange', _ev => {
+      //   console.log('seconds', new Date().getSeconds(), peerConnection.iceGatheringState)
+      // })
+
+      const onIceCandidate = (ev: RTCPeerConnectionIceEvent) => {
+        const { candidate } = ev
+
+        totalIceCandidates++
+
+        if (candidate) this.additionalCandidates.push(candidate)
+
+        if (!candidate) {
+          clearTimeout(timeout)
+          peerConnection.removeEventListener('icecandidate', onIceCandidate)
+          resolve()
+        }
       }
-    }
 
-    peerConnection.addEventListener('icecandidate', onIceCandidate)
-
-    await deferred.promise
+      peerConnection.addEventListener('icecandidate', onIceCandidate)
+    })
   }
 }

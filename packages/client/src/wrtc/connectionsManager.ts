@@ -40,6 +40,21 @@ export default class ConnectionsManagerClient {
     bridge.emit(EVENTS.DATA_CHANNEL_IS_OPEN)
   }
 
+  // fetch additional candidates
+  async fetchAdditionalCandidates(host: string, id: ChannelId) {
+    const res = await fetch(`${host}/connections/${id}/additional-candidates`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+
+    const candidates = await res.json()
+    candidates.forEach((c: RTCIceCandidateInit) => {
+      this.localPeerConnection.addIceCandidate(c)
+    })
+  }
+
   async connect() {
     const host = `${this.url}/.wrtc/v1`
 
@@ -58,6 +73,31 @@ export default class ConnectionsManagerClient {
 
     const { id, localDescription } = this.remotePeerConnection
 
+    /**
+     * testing
+     */
+    // console.log(localDescription.sdp?.split('\n'))
+    // remove all host type candidates (for testing)
+    // let removedHostCandidates: any[] = []
+    // localDescription.sdp = localDescription.sdp
+    //   ?.split('\n')
+    //   .filter(line => {
+    //     if (/typ host/.test(line)) {
+    //       console.log('removing', line)
+    //       removedHostCandidates.push(line.replace('a=', '').trim())
+    //     }
+    //     return !/typ host/.test(line)
+    //   })
+    //   .join('\n')
+    // console.log(localDescription.sdp)
+    // add all (host) candidates manually
+    // setTimeout(() => {
+    //   removedHostCandidates.forEach(candidate => {
+    //     console.log('try to add candidate: ', candidate)
+    //     this.localPeerConnection.addIceCandidate({ candidate, sdpMid: '0', sdpMLineIndex: 0 })
+    //   })
+    // }, 2000)
+
     const configuration: RTCConfiguration = {
       // @ts-ignore
       sdpSemantics: 'unified-plan',
@@ -70,7 +110,25 @@ export default class ConnectionsManagerClient {
       // @ts-ignore
       mozRTCPeerConnection
 
+    // create rtc peer connection
     this.localPeerConnection = new RTCPc(configuration)
+
+    // get additional ice candidates
+    // we do still continue to gather candidates even if the connection is established,
+    // maybe we get a better connection.
+    // So the server is still gathering candidates and we ask for them frequently.
+    const showBackOffIntervals = (attempts = 10, initial = 50, factor = 1.8, jitter = 20) =>
+      Array(attempts)
+        .fill(0)
+        .map(
+          (_, index) => parseInt((initial * factor ** index).toString()) + parseInt((Math.random() * jitter).toString())
+        )
+
+    showBackOffIntervals().forEach(ms => {
+      setTimeout(() => {
+        this.fetchAdditionalCandidates(host, id)
+      }, ms)
+    })
 
     try {
       await this.localPeerConnection.setRemoteDescription(localDescription)
