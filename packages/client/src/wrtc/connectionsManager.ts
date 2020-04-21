@@ -49,10 +49,12 @@ export default class ConnectionsManagerClient {
       }
     })
 
-    const candidates = await res.json()
-    candidates.forEach((c: RTCIceCandidateInit) => {
-      this.localPeerConnection.addIceCandidate(c)
-    })
+    if (res.ok) {
+      const candidates = await res.json()
+      candidates.forEach((c: RTCIceCandidateInit) => {
+        this.localPeerConnection.addIceCandidate(c)
+      })
+    }
   }
 
   async connect() {
