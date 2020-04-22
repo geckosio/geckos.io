@@ -251,8 +251,7 @@ To help developing geckos.io, install this repository via **`npm install`**. Tes
 
 ## Automated Tests
 
-We do run automated tests for Node.js
-8, 10, 11 and 12 using Docker on Jenkins on localhost with the Dockerfiles in [./dockerfiles](dockerfiles) using [this Jenkins setup](https://github.com/yandeu/jenkins-puppeteer-docker).
+We do run automated tests for Node.js 10, 12 and 14 using Docker on Jenkins on localhost with the Dockerfiles in [./dockerfiles](dockerfiles) using [this Jenkins setup](https://github.com/yandeu/jenkins-puppeteer-docker).
 
 ## License
 
