@@ -10,8 +10,9 @@
 
 #### _Geckos&#46;io fits perfectly with your next HTML5 real-time multiplayer games or chat app._
 
-[![Dependency Status](https://david-dm.org/geckosio/geckos.io/status.svg?path=packages/server&style=flat-square)](https://david-dm.org/geckosio/geckos.io?path=packages%2Fserver)
 [![NPM version](https://img.shields.io/npm/v/@geckos.io/server.svg?style=flat-square)](https://www.npmjs.com/package/@geckos.io/server)
+[![Github Workflow](https://img.shields.io/github/workflow/status/geckosio/geckos.io/CI/master?label=github%20build&logo=github&style=flat-square)](https://github.com/geckosio/geckos.io/actions?query=workflow%3ACI)
+[![Dependency Status](https://david-dm.org/geckosio/geckos.io/status.svg?path=packages/server&style=flat-square)](https://david-dm.org/geckosio/geckos.io?path=packages%2Fserver)
 [![Downloads](https://img.shields.io/npm/dm/@geckos.io/server.svg?style=flat-square)](https://www.npmjs.com/package/@geckos.io/server)
 ![Node version](https://img.shields.io/node/v/@geckos.io/server.svg?style=flat-square)
 ![Code style](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)
@@ -248,10 +249,6 @@ Want to make a 3D HTML5 Game? Take a look at [enable3d](https://github.com/yande
 ## Development
 
 To help developing geckos.io, install this repository via **`npm install`**. Test it with **`npm test`**. Then start the development server with **`npm run dev`**.
-
-## Automated Tests
-
-We do run automated tests for Node.js 10, 12 and 14 using Docker on Jenkins on localhost with the Dockerfiles in [./dockerfiles](dockerfiles) using [this Jenkins setup](https://github.com/yandeu/jenkins-puppeteer-docker).
 
 ## License
 
