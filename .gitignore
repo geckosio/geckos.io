@@ -13,3 +13,4 @@ packages/tests/output
 */server/lib*
 bundles/test*
 */.tmp/*
+coverage
