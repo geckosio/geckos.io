@@ -25,6 +25,10 @@ export class Bridge {
   removeListener(eventName: EventName, emitted: EventEmitter.ListenerFn, context = undefined) {
     this.eventEmitter.removeListener(eventName, emitted, context)
   }
+
+  removeAllListeners() {
+    this.eventEmitter.removeAllListeners()
+  }
 }
 
 const bridge = new Bridge()

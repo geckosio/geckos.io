@@ -120,6 +120,9 @@ export class ClientChannel {
    */
   onDisconnect(callback: ConnectionEventCallbackClient) {
     bridge.on(EVENTS.DISCONNECTED, callback)
+
+    // remove all event listeners
+    bridge.removeAllListeners()
   }
 
   /**
