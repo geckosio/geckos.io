@@ -258,8 +258,7 @@ export default class ServerChannel {
       let cb: EventCallbackServer = (data: any, senderId: ChannelId) => callback(data, senderId)
       // check if message is reliable
       // and reject it if it has already been submitted
-      const isReliableMessage: boolean =
-        data && typeof data.MESSAGE !== 'undefined' && data.RELIABLE === 1 && data.ID !== 'undefined'
+      const isReliableMessage: boolean = data && data.RELIABLE === 1 && data.ID !== 'undefined'
 
       const expireTime = 15_000 // 15 seconds
 

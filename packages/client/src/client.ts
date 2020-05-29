@@ -134,8 +134,7 @@ export class ClientChannel {
     bridge.on(eventName, (data: any) => {
       // check if message is reliable
       // and reject it if it has already been submitted
-      const isReliableMessage: boolean =
-        data && typeof data.MESSAGE !== 'undefined' && data.RELIABLE === 1 && data.ID !== 'undefined'
+      const isReliableMessage: boolean = data && data.RELIABLE === 1 && data.ID !== 'undefined'
 
       const expireTime = 15_000 // 15 seconds
 
