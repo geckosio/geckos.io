@@ -1,6 +1,4 @@
 /.idea
-package-lock.json
-*package-lock.json*
 /.vscode
 /packages/chatApp/dist
 /output
