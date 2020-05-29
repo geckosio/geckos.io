@@ -356,6 +356,12 @@ io.onConnection((channel: Channel) => {
 })
 ```
 
+## 3D HTML5 Multiplayer Games
+
+<a href="https://enable3d.io"><img src="readme/enable3d-logo.png" alt="enable3d logo" width="300"></a>
+
+Want to make a 3D HTML5 Multiplayer Game? Take a look at one of my other projects called [enable3d](https://enable3d.io).
+
 ## Examples
 
 - [Multiplayer Game with phaser.io](https://github.com/geckosio/phaser3-multiplayer-game-example#readme)
@@ -383,12 +389,6 @@ _TODO: Note some differences here._
 ## New Technologies
 
 For now WebRTC in the best way to send fast (unordered and unreliable) messages between browser and server. But once a better technology will be widely available (for example [quic](https://caniuse.com/#search=quic)), we will implement it as well.
-
-## Ads
-
-<a href="https://github.com/yandeu/enable3d#readme"><img src="readme/enable3d-logo.png" alt="enable3d logo" width="300"></a>
-
-Want to make a 3D HTML5 Game? Take a look at [enable3d](https://github.com/yandeu/enable3d#readme).
 
 ## Development
 
