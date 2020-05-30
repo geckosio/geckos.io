@@ -48,6 +48,7 @@ export class GeckosServer {
     // on server close event
     this.server.once('close', () => {
       this.connectionsManager.connections.forEach((connection: Connection) => connection.close())
+      bridge.removeAllListeners()
     })
 
     // add all routes
@@ -71,6 +72,7 @@ export class GeckosServer {
     // on server close event
     this.server.once('close', () => {
       this.connectionsManager.connections.forEach((connection: Connection) => connection.close())
+      bridge.removeAllListeners()
     })
   }
 
