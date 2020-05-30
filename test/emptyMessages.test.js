@@ -11,7 +11,6 @@ app.get('/emptyMessages.html', (req, res) => res.sendFile(path.join(__dirname, '
 
 io.addServer(server)
 server.listen(3515)
-jest.setTimeout(5000)
 
 let channel
 

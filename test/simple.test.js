@@ -10,7 +10,6 @@ app.get('/simple.html', (req, res) => res.sendFile(path.join(__dirname, 'simple.
 
 app.listen(3033)
 io.listen(8888)
-jest.setTimeout(5000)
 
 let channel
 

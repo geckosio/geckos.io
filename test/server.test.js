@@ -11,7 +11,6 @@ app.get('/server.html', (req, res) => res.sendFile(path.join(__dirname, 'server.
 
 io.addServer(server)
 server.listen(3034)
-jest.setTimeout(5000)
 
 let channel
 
