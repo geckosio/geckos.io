@@ -5,9 +5,9 @@ import { EVENTS } from '@geckos.io/common/lib/constants'
 import {
   Data,
   RoomId,
-  EventCallbackServer,
+  // EventCallbackServer,
   ConnectionEventCallbackServer,
-  EventOptions,
+  // EventOptions,
   EventName,
   ServerOptions,
   CorsOptions,
@@ -121,21 +121,21 @@ export class GeckosServer {
     })
   }
 
-  /**
-   * Listen for a message.
-   * @param eventName The event name.
-   * @param callback The event callback.
-   */
-  on(eventName: EventName, callback: EventCallbackServer) {
-    this._on(eventName, callback)
-  }
+  // /**
+  //  * Listen for a message.
+  //  * @param eventName The event name.
+  //  * @param callback The event callback.
+  //  */
+  // on(eventName: EventName, callback: EventCallbackServer) {
+  //   this._on(eventName, callback)
+  // }
 
-  private _on(eventName: EventName, callback: Function = () => {}) {
-    bridge.on(eventName, (channel: ServerChannel, eventOptions: EventOptions) => {
-      let cb: any = (channel: ServerChannel, eventOptions: EventOptions) => callback(channel, eventOptions)
-      cb(channel, eventOptions.senderId)
-    })
-  }
+  // private _on(eventName: EventName, callback: Function = () => {}) {
+  //   bridge.on(eventName, (channel: ServerChannel, eventOptions: EventOptions) => {
+  //     let cb: any = (channel: ServerChannel, eventOptions: EventOptions) => callback(channel, eventOptions)
+  //     cb(channel, eventOptions.senderId)
+  //   })
+  // }
 }
 
 /**
