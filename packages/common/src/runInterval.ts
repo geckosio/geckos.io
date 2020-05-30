@@ -1,11 +1,10 @@
-const runInterval = (
-  interval: number = 200,
-  runs: number = 1,
-  cb: Function = () => {
-    console.error('Please add a callback function to runInterval()')
-  }
-) => {
+const runInterval = (interval: number = 200, runs: number = 1, cb: Function) => {
   let counter = 0
+
+  if (typeof cb !== 'function') {
+    console.error('You have to define your callback function!')
+    return
+  }
 
   const i = setInterval(() => {
     cb()
