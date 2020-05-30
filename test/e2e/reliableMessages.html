@@ -21,6 +21,13 @@
               reliable: true
             })
         })
+
+        channel.on('reliable-message-room', data => {
+          if (data === 'hello room')
+            channel.emit('reliable-message-room', 'hello room back', {
+              reliable: true
+            })
+        })
       })
     </script>
   </body>

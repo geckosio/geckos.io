@@ -1,11 +1,11 @@
-const geckos = require('../packages/server/lib').default
+const geckos = require('../../packages/server/lib').default
 const io = geckos()
 
 const express = require('express')
 const path = require('path')
 const app = express()
 
-app.use('/', express.static(path.join(__dirname)))
+app.use('/', express.static(path.join(__dirname, '../')))
 
 app.listen(5301)
 io.listen(5302)
@@ -32,6 +32,12 @@ describe('connection', () => {
     })
   })
 
+  describe('others', () => {
+    test('test port', () => {
+      expect(io.port).toBe(5302)
+    })
+  })
+
   describe('close', () => {
     test('should close the connection', done => {
       channel.onDisconnect(reason => {
@@ -45,7 +51,7 @@ describe('connection', () => {
   })
 })
 
-page.goto('http://localhost:5301/simple.html')
+page.goto('http://localhost:5301/e2e/simple.html')
 
 afterAll(async () => {
   page.close()

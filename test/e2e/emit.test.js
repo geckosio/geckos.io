@@ -1,4 +1,4 @@
-const geckos = require('../packages/server/lib').default
+const geckos = require('../../packages/server/lib').default
 const http = require('http')
 const express = require('express')
 const path = require('path')
@@ -6,7 +6,7 @@ const app = express()
 const server = http.createServer(app)
 const io = geckos()
 
-app.use('/', express.static(path.join(__dirname)))
+app.use('/', express.static(path.join(__dirname, '../')))
 
 io.addServer(server)
 server.listen(5500)
@@ -62,7 +62,7 @@ describe('connection', () => {
   })
 })
 
-page.goto('http://localhost:5500/emit.html')
+page.goto('http://localhost:5500/e2e/emit.html')
 
 afterAll(async () => {
   page.close()

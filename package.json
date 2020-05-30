@@ -20,7 +20,7 @@
     "dev": "cd packages/chatApp && npm run dev",
     "prettier": "prettier --write 'src/**/*.ts' && prettier --write 'dev/chatApp/**/*.ts'",
     "postinstall": "lerna bootstrap --no-ci && npm run build",
-    "test": "npm run build-client-bundle && jest --runInBand --coverage --forceExit",
+    "test": "npm run build-client-bundle && jest --coverage --forceExit",
     "build-client-bundle": "webpack --config packages/client/webpack/webpack.prod.js --path=../../../test/.tmp --packageVersion=latest"
   },
   "keywords": [

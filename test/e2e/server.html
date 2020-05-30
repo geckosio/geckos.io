@@ -29,13 +29,17 @@
 
         channel.emit('chat message 1', 'Hello 1')
 
-        setTimeout(() => {
-          channel.raw.emit('123')
-        }, 5000)
+        channel.onRaw(rawMessage => {
+          if (rawMessage === 'raw') channel.raw.emit('raw back')
+        })
+
+        channel.on('broadcast', () => {
+          channel.emit('broadcast')
+        })
 
         setTimeout(() => {
           channel.close()
-        }, 10000)
+        }, 2000)
       })
     </script>
   </body>
