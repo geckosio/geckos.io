@@ -37,13 +37,15 @@ export default class ConnectionsManagerServer {
       }
     }
 
-    connection.once('closed', () => this.deleteConnection(connection))
     this.connections.set(connection.id, connection)
     return connection
   }
 
   deleteConnection(connection: WebRTCConnection) {
     connection.close()
+    connection.channel.eventEmitter.removeAllListeners()
+    connection.removeAllListeners()
+
     this.connections.delete(connection.id)
   }
 }

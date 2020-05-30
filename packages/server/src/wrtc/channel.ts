@@ -56,7 +56,7 @@ export default class ServerChannel {
     }
 
     this.dataChannel.onclose = () => {
-      this.eventEmitter.removeAllListeners()
+      // this.eventEmitter.removeAllListeners()
     }
   }
 

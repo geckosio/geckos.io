@@ -100,7 +100,6 @@ export default class WebRTCConnection extends DefaultConnection {
   close() {
     this.peerConnection.close()
     super.close()
-    this.removeAllListeners()
   }
 
   async waitUntilIceGatheringStateComplete(peerConnection: RTCPeerConnection, options: any) {
