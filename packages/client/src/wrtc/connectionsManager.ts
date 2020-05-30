@@ -1,4 +1,4 @@
-import bridge from '@geckos.io/common/lib/bridge'
+import { Bridge } from '@geckos.io/common/lib/bridge'
 import { EVENTS } from '@geckos.io/common/lib/constants'
 import { RawMessage, Data, ChannelId, EventName } from '@geckos.io/common/lib/typings'
 import ParseMessage from '@geckos.io/common/lib/parseMessage'
@@ -14,6 +14,7 @@ export default class ConnectionsManagerClient {
   remotePeerConnection: RTCRemotePeerConnection
   dataChannel: RTCDataChannel
   id: ChannelId
+  bridge = new Bridge()
 
   emit(eventName: EventName, data: Data | RawMessage | null = null) {
     SendMessage(this.dataChannel, eventName, data)
@@ -34,10 +35,10 @@ export default class ConnectionsManagerClient {
 
     this.dataChannel.onmessage = (ev: MessageEvent) => {
       const { key, data } = ParseMessage(ev)
-      bridge.emit(key, data)
+      this.bridge.emit(key, data)
     }
 
-    bridge.emit(EVENTS.DATA_CHANNEL_IS_OPEN)
+    this.bridge.emit(EVENTS.DATA_CHANNEL_IS_OPEN)
   }
 
   // fetch additional candidates

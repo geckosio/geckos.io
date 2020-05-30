@@ -1,4 +1,4 @@
-import bridge from '@geckos.io/common/lib/bridge'
+import { Bridge } from '@geckos.io/common/lib/bridge'
 import { makeReliable } from '@geckos.io/common/lib/reliableMessage'
 import { EVENTS } from '@geckos.io/common/lib/constants'
 import PeerConnection from './wrtc/peerConnection'
@@ -18,22 +18,25 @@ export class ClientChannel {
   private peerConnection: PeerConnection
   private connectionsManager: ConnectionsManagerClient
   private url: string
+  private bridge: Bridge
   // stores all reliable messages for about 15 seconds
   private receivedReliableMessages: { id: string; timestamp: Date; expire: number }[] = []
 
   constructor(url: string, port: number, label: string, rtcConfiguration: RTCConfiguration) {
     this.url = `${url}:${port}`
     this.connectionsManager = new ConnectionsManagerClient(this.url, label, rtcConfiguration)
+    this.bridge = this.connectionsManager.bridge
 
     // remove all event listeners on disconnect
-    bridge.on(EVENTS.DISCONNECTED, () => bridge.removeAllListeners())
+    this.bridge.on(EVENTS.DISCONNECTED, () => this.bridge.removeAllListeners())
   }
 
   private onconnectionstatechange() {
     let lpc = this.peerConnection.localPeerConnection
 
     lpc.onconnectionstatechange = () => {
-      if (lpc.connectionState === 'disconnected' || lpc.connectionState === 'closed') bridge.emit(EVENTS.DISCONNECTED)
+      if (lpc.connectionState === 'disconnected' || lpc.connectionState === 'closed')
+        this.bridge.emit(EVENTS.DISCONNECTED)
     }
   }
 
@@ -47,7 +50,7 @@ export class ClientChannel {
     this.peerConnection.localPeerConnection.close()
 
     // fire the DISCONNECTED event manually
-    bridge.emit(EVENTS.DISCONNECTED)
+    this.bridge.emit(EVENTS.DISCONNECTED)
 
     try {
       const host = `${this.url}/.wrtc/v1`
@@ -93,7 +96,7 @@ export class ClientChannel {
    * @param callback The event callback.
    */
   onRaw(callback: EventCallbackRawMessage) {
-    bridge.on(EVENTS.RAW_MESSAGE, (rawMessage: RawMessage) => {
+    this.bridge.on(EVENTS.RAW_MESSAGE, (rawMessage: RawMessage) => {
       let cb: EventCallbackRawMessage = (rawMessage: RawMessage) => callback(rawMessage)
       cb(rawMessage)
     })
@@ -105,7 +108,7 @@ export class ClientChannel {
    */
   async onConnect(callback: ConnectionEventCallbackClient) {
     // TODO(yandeu) add a connection timeout (or something like this)
-    bridge.on(EVENTS.DATA_CHANNEL_IS_OPEN, () => {
+    this.bridge.on(EVENTS.DATA_CHANNEL_IS_OPEN, () => {
       callback()
     })
 
@@ -122,7 +125,7 @@ export class ClientChannel {
    * @param callback The event callback.
    */
   onDisconnect(callback: ConnectionEventCallbackClient) {
-    bridge.on(EVENTS.DISCONNECTED, callback)
+    this.bridge.on(EVENTS.DISCONNECTED, callback)
   }
 
   /**
@@ -131,7 +134,7 @@ export class ClientChannel {
    * @param callback The event callback.
    */
   on(eventName: EventName, callback: EventCallbackClient) {
-    bridge.on(eventName, (data: any) => {
+    this.bridge.on(eventName, (data: any) => {
       // check if message is reliable
       // and reject it if it has already been submitted
       const isReliableMessage: boolean = data && data.RELIABLE === 1 && data.ID !== 'undefined'
