@@ -29,9 +29,8 @@ server.listen(3000, () => {
 })
 
 io.onConnection((channel: ServerChannel) => {
-  channel.onDisconnect(event => {
-    console.log('onDisconnect event:', event)
-    if (event === 'closed') console.log(`The connection for channel ${channel.id} got closed!`)
+  channel.onDisconnect(reason => {
+    console.log('onDisconnect reason:', reason)
   })
 
   channel.emit('chat message', `Welcome to the chat ${channel.id}!`)

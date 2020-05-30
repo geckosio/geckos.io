@@ -153,8 +153,8 @@ io.onConnection(channel => {
   const { id } = channel
 
   // whenever the channel got disconnected
-  // the event will be 'disconnected', 'failed' or 'closed'
-  channel.onDisconnect(event => {})
+  // the reason will be 'disconnected', 'failed' or 'closed'
+  channel.onDisconnect(reason => {})
 
   // listen for a custom event
   channel.on('chat message', data => {})
