@@ -24,6 +24,9 @@ export class ClientChannel {
   constructor(url: string, port: number, label: string, rtcConfiguration: RTCConfiguration) {
     this.url = `${url}:${port}`
     this.connectionsManager = new ConnectionsManagerClient(this.url, label, rtcConfiguration)
+
+    // remove all event listeners on disconnect
+    bridge.on(EVENTS.DISCONNECTED, () => bridge.removeAllListeners())
   }
 
   private onconnectionstatechange() {
@@ -120,9 +123,6 @@ export class ClientChannel {
    */
   onDisconnect(callback: ConnectionEventCallbackClient) {
     bridge.on(EVENTS.DISCONNECTED, callback)
-
-    // remove all event listeners
-    bridge.removeAllListeners()
   }
 
   /**
