@@ -1,25 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Chat App with geckos.io</title>
-    <script src="test/.tmp/geckos.io-client.latest.min.js"></script>
+    <script src="/.tmp/geckos.io-client.latest.min.js"></script>
   </head>
   <body>
-    <h1>Simple Chat App with geckos.io</h1>
-
     <script>
       'use strict'
 
-      var channel = geckos({ port: 3034 })
+      var channel = geckos({ port: 5200 })
 
-      channel.onConnect(function(error) {
+      channel.onConnect(error => {
         if (error) {
           console.error(error.message)
           return
         }
+
+        channel.onDisconnect(() => {
+          console.log('on disconnect')
+        })
 
         channel.on('chat message', data => {
           if (data === 'Hello everyone in this room') channel.emit('room test', 'OK')
@@ -31,10 +29,13 @@
 
         channel.emit('chat message 1', 'Hello 1')
 
-        // only send messages after a small pause
         setTimeout(() => {
           channel.raw.emit('123')
-        }, 500)
+        }, 5000)
+
+        setTimeout(() => {
+          channel.close()
+        }, 10000)
       })
     </script>
   </body>

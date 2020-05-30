@@ -9,7 +9,7 @@ const io = geckos()
 app.use('/', express.static(path.join(__dirname)))
 
 io.addServer(server)
-server.listen(5100)
+server.listen(5400)
 
 let channel
 
@@ -22,23 +22,19 @@ describe('connection', () => {
   })
 
   describe('messages', () => {
-    test('should receive empty message', done => {
-      channel.on('empty', data => {
-        expect(data).toBe(null)
+    test('should end reliable messages back and forth', done => {
+      channel.on('reliable-message', data => {
+        expect(data).toBe('hello back')
         done()
       })
-    })
-
-    test('should receive empty message (reliable)', done => {
-      channel.on('empty-reliable', data => {
-        expect(data).toBe(null)
-        done()
+      channel.emit('reliable-message', 'hello', {
+        reliable: true
       })
     })
   })
 })
 
-page.goto('http://localhost:5100/emptyMessages.html')
+page.goto('http://localhost:5400/reliableMessages.html')
 
 afterAll(async () => {
   page.close()

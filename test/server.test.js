@@ -6,11 +6,10 @@ const app = express()
 const server = http.createServer(app)
 const io = geckos({ iceTransportPolicy: 'relay' })
 
-app.use('/', express.static(path.join(__dirname, '../')))
-app.get('/server.html', (req, res) => res.sendFile(path.join(__dirname, 'server.html')))
+app.use('/', express.static(path.join(__dirname)))
 
 io.addServer(server)
-server.listen(3034)
+server.listen(5200)
 
 let channel
 
@@ -49,20 +48,18 @@ describe('connection', () => {
   })
 
   describe('close', () => {
-    test('server should close the connection', done => {
-      channel.onDisconnect(event => {
+    test('server should notify of client closing the connection', done => {
+      channel.onDisconnect(reason => {
+        expect(reason).toBe('closed')
         done()
       })
-      setTimeout(() => {
-        channel.close()
-      }, 250)
     })
   })
 })
 
-page.goto('http://localhost:3034/server.html')
+page.goto('http://localhost:5200/server.html')
 
 afterAll(async () => {
+  page.close()
   server.close()
-  server.removeAllListeners()
 })

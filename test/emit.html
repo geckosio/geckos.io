@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="/.tmp/geckos.io-client.latest.min.js"></script>
+  </head>
+  <body>
+    <script>
+      'use strict'
+
+      var channel = geckos({ port: 5500 })
+
+      channel.onConnect(error => {
+        if (error) {
+          console.error(error.message)
+          return
+        }
+
+        channel.on('emit', data => {
+          if (data === 'emit') channel.emit('emit', 'emit back')
+        })
+
+        channel.on('emit room', data => {
+          if (data === 'emit room') channel.emit('emit room', 'emit room back')
+        })
+
+        channel.on('emit global', data => {
+          if (data === 'hello global') channel.emit('emit global', 'hello global back')
+        })
+
+        channel.on('io room', data => {
+          if (data === 'Hello everyone!') channel.emit('io room', 'Hello back, everyone!')
+        })
+      })
+    </script>
+  </body>
+</html>

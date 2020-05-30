@@ -7,7 +7,7 @@
     <script>
       'use strict'
 
-      var channel = geckos({ port: 5100 })
+      var channel = geckos({ port: 5400 })
 
       channel.onConnect(error => {
         if (error) {
@@ -15,15 +15,12 @@
           return
         }
 
-        setTimeout(() => {
-          channel.emit('empty')
-        }, 2000)
-
-        setTimeout(() => {
-          channel.emit('empty-reliable', undefined, {
-            reliable: true
-          })
-        }, 4000)
+        channel.on('reliable-message', data => {
+          if (data === 'hello')
+            channel.emit('reliable-message', 'hello back', {
+              reliable: true
+            })
+        })
       })
     </script>
   </body>

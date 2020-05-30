@@ -5,11 +5,10 @@ const express = require('express')
 const path = require('path')
 const app = express()
 
-app.use('/', express.static(path.join(__dirname, '../')))
-app.get('/simple.html', (req, res) => res.sendFile(path.join(__dirname, 'simple.html')))
+app.use('/', express.static(path.join(__dirname)))
 
-app.listen(3033)
-io.listen(8888)
+app.listen(5301)
+io.listen(5302)
 
 let channel
 
@@ -34,20 +33,20 @@ describe('connection', () => {
   })
 
   describe('close', () => {
-    test('client should close the connection', done => {
-      channel.onDisconnect(() => {
+    test('should close the connection', done => {
+      channel.onDisconnect(reason => {
+        expect(reason).toBe('closed')
         done()
       })
       setTimeout(() => {
         channel.close()
-      }, 250)
+      }, 2000)
     })
   })
 })
 
-page.goto('http://localhost:3033/simple.html')
+page.goto('http://localhost:5301/simple.html')
 
 afterAll(async () => {
-  app.removeAllListeners()
   page.close()
 })
