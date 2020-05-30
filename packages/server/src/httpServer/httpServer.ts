@@ -5,6 +5,11 @@ import SetCORS from './setCors'
 import ParseBody from './parseBody'
 import { CorsOptions } from '@geckos.io/common/lib/typings'
 
+const end = (res: http.ServerResponse, statusCode: number) => {
+  res.writeHead(statusCode)
+  res.end()
+}
+
 const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerServer, cors: CorsOptions) => {
   const prefix = '.wrtc'
   const version = 'v1'
@@ -35,8 +40,7 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
       SetCORS(req, res, cors)
 
       if (req.method === 'OPTIONS') {
-        res.writeHead(200)
-        res.end()
+        end(res, 200)
         return
       }
 
@@ -45,15 +49,12 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
       try {
         body = (await ParseBody(req)) as string
       } catch (error) {
-        res.writeHead(400)
-        res.end()
+        end(res, 400)
         return
       }
 
-      res.on('error', error => {
-        console.error(error.message)
-        res.writeHead(500)
-        res.end()
+      res.on('error', _error => {
+        end(res, 500)
         return
       })
 
@@ -91,9 +92,7 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
             res.end()
             return
           } catch (error) {
-            console.error(error.message)
-            res.statusCode = 500
-            res.end()
+            end(res, 500)
             return
           }
         } else if (method === 'POST' && path2) {
@@ -103,8 +102,7 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
             const connection = connectionsManager.getConnection(id)
 
             if (!connection) {
-              res.statusCode = 404
-              res.end()
+              end(res, 404)
               return
             }
 
@@ -115,9 +113,7 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
               res.end()
               return
             } catch (error) {
-              console.error(error.message)
-              res.statusCode = 400
-              res.end()
+              end(res, 400)
               return
             }
           }
@@ -128,8 +124,7 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
             const connection = connectionsManager.getConnection(id)
 
             if (!connection) {
-              res.statusCode = 404
-              res.end()
+              end(res, 404)
               return
             }
 
@@ -140,9 +135,7 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
               res.end()
               return
             } catch (error) {
-              console.error(error.message)
-              res.statusCode = 400
-              res.end()
+              end(res, 400)
               return
             }
           }
@@ -156,8 +149,7 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
           res.end()
           return
         } else {
-          res.writeHead(404)
-          res.end()
+          end(res, 404)
           return
         }
       }
