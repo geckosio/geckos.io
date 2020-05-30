@@ -49,6 +49,14 @@ describe('connection', () => {
       }, 2000)
     })
   })
+
+  describe('shutdown', () => {
+    test('close the geckos server', done => {
+      io.server.close(() => {
+        done()
+      })
+    })
+  })
 })
 
 page.goto('http://localhost:5301/e2e/simple.html')

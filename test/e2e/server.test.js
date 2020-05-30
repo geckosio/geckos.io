@@ -85,9 +85,16 @@ describe('connection', () => {
   })
 })
 
+describe('shutdown', () => {
+  test('close the http server (will close all WebRTC connections)', done => {
+    server.close(() => {
+      done()
+    })
+  })
+})
+
 page.goto('http://localhost:5200/e2e/server.html')
 
 afterAll(async () => {
   page.close()
-  server.close()
 })

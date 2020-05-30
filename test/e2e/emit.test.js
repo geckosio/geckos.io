@@ -4,7 +4,12 @@ const express = require('express')
 const path = require('path')
 const app = express()
 const server = http.createServer(app)
-const io = geckos()
+const io = geckos({
+  label: 'testLabel',
+  ordered: true,
+  maxRetransmits: 10,
+  maxPacketLifeTime: undefined
+})
 
 app.use('/', express.static(path.join(__dirname, '../')))
 
@@ -52,12 +57,20 @@ describe('connection', () => {
   })
 
   describe('emit specific room', () => {
+    let calls = 0
     test('should emit to specific room', done => {
       channel.on('io room', data => {
-        expect(data).toBe('Hello back, everyone!')
-        done()
+        if (data === 'Hello back, everyone!') calls++
       })
+
       io.room(channel.roomId).emit('io room', 'Hello everyone!')
+      io.room('non-existing-roomId').emit('io room', 'Hello everyone!')
+      io.room().emit('io room', 'Hello everyone!')
+
+      setTimeout(() => {
+        expect(calls).toBe(2)
+        done()
+      }, 1000)
     })
   })
 })

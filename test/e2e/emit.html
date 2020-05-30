@@ -7,7 +7,7 @@
     <script>
       'use strict'
 
-      var channel = geckos({ port: 5500 })
+      var channel = geckos({ port: 5500, label: 'testLabel' })
 
       channel.onConnect(error => {
         if (error) {

@@ -41,6 +41,16 @@ describe('connection', () => {
         reliable: true
       })
     })
+
+    test('should send reliable messages (to global) back and forth', done => {
+      channel.on('reliable-message-global', data => {
+        expect(data).toBe('hello global back')
+        done()
+      })
+      io.emit('reliable-message-global', 'hello global', {
+        reliable: true
+      })
+    })
   })
 })
 

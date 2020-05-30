@@ -28,6 +28,13 @@
               reliable: true
             })
         })
+
+        channel.on('reliable-message-global', data => {
+          if (data === 'hello global')
+            channel.emit('reliable-message-global', 'hello global back', {
+              reliable: true
+            })
+        })
       })
     </script>
   </body>
