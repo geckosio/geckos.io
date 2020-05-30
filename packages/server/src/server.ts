@@ -23,6 +23,7 @@ export class GeckosServer {
   private connectionsManager: ConnectionsManagerServer
   private _port: number
   private _cors: CorsOptions = { origin: '*' }
+  public server: http.Server
 
   constructor(options: ServerOptions) {
     this.connectionsManager = new ConnectionsManagerServer(options)
@@ -42,17 +43,19 @@ export class GeckosServer {
     this._port = port
 
     // create the server
-    let server = http.createServer()
+    this.server = http.createServer()
+
+    // on server close event
+    this.server.once('close', () => {
+      this.connectionsManager.connections.forEach((connection: Connection) => connection.close())
+    })
 
     // add all routes
-    HttpServer(server, this.connectionsManager, this._cors)
+    HttpServer(this.server, this.connectionsManager, this._cors)
 
     // start the server
-    server.listen(port, () => {
+    this.server.listen(port, () => {
       console.log(`Geckos.io signaling server is running on http://localhost:${port}`)
-      server.once('close', () => {
-        this.connectionsManager.connections.forEach((connection: Connection) => connection.close())
-      })
     })
   }
 
@@ -61,9 +64,12 @@ export class GeckosServer {
    * @param server Your http.Server.
    */
   public addServer(server: http.Server) {
-    HttpServer(server, this.connectionsManager, this._cors)
+    this.server = server
 
-    server.once('close', () => {
+    HttpServer(this.server, this.connectionsManager, this._cors)
+
+    // on server close event
+    this.server.once('close', () => {
       this.connectionsManager.connections.forEach((connection: Connection) => connection.close())
     })
   }
