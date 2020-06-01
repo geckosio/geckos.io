@@ -26,5 +26,8 @@
   },
   "dependencies": {
     "eventemitter3": "^4.0.0"
+  },
+  "funding": {
+    "url": "https://github.com/sponsors/yandeu"
   }
 }
