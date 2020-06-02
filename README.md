@@ -367,6 +367,13 @@ Want to make a 3D HTML5 Multiplayer Game? Take a look at one of my other project
 - [Multiplayer Game with phaser.io](https://github.com/geckosio/phaser3-multiplayer-game-example#readme)
 - [Simple Chat App Example](https://github.com/geckosio/simple-chat-app-example#readme)
 
+## Other geckos.io Packages
+
+Take a look at these other packages you might be interested in.
+
+- [@geckos.io/phaser-on-nodejs](https://www.npmjs.com/package/@geckos.io/phaser-on-nodejs) - Run Phaser 3 Games on Node.js.
+- [@geckos.io/snapshot-interpolation](https://www.npmjs.com/package/@geckos.io/snapshot-interpolation) - Snapshot Interpolation for Multiplayer Games.
+
 ## socket&#46;io vs geckos&#46;io vs peerjs
 
 _TODO: Note some differences here._
