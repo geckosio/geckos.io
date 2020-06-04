@@ -356,23 +356,10 @@ io.onConnection((channel: Channel) => {
 })
 ```
 
-## 3D HTML5 Multiplayer Games
-
-<a href="https://enable3d.io"><img src="readme/enable3d-logo.png" alt="enable3d logo" width="300"></a>
-
-Want to make a 3D HTML5 Multiplayer Game? Take a look at one of my other projects called [enable3d](https://enable3d.io).
-
 ## Examples
 
 - [Multiplayer Game with phaser.io](https://github.com/geckosio/phaser3-multiplayer-game-example#readme)
 - [Simple Chat App Example](https://github.com/geckosio/simple-chat-app-example#readme)
-
-## Other geckos.io Packages
-
-Take a look at these other packages you might be interested in.
-
-- [@geckos.io/phaser-on-nodejs](https://www.npmjs.com/package/@geckos.io/phaser-on-nodejs) - Run Phaser 3 Games on Node.js.
-- [@geckos.io/snapshot-interpolation](https://www.npmjs.com/package/@geckos.io/snapshot-interpolation) - Snapshot Interpolation for Multiplayer Games.
 
 ## socket&#46;io vs geckos&#46;io vs peerjs
 
@@ -392,6 +379,28 @@ _TODO: Note some differences here._
 ## Who is using geckos.io
 
 - [DatTank.io](https://dattank.io/) - is a free multiplayer browser online tank game.
+
+## Other cool Packages
+
+Take a look at these other packages you might be interested in.
+
+### enable3d
+
+Easily build 3D Game for Web, Mobile and PC ([https://enable3d.io](https://enable3d.io)).
+
+<a href="https://enable3d.io"><img src="readme/enable3d-logo.png" alt="enable3d logo" height="80"></a>
+
+### Phaser on Node.js
+
+Run Phaser 3 Games on Node.js ([@geckos.io/phaser-on-nodejs](https://github.com/geckosio/phaser-on-nodejs))
+
+<img src="https://raw.githubusercontent.com/yandeu/phaser3-multiplayer-with-physics/master/readme/phaser-with-nodejs.png" height="80">
+
+### Snapshot Interpolation
+
+Snapshot Interpolation for Multiplayer Games ([@geckos.io/snapshot-interpolation](https://github.com/geckosio/snapshot-interpolation))
+
+<img src="https://github.com/geckosio/snapshot-interpolation/raw/master/readme/logo.png" height="80">
 
 ## New Technologies
 
