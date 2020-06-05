@@ -3,4 +3,5 @@ import iceServers from './iceServers'
 import { Data, RawMessage, ChannelId } from '@geckos.io/common/lib/typings'
 
 export default server
-export type { GeckosServer, ServerChannel, Data, RawMessage, iceServers, ChannelId }
+export { iceServers }
+export type { GeckosServer, ServerChannel, Data, RawMessage, ChannelId }
