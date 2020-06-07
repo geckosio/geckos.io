@@ -24,7 +24,10 @@
 
 ## What is it made for?
 
-It's designed specifically for your HTML5 real-time multiplayer games by lowering the average latency and preventing huge latency spikes.
+It's designed specifically for your HTML5 real-time multiplayer games by lowering the average latency and preventing huge latency spikes. It allows you to communicate with your node.js server via UDP, which is much faster than TPC (used by WebSocket). Take a look at the comparison video between UDP and TCP.
+https://youtu.be/ZEEBsq3eQmg
+
+<a href="https://youtu.be/ZEEBsq3eQmg"><img src="./readme/thumbnail.png" width="320"></a>
 
 ## Getting Started
 
@@ -376,6 +379,10 @@ _TODO: Note some differences here._
 | Chat App                                                        |    &#9679;    |               | &#9679; |
 | Any other App with Real-Time communication                      |    &#9679;    |    &#9679;    | &#9679; |
 
+## New Technologies
+
+For now WebRTC in the best way to send fast (unordered and unreliable) messages between browser and server. But once a better technology will be widely available (for example [quic](https://caniuse.com/#search=quic)), we will implement it as well.
+
 ## Who is using geckos.io
 
 - [DatTank.io](https://dattank.io/) - is a free multiplayer browser online tank game.
@@ -401,10 +408,6 @@ Run Phaser 3 Games on Node.js ([@geckos.io/phaser-on-nodejs](https://github.com/
 Snapshot Interpolation for Multiplayer Games ([@geckos.io/snapshot-interpolation](https://github.com/geckosio/snapshot-interpolation))
 
 <img src="https://github.com/geckosio/snapshot-interpolation/raw/master/readme/logo.png" height="80">
-
-## New Technologies
-
-For now WebRTC in the best way to send fast (unordered and unreliable) messages between browser and server. But once a better technology will be widely available (for example [quic](https://caniuse.com/#search=quic)), we will implement it as well.
 
 ## Development
 
