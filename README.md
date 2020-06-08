@@ -37,6 +37,17 @@ First things first, install it via npm:
 npm install @geckos.io/client @geckos.io/server
 ```
 
+## New in version > 1.5.0
+
+#### New autoManageBuffering option
+
+By default the RTCDataChannel queues data if it can't be send directly. This is very bad for multiplayer games, since we do not want to render old state. In version 1.5.0, the option **autoManageBuffering** was added. It is set to true by default. If **autoManageBuffering** is on, Geckos.io will prefer to drop messages instead of adding them to the send queue. (Messages with the option [{ reliable: true }](#reliable-messages), will still be added to the queue)
+
+#### The problem with the queue while gaming?
+
+If you send 30Kbytes @60fps and the client only has a 10Mbit connection, he can never receive all messages. So it is necessary to drop some of them, which will be done automatically with **autoManageBuffering**.  
+Another good solution to this problem would be to decrease the send rate for that specific client. Use the new `channel.onDrop(drop => {})` method to track dropped messages. If, for example, you notice that 20% of the messages for a specific client are dropped, decrease the send rate.
+
 ## Usage
 
 #### client.js
