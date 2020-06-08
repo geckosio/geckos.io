@@ -157,6 +157,7 @@ export class GeckosServer {
  * @param options.maxRetransmits The maximum number of times the user agent should attempt to retransmit a message which fails the first time in unreliable mode. While this value is a16-bit unsigned number, each user agent may clamp it to whatever maximum it deems appropriate. Default: 0.
  * @param options.cors Set the CORS options.
  * @param options.cors.origin String OR (req: http.IncomingMessage) => string. Default '*'
+ * @param options.autoManageBuffering By default, geckos.io manages RTCDataChannel buffering for you. Default 'true'
  */
 const geckosServer = (options: ServerOptions = {}) => {
   const { iceTransportPolicy } = options

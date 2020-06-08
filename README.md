@@ -144,6 +144,7 @@ import geckos from '@geckos.io/server'
  * @param options.maxRetransmits Default: 0.
  * @param options.cors
  * @param options.cors.origin String | (req) => string. Default '*'
+ * @param options.autoManageBuffering By default, geckos.io manages RTCDataChannel buffering for you. Default 'true'
  */
 io = geckos(options)
 

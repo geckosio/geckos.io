@@ -20,6 +20,7 @@ import { makeReliable } from '@geckos.io/common/lib/reliableMessage'
 
 export default class ServerChannel {
   public maxMessageSize: number | undefined
+  public autoManageBuffering: boolean
 
   private _roomId: RoomId
   private _id: ChannelId
@@ -37,8 +38,11 @@ export default class ServerChannel {
       label = 'geckos.io',
       ordered = false,
       maxRetransmits = 0,
-      maxPacketLifeTime = undefined
+      maxPacketLifeTime = undefined,
+      autoManageBuffering = true
     } = dataChannelOptions
+
+    this.autoManageBuffering = autoManageBuffering
 
     this.dataChannel = webrtcConnection.peerConnection.createDataChannel(label, {
       ordered: ordered,
@@ -231,7 +235,7 @@ export default class ServerChannel {
     if (!this._roomId || this._roomId === this._roomId)
       if (!this._id || this._id === this._id) {
         const isReliable = data && typeof data === 'object' && 'RELIABLE' in data
-        const buffering = this.dataChannel.bufferedAmount > 0
+        const buffering = this.autoManageBuffering && this.dataChannel.bufferedAmount > 0
         const drop = (reason: string, event: any, data: any) => {
           this.eventEmitter.emit(EVENTS.DROP, { reason, event, data })
         }

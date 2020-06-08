@@ -19,6 +19,7 @@ export interface ServerOptions {
   maxRetransmits?: number
   maxPacketLifeTime?: number
   cors?: CorsOptions
+  autoManageBuffering?: boolean
 }
 
 export interface ClientOptions {
