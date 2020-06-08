@@ -232,10 +232,17 @@ export default class ServerChannel {
       if (!this._id || this._id === this._id) {
         const isReliable = data && typeof data === 'object' && 'RELIABLE' in data
         const buffering = this.dataChannel.bufferedAmount > 0
+        const drop = (reason: string, event: any, data: any) => {
+          this.eventEmitter.emit(EVENTS.DROP, { reason, event, data })
+        }
 
         // server should never buffer, geckos.io wants to send messages as fast as possible
-        if (isReliable || !buffering) SendMessage(this.dataChannel, this.maxMessageSize, eventName, data)
-        else this.eventEmitter.emit(EVENTS.DROP, { reason: ERRORS.DROPPED_FROM_BUFFERING, event: eventName, data })
+        if (isReliable || !buffering) {
+          const error = SendMessage(this.dataChannel, this.maxMessageSize, eventName, data)
+          if (error) drop(ERRORS.MAX_MESSAGE_SIZE_EXCEEDED, eventName, data)
+        } else {
+          drop(ERRORS.DROPPED_FROM_BUFFERING, eventName, data)
+        }
       }
   }
 

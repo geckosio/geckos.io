@@ -1,23 +1,30 @@
 import { Data, RawMessage, EventName } from './typings'
 import { isRawMessage } from './helpers'
 import { EVENTS } from './constants'
+import sizeof from 'object-sizeof'
 
 const SendMessage = (
   dataChannel: RTCDataChannel,
-  _maxMessageSize: number | undefined,
+  maxMessageSize: number | undefined,
   eventName: EventName,
   data: Data | RawMessage | null = null
 ) => {
+  const send = (data: any) => {
+    if (typeof maxMessageSize === 'number' && sizeof(data) > maxMessageSize)
+      throw new Error(`maxMessageSize of ${maxMessageSize} exceeded`)
+    else dataChannel.send(data)
+  }
+
   if (dataChannel.readyState === 'open') {
     try {
       if (eventName === EVENTS.RAW_MESSAGE && data !== null && isRawMessage(data)) {
-        // @ts-ignore
-        dataChannel.send(data)
+        send(data)
       } else {
-        dataChannel.send(JSON.stringify({ [eventName]: data }))
+        send(JSON.stringify({ [eventName]: data }))
       }
     } catch (error) {
-      console.error('Error => dataChannel.send: ', error.message)
+      console.error('Error in sendMessage.ts: ', error.message)
+      return error
     }
   }
 }
