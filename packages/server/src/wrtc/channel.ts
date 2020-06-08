@@ -19,9 +19,12 @@ import SendMessage from '@geckos.io/common/lib/sendMessage'
 import { makeReliable } from '@geckos.io/common/lib/reliableMessage'
 
 export default class ServerChannel {
+  public maxMessageSize: number | undefined
+
   private _roomId: RoomId
   private _id: ChannelId
   private dataChannel: RTCDataChannel
+
   eventEmitter = new EventEmitter()
   // stores all reliable messages for about 15 seconds
   private receivedReliableMessages: { id: string; timestamp: Date; expire: number }[] = []
@@ -231,7 +234,7 @@ export default class ServerChannel {
         const buffering = this.dataChannel.bufferedAmount > 0
 
         // server should never buffer, geckos.io wants to send messages as fast as possible
-        if (isReliable || !buffering) SendMessage(this.dataChannel, eventName, data)
+        if (isReliable || !buffering) SendMessage(this.dataChannel, this.maxMessageSize, eventName, data)
         else this.eventEmitter.emit(EVENTS.DROP, { reason: ERRORS.DROPPED_FROM_BUFFERING, event: eventName, data })
       }
   }

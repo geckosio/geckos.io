@@ -107,6 +107,9 @@ import geckos from '@geckos.io/client'
  */
 const channel = geckos(options)
 
+// the channel's id and maxMessageSize (in bytes)
+const { id, maxMessageSize } = channel
+
 // once the channel is connected to the server
 channel.onConnect(error => {
   if (error) console.error(error.message)
@@ -152,8 +155,8 @@ io.listen()
 
 // whenever a new channel is connected
 io.onConnection(channel => {
-  // the channel includes its id
-  const { id } = channel
+  // the channel's id and maxMessageSize (in bytes)
+  const { id, maxMessageSize } = channel
 
   // whenever the channel got disconnected
   // the reason will be 'disconnected', 'failed' or 'closed'

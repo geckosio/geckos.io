@@ -2,7 +2,12 @@ import { Data, RawMessage, EventName } from './typings'
 import { isRawMessage } from './helpers'
 import { EVENTS } from './constants'
 
-const SendMessage = (dataChannel: RTCDataChannel, eventName: EventName, data: Data | RawMessage | null = null) => {
+const SendMessage = (
+  dataChannel: RTCDataChannel,
+  _maxMessageSize: number | undefined,
+  eventName: EventName,
+  data: Data | RawMessage | null = null
+) => {
   if (dataChannel.readyState === 'open') {
     try {
       if (eventName === EVENTS.RAW_MESSAGE && data !== null && isRawMessage(data)) {

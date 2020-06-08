@@ -15,6 +15,8 @@ import {
 } from '@geckos.io/common/lib/typings'
 
 export class ClientChannel {
+  public maxMessageSize: number | undefined
+
   private peerConnection: PeerConnection
   private connectionsManager: ConnectionsManagerClient
   private url: string
@@ -117,7 +119,12 @@ export class ClientChannel {
     const error = await this.peerConnection.connect(this.connectionsManager)
 
     if (error) callback(error)
-    else this.onconnectionstatechange()
+    else {
+      // keep track of the maxMessageSize
+      this.maxMessageSize = this.connectionsManager.maxMessageSize = this.peerConnection.localPeerConnection.sctp?.maxMessageSize
+      // init onConnectionStateChange event
+      this.onconnectionstatechange()
+    }
   }
 
   /**

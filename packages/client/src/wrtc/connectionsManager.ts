@@ -10,14 +10,15 @@ interface RTCRemotePeerConnection {
 }
 
 export default class ConnectionsManagerClient {
-  localPeerConnection: RTCPeerConnection
-  remotePeerConnection: RTCRemotePeerConnection
-  dataChannel: RTCDataChannel
-  id: ChannelId
-  bridge = new Bridge()
+  public maxMessageSize: number | undefined
+  public localPeerConnection: RTCPeerConnection
+  public remotePeerConnection: RTCRemotePeerConnection
+  public dataChannel: RTCDataChannel
+  public id: ChannelId
+  public bridge = new Bridge()
 
   emit(eventName: EventName, data: Data | RawMessage | null = null) {
-    SendMessage(this.dataChannel, eventName, data)
+    SendMessage(this.dataChannel, this.maxMessageSize, eventName, data)
   }
 
   constructor(public url: string, public label: string, public rtcConfiguration: RTCConfiguration) {}

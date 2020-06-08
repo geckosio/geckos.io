@@ -31,6 +31,9 @@ export default class ConnectionsManagerServer {
     const pc = connection.peerConnection
 
     pc.onconnectionstatechange = () => {
+      // keep track of the maxMessageSize
+      if (pc.connectionState === 'connected') connection.channel.maxMessageSize = pc.sctp?.maxMessageSize
+
       if (pc.connectionState === 'disconnected' || pc.connectionState === 'failed' || pc.connectionState === 'closed') {
         connection.channel.eventEmitter.emit(EVENTS.DISCONNECT, pc.connectionState)
         this.deleteConnection(connection)
