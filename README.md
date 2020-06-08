@@ -175,6 +175,9 @@ io.onConnection(channel => {
   // channel closes the webRTC connection
   channel.close()
 
+  // get notified when a message got dropped
+  channel.onDrop(drop => {})
+
   // will trigger a specific event on all channels in a
   // specific room and add the senderId as a second parameter
   channel.forward(channel.roomId).emit('chat message', 'Hello!')
