@@ -217,6 +217,7 @@ io.onConnection(channel => {
 - `forwardMessage`
 - `broadcastMessage`
 - `rawMessage`
+- `dropped`
 
 ## Raw Messages
 

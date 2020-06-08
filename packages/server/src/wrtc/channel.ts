@@ -2,7 +2,7 @@ import bridge from '@geckos.io/common/lib/bridge'
 import WebRTCConnection from './webrtcConnection'
 import EventEmitter from 'eventemitter3'
 import ParseMessage from '@geckos.io/common/lib/parseMessage'
-import { EVENTS } from '@geckos.io/common/lib/constants'
+import { EVENTS, ERRORS } from '@geckos.io/common/lib/constants'
 import {
   Data,
   RoomId,
@@ -79,6 +79,13 @@ export default class ServerChannel {
     this.eventEmitter.on(EVENTS.DISCONNECT, (connectionState: 'disconnected' | 'failed' | 'closed') => {
       let cb: DisconnectEventCallbackServer = connectionState => callback(connectionState)
       cb(connectionState)
+    })
+  }
+
+  /** Listen for the drop event. */
+  onDrop(callback: (drop: { event: EventName; data: Data | RawMessage | null }) => void) {
+    this.eventEmitter.on(EVENTS.DROP, (drop: { event: EventName; data: Data | RawMessage | null }) => {
+      callback(drop)
     })
   }
 
@@ -220,7 +227,12 @@ export default class ServerChannel {
   private _emit(eventName: EventName, data: Data | RawMessage | null = null) {
     if (!this._roomId || this._roomId === this._roomId)
       if (!this._id || this._id === this._id) {
-        SendMessage(this.dataChannel, eventName, data)
+        const isReliable = data && typeof data === 'object' && 'RELIABLE' in data
+        const buffering = this.dataChannel.bufferedAmount > 0
+
+        // server should never buffer, geckos.io wants to send messages as fast as possible
+        if (isReliable || !buffering) SendMessage(this.dataChannel, eventName, data)
+        else this.eventEmitter.emit(EVENTS.DROP, { reason: ERRORS.DROPPED_FROM_BUFFERING, event: eventName, data })
       }
   }
 
