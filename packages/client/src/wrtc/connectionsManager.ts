@@ -1,6 +1,6 @@
 import { Bridge } from '@geckos.io/common/lib/bridge'
 import { EVENTS } from '@geckos.io/common/lib/constants'
-import { RawMessage, Data, ChannelId, EventName } from '@geckos.io/common/lib/typings'
+import { RawMessage, Data, ChannelId, EventName } from '@geckos.io/common/lib/types'
 import ParseMessage from '@geckos.io/common/lib/parseMessage'
 import SendMessage from '@geckos.io/common/lib/sendMessage'
 

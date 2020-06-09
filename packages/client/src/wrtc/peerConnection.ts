@@ -1,6 +1,6 @@
 import ConnectionsManagerClient from './connectionsManager'
 import { ERRORS } from '@geckos.io/common/lib/constants'
-import { ChannelId } from '@geckos.io/common/lib/typings'
+import { ChannelId } from '@geckos.io/common/lib/types'
 
 export default class PeerConnection {
   localPeerConnection: RTCPeerConnection

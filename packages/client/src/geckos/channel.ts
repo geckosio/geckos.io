@@ -3,7 +3,7 @@ import { makeReliable } from '@geckos.io/common/lib/reliableMessage'
 import { EVENTS } from '@geckos.io/common/lib/constants'
 import PeerConnection from '../wrtc/peerConnection'
 import ConnectionsManagerClient from '../wrtc/connectionsManager'
-import * as Types from '@geckos.io/common/lib/typings'
+import * as Types from '@geckos.io/common/lib/types'
 
 export class ClientChannel {
   public maxMessageSize: number | undefined
