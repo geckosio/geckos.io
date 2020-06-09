@@ -64,7 +64,7 @@ describe('connection', () => {
 
         channel.onDrop(drop => {
           expect(drop.reason).toBe('DROPPED_FROM_BUFFERING')
-          expect(attempts).toBeGreaterThanOrEqual(10)
+          expect(attempts).toBeGreaterThanOrEqual(1)
           clearInterval(interval)
           done()
         })
