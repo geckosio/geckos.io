@@ -1,4 +1,4 @@
-import { Data, RawMessage, EventName } from './typings'
+import { Data, RawMessage, EventName } from './types'
 import { isRawMessage } from './helpers'
 import { EVENTS } from './constants'
 import sizeof from 'object-sizeof'

@@ -1,7 +1,7 @@
-import DefaultConnection from './defaultConnection'
-import CreateDataChannel from './channel'
-import Channel from './channel'
-import { ChannelId, ServerOptions } from '@geckos.io/common/lib/typings'
+import Connection from './connection'
+import CreateDataChannel from '../geckos/channel'
+import Channel from '../geckos/channel'
+import { ChannelId, ServerOptions } from '../../../common/lib/types'
 
 const DefaultRTCPeerConnection: RTCPeerConnection = require('wrtc').RTCPeerConnection
 
@@ -9,7 +9,7 @@ const DefaultRTCPeerConnection: RTCPeerConnection = require('wrtc').RTCPeerConne
 // so I set it to 10 seconds
 const TIME_TO_HOST_CANDIDATES = 10000
 
-export default class WebRTCConnection extends DefaultConnection {
+export default class WebRTCConnection extends Connection {
   public peerConnection: RTCPeerConnection
   public channel: Channel
   public additionalCandidates: RTCIceCandidate[] = []

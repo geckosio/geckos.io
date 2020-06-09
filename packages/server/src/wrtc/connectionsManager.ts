@@ -1,5 +1,5 @@
 import WebRTCConnection from './webrtcConnection'
-import { ChannelId, ServerOptions } from '@geckos.io/common/lib/typings'
+import { ChannelId, ServerOptions } from '../../../common/lib/types'
 import { EVENTS } from '@geckos.io/common/lib/constants'
 import makeRandomId from '@geckos.io/common/lib/makeRandomId'
 

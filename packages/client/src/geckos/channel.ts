@@ -1,18 +1,9 @@
 import { Bridge } from '@geckos.io/common/lib/bridge'
 import { makeReliable } from '@geckos.io/common/lib/reliableMessage'
 import { EVENTS } from '@geckos.io/common/lib/constants'
-import PeerConnection from './wrtc/peerConnection'
-import ConnectionsManagerClient from './wrtc/connectionsManager'
-import {
-  RawMessage,
-  Data,
-  EventName,
-  EventCallbackClient,
-  ConnectionEventCallbackClient,
-  EventCallbackRawMessage,
-  ClientOptions,
-  EmitOptions
-} from '@geckos.io/common/lib/typings'
+import PeerConnection from '../wrtc/peerConnection'
+import ConnectionsManagerClient from '../wrtc/connectionsManager'
+import * as Types from '@geckos.io/common/lib/typings'
 
 export class ClientChannel {
   public maxMessageSize: number | undefined
@@ -68,7 +59,7 @@ export class ClientChannel {
   }
 
   /** Emit a message to the server. */
-  emit(eventName: EventName, data: Data | null = null, options?: EmitOptions) {
+  emit(eventName: Types.EventName, data: Types.Data | null = null, options?: Types.EmitOptions) {
     if (options && options.reliable) {
       makeReliable(options, (id: string) =>
         this.connectionsManager.emit(eventName, {
@@ -89,7 +80,7 @@ export class ClientChannel {
        * Emit a raw message.
        * @param rawMessage The raw message. Can be of type 'USVString | ArrayBuffer | ArrayBufferView'
        */
-      emit: (rawMessage: RawMessage) => this.emit(EVENTS.RAW_MESSAGE, rawMessage)
+      emit: (rawMessage: Types.RawMessage) => this.emit(EVENTS.RAW_MESSAGE, rawMessage)
     }
   }
 
@@ -97,9 +88,9 @@ export class ClientChannel {
    * Listen for a raw message from the server.
    * @param callback The event callback.
    */
-  onRaw(callback: EventCallbackRawMessage) {
-    this.bridge.on(EVENTS.RAW_MESSAGE, (rawMessage: RawMessage) => {
-      let cb: EventCallbackRawMessage = (rawMessage: RawMessage) => callback(rawMessage)
+  onRaw(callback: Types.EventCallbackRawMessage) {
+    this.bridge.on(EVENTS.RAW_MESSAGE, (rawMessage: Types.RawMessage) => {
+      let cb: Types.EventCallbackRawMessage = (rawMessage: Types.RawMessage) => callback(rawMessage)
       cb(rawMessage)
     })
   }
@@ -108,7 +99,7 @@ export class ClientChannel {
    * Listen for the connect event.
    * @param callback The event callback.
    */
-  async onConnect(callback: ConnectionEventCallbackClient) {
+  async onConnect(callback: Types.ConnectionEventCallbackClient) {
     // TODO(yandeu) add a connection timeout (or something like this)
     this.bridge.on(EVENTS.DATA_CHANNEL_IS_OPEN, () => {
       callback()
@@ -131,7 +122,7 @@ export class ClientChannel {
    * Listen for the disconnect event.
    * @param callback The event callback.
    */
-  onDisconnect(callback: ConnectionEventCallbackClient) {
+  onDisconnect(callback: Types.ConnectionEventCallbackClient) {
     this.bridge.on(EVENTS.DISCONNECTED, callback)
   }
 
@@ -140,7 +131,7 @@ export class ClientChannel {
    * @param eventName The event name.
    * @param callback The event callback.
    */
-  on(eventName: EventName, callback: EventCallbackClient) {
+  on(eventName: Types.EventName, callback: Types.EventCallbackClient) {
     this.bridge.on(eventName, (data: any) => {
       // check if message is reliable
       // and reject it if it has already been submitted
@@ -185,7 +176,7 @@ export class ClientChannel {
  * @param options.iceServers An array of RTCIceServers. See https://developer.mozilla.org/en-US/docs/Web/API/RTCIceServer.
  * @param options.iceTransportPolicy RTCIceTransportPolicy enum defines string constants which can be used to limit the transport policies of the ICE candidates to be considered during the connection process.
  */
-const geckosClient = (options: ClientOptions = {}) => {
+const geckosClient = (options: Types.ClientOptions = {}) => {
   const {
     iceServers = [],
     iceTransportPolicy = 'all',

@@ -1,3 +1,3 @@
-import client from './client'
+import client from './geckos/channel'
 
 export default client

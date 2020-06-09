@@ -1,20 +1,9 @@
 import bridge from '@geckos.io/common/lib/bridge'
-import WebRTCConnection from './webrtcConnection'
+import WebRTCConnection from '../wrtc/webrtcConnection'
 import EventEmitter from 'eventemitter3'
 import ParseMessage from '@geckos.io/common/lib/parseMessage'
 import { EVENTS, ERRORS } from '@geckos.io/common/lib/constants'
-import {
-  Data,
-  RoomId,
-  EventCallbackServer,
-  RawMessage,
-  ChannelId,
-  EventName,
-  DisconnectEventCallbackServer,
-  EventCallbackRawMessage,
-  ServerOptions,
-  EmitOptions
-} from '@geckos.io/common/lib/typings'
+import * as Types from '@geckos.io/common/lib/types'
 import SendMessage from '@geckos.io/common/lib/sendMessage'
 import { makeReliable } from '@geckos.io/common/lib/reliableMessage'
 
@@ -22,15 +11,15 @@ export default class ServerChannel {
   public maxMessageSize: number | undefined
   public autoManageBuffering: boolean
 
-  private _roomId: RoomId
-  private _id: ChannelId
+  private _roomId: Types.RoomId
+  private _id: Types.ChannelId
   private dataChannel: RTCDataChannel
 
   eventEmitter = new EventEmitter()
   // stores all reliable messages for about 15 seconds
   private receivedReliableMessages: { id: string; timestamp: Date; expire: number }[] = []
 
-  constructor(public webrtcConnection: WebRTCConnection, dataChannelOptions: ServerOptions) {
+  constructor(public webrtcConnection: WebRTCConnection, dataChannelOptions: Types.ServerOptions) {
     this._id = webrtcConnection.id
     this._roomId = undefined
 
@@ -82,18 +71,21 @@ export default class ServerChannel {
    * Gets the connectionState 'disconnected', 'failed' or 'closed'. See https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/connectionState
    * @param callback The connectionState.
    */
-  onDisconnect(callback: DisconnectEventCallbackServer) {
+  onDisconnect(callback: Types.DisconnectEventCallbackServer) {
     this.eventEmitter.on(EVENTS.DISCONNECT, (connectionState: 'disconnected' | 'failed' | 'closed') => {
-      let cb: DisconnectEventCallbackServer = connectionState => callback(connectionState)
+      let cb: Types.DisconnectEventCallbackServer = connectionState => callback(connectionState)
       cb(connectionState)
     })
   }
 
   /** Listen for the drop event. */
-  onDrop(callback: (drop: { event: EventName; data: Data | RawMessage | null }) => void) {
-    this.eventEmitter.on(EVENTS.DROP, (drop: { event: EventName; data: Data | RawMessage | null }) => {
-      callback(drop)
-    })
+  onDrop(callback: (drop: { event: Types.EventName; data: Types.Data | Types.RawMessage | null }) => void) {
+    this.eventEmitter.on(
+      EVENTS.DROP,
+      (drop: { event: Types.EventName; data: Types.Data | Types.RawMessage | null }) => {
+        callback(drop)
+      }
+    )
   }
 
   /** Close the webRTC connection. */
@@ -102,7 +94,7 @@ export default class ServerChannel {
   }
 
   /** Join a room by its id. */
-  join(roomId: RoomId) {
+  join(roomId: Types.RoomId) {
     this._roomId = roomId
   }
 
@@ -119,7 +111,7 @@ export default class ServerChannel {
        * @param eventName The event name.
        * @param data The data to send.
        */
-      emit: (eventName: EventName, data: Data, options?: EmitOptions) => {
+      emit: (eventName: Types.EventName, data: Types.Data, options?: Types.EmitOptions) => {
         this.webrtcConnection.connections.forEach((connection: WebRTCConnection) => {
           const { channel } = connection
           const { roomId } = channel
@@ -150,7 +142,7 @@ export default class ServerChannel {
        * @param eventName The event name.
        * @param data The data to send.
        */
-      emit: (eventName: EventName, data: Data, options?: EmitOptions) => {
+      emit: (eventName: Types.EventName, data: Types.Data, options?: Types.EmitOptions) => {
         this.webrtcConnection.connections.forEach((connection: WebRTCConnection) => {
           const { channel } = connection
           const { roomId, id } = channel
@@ -177,14 +169,14 @@ export default class ServerChannel {
    * Forward a message to all channels in a specific room.
    * @param roomId The roomId.
    */
-  forward(roomId: RoomId) {
+  forward(roomId: Types.RoomId) {
     return {
       /**
        * Emit a forwarded message.
        * @param eventName The event name.
        * @param data The data to send.
        */
-      emit: (eventName: EventName, data: Data, options?: EmitOptions) => {
+      emit: (eventName: Types.EventName, data: Types.Data, options?: Types.EmitOptions) => {
         this.webrtcConnection.connections.forEach((connection: WebRTCConnection) => {
           const { channel } = connection
           const { roomId: channelRoomId } = channel
@@ -217,7 +209,7 @@ export default class ServerChannel {
    * @param data The data to send.
    * @param options EmitOptions
    */
-  emit(eventName: EventName, data: Data | null = null, options?: EmitOptions) {
+  emit(eventName: Types.EventName, data: Types.Data | null = null, options?: Types.EmitOptions) {
     if (options && options.reliable) {
       makeReliable(options, (id: string) =>
         this._emit(eventName, {
@@ -231,7 +223,7 @@ export default class ServerChannel {
     }
   }
 
-  private _emit(eventName: EventName, data: Data | RawMessage | null = null) {
+  private _emit(eventName: Types.EventName, data: Types.Data | Types.RawMessage | null = null) {
     if (!this._roomId || this._roomId === this._roomId)
       if (!this._id || this._id === this._id) {
         const isReliable = data && typeof data === 'object' && 'RELIABLE' in data
@@ -257,9 +249,9 @@ export default class ServerChannel {
        * Emit a raw message.
        * @param rawMessage The raw message. Can be of type 'USVString | ArrayBuffer | ArrayBufferView'
        */
-      emit: (rawMessage: RawMessage) => this.emit(EVENTS.RAW_MESSAGE, rawMessage),
-      room: { emit: (rawMessage: RawMessage) => this.room.emit(EVENTS.RAW_MESSAGE, rawMessage) },
-      broadcast: { emit: (rawMessage: RawMessage) => this.broadcast.emit(EVENTS.RAW_MESSAGE, rawMessage) }
+      emit: (rawMessage: Types.RawMessage) => this.emit(EVENTS.RAW_MESSAGE, rawMessage),
+      room: { emit: (rawMessage: Types.RawMessage) => this.room.emit(EVENTS.RAW_MESSAGE, rawMessage) },
+      broadcast: { emit: (rawMessage: Types.RawMessage) => this.broadcast.emit(EVENTS.RAW_MESSAGE, rawMessage) }
     }
   }
 
@@ -267,9 +259,9 @@ export default class ServerChannel {
    * Listen for raw messages.
    * @param callback The event callback.
    */
-  onRaw(callback: EventCallbackRawMessage) {
-    this.eventEmitter.on(EVENTS.RAW_MESSAGE, (rawMessage: RawMessage) => {
-      let cb: EventCallbackRawMessage = (rawMessage: RawMessage) => callback(rawMessage)
+  onRaw(callback: Types.EventCallbackRawMessage) {
+    this.eventEmitter.on(EVENTS.RAW_MESSAGE, (rawMessage: Types.RawMessage) => {
+      let cb: Types.EventCallbackRawMessage = (rawMessage: Types.RawMessage) => callback(rawMessage)
       cb(rawMessage)
     })
   }
@@ -279,9 +271,9 @@ export default class ServerChannel {
    * @param eventName The event name.
    * @param callback The event callback.
    */
-  on(eventName: EventName, callback: EventCallbackServer) {
-    this.eventEmitter.on(eventName, (data: any, senderId: ChannelId = undefined) => {
-      let cb: EventCallbackServer = (data: any, senderId: ChannelId) => callback(data, senderId)
+  on(eventName: Types.EventName, callback: Types.EventCallbackServer) {
+    this.eventEmitter.on(eventName, (data: any, senderId: Types.ChannelId = undefined) => {
+      let cb: Types.EventCallbackServer = (data: any, senderId: Types.ChannelId) => callback(data, senderId)
       // check if message is reliable
       // and reject it if it has already been submitted
       const isReliableMessage: boolean = data && data.RELIABLE === 1 && data.ID !== 'undefined'

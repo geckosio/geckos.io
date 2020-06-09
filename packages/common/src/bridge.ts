@@ -1,5 +1,5 @@
 import EventEmitter from 'eventemitter3'
-import { Data, EventOptions, ChannelId, EventName, RoomId } from './typings'
+import { Data, EventOptions, ChannelId, EventName, RoomId } from './types'
 
 export class Bridge {
   eventEmitter = new EventEmitter()
@@ -21,11 +21,6 @@ export class Bridge {
       cb(data, options)
     })
   }
-
-  // this is never used
-  // removeListener(eventName: EventName, emitted: EventEmitter.ListenerFn, context = undefined) {
-  //   this.eventEmitter.removeListener(eventName, emitted, context)
-  // }
 
   removeAllListeners() {
     this.eventEmitter.removeAllListeners()

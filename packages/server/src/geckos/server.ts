@@ -1,6 +1,6 @@
 import bridge from '@geckos.io/common/lib/bridge'
 import http from 'http'
-import ServerChannel from './wrtc/channel'
+import ServerChannel from './channel'
 import { EVENTS } from '@geckos.io/common/lib/constants'
 import {
   Data,
@@ -12,12 +12,12 @@ import {
   ServerOptions,
   CorsOptions,
   EmitOptions
-} from '@geckos.io/common/lib/typings'
+} from '../../../common/lib/types'
 import { makeReliable } from '@geckos.io/common/lib/reliableMessage'
-import Connection from './wrtc/defaultConnection'
-import ConnectionsManagerServer from './wrtc/connectionsManager'
-import HttpServer from './httpServer/httpServer'
-import WebRTCConnection from './wrtc/webrtcConnection'
+import Connection from '../wrtc/connection'
+import ConnectionsManagerServer from '../wrtc/connectionsManager'
+import HttpServer from '../httpServer/httpServer'
+import WebRTCConnection from '../wrtc/webrtcConnection'
 
 export class GeckosServer {
   private connectionsManager: ConnectionsManagerServer
