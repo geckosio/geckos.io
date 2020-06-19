@@ -24,7 +24,7 @@
 
 ## What is it made for?
 
-It's designed specifically for your HTML5 real-time multiplayer games by lowering the average latency and preventing huge latency spikes. It allows you to communicate with your node.js server via UDP, which is much faster than TPC (used by WebSocket). Take a look at the comparison video between UDP and TCP.
+It's designed specifically for your HTML5 real-time multiplayer games by lowering the average latency and preventing huge latency spikes. It allows you to communicate with your node.js server via UDP, which is much faster than TCP (used by WebSocket). Take a look at the comparison video between UDP and TCP.
 https://youtu.be/ZEEBsq3eQmg
 
 <a href="https://youtu.be/ZEEBsq3eQmg"><img src="./readme/thumbnail.png" width="320"></a>
