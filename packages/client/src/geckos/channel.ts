@@ -100,11 +100,6 @@ export class ClientChannel {
    * @param callback The event callback.
    */
   async onConnect(callback: Types.ConnectionEventCallbackClient) {
-    // TODO(yandeu) add a connection timeout (or something like this)
-    this.bridge.on(EVENTS.DATA_CHANNEL_IS_OPEN, () => {
-      callback()
-    })
-
     this.peerConnection = new PeerConnection()
 
     const error = await this.peerConnection.connect(this.connectionsManager)
@@ -115,6 +110,8 @@ export class ClientChannel {
       this.maxMessageSize = this.connectionsManager.maxMessageSize = this.peerConnection.localPeerConnection.sctp?.maxMessageSize
       // init onConnectionStateChange event
       this.onconnectionstatechange()
+      // we are now ready
+      callback()
     }
   }
 

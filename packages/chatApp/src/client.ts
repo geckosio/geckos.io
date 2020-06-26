@@ -20,7 +20,7 @@ channel.onConnect(error => {
     appendMessage(error.message)
     return
   } else {
-    console.log('You are connected')
+    console.log('You are connected', channel.id)
   }
 
   channel.emit('chat message', `Hello everyone, I\'m ${channel.id}`)

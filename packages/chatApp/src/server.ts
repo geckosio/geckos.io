@@ -30,7 +30,7 @@ server.listen(3000, () => {
 
 io.onConnection((channel: ServerChannel) => {
   channel.onDisconnect(reason => {
-    console.log('onDisconnect reason:', reason)
+    // console.log('onDisconnect reason:', reason)
   })
 
   channel.emit('chat message', `Welcome to the chat ${channel.id}!`)
@@ -53,12 +53,7 @@ io.onConnection((channel: ServerChannel) => {
     channel.emit('chat message', `SENT: ${data}`)
   })
 
-  channel.on('number', (data: Data) => {
-    console.log('number: ', data)
-  })
-
   channel.onRaw((rawMessage: RawMessage) => {
-    console.log('rawMessage: ', rawMessage)
     channel.raw.emit('RAW_MESSAGE')
   })
 })

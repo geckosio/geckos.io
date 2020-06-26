@@ -16,9 +16,11 @@ export default class PeerConnection {
 
     if (webRTCPcSupported) {
       const { localPeerConnection, dataChannel, id } = await connectionsManager.connect()
+
       this.localPeerConnection = localPeerConnection
       this.dataChannel = dataChannel
       this.id = id
+
       return null
     } else {
       let error = new Error(ERRORS.BROWSER_NOT_SUPPORTED)

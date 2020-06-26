@@ -1,5 +1,4 @@
 import { Bridge } from '@geckos.io/common/lib/bridge'
-import { EVENTS } from '@geckos.io/common/lib/constants'
 import { RawMessage, Data, ChannelId, EventName } from '@geckos.io/common/lib/types'
 import ParseMessage from '@geckos.io/common/lib/parseMessage'
 import SendMessage from '@geckos.io/common/lib/sendMessage'
@@ -38,8 +37,6 @@ export default class ConnectionsManagerClient {
       const { key, data } = ParseMessage(ev)
       this.bridge.emit(key, data)
     }
-
-    this.bridge.emit(EVENTS.DATA_CHANNEL_IS_OPEN)
   }
 
   // fetch additional candidates
@@ -136,7 +133,7 @@ export default class ConnectionsManagerClient {
 
     try {
       await this.localPeerConnection.setRemoteDescription(localDescription)
-      this.localPeerConnection.addEventListener('datachannel', this.onDataChannel)
+      this.localPeerConnection.addEventListener('datachannel', this.onDataChannel, { once: true })
 
       const originalAnswer = await this.localPeerConnection.createAnswer()
       const updatedAnswer = new RTCSessionDescription({
@@ -157,6 +154,20 @@ export default class ConnectionsManagerClient {
       } catch (error) {
         console.error(error.message)
       }
+
+      const waitForDataChannel = () => {
+        return new Promise(resolve => {
+          this.localPeerConnection.addEventListener(
+            'datachannel',
+            () => {
+              resolve()
+            },
+            { once: true }
+          )
+        })
+      }
+
+      if (!this.dataChannel) await waitForDataChannel()
 
       return {
         localPeerConnection: this.localPeerConnection,
