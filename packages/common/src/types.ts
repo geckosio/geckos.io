@@ -20,7 +20,7 @@ export interface ServerOptions {
   maxPacketLifeTime?: number
   cors?: CorsOptions
   autoManageBuffering?: boolean
-  authorization?: (header: string) => Promise<boolean>
+  authorization?: (header: string) => Promise<boolean | any>
 }
 
 export interface ClientOptions {

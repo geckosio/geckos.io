@@ -27,12 +27,14 @@ export default class ConnectionsManagerServer {
   }
 
   async createConnection(authorization: string | undefined) {
+    let userData: any
     if (authorization) {
       const res = await this.options?.authorization?.(authorization)
-      if (!res) return 'unauthorized'
+      if (typeof res === 'boolean' && !res) return 'unauthorized'
+      else userData = res
     }
 
-    const connection = new WebRTCConnection(this.createId(), this.options, this.connections)
+    const connection = new WebRTCConnection(this.createId(), this.options, this.connections, userData)
     const pc = connection.peerConnection
 
     pc.onconnectionstatechange = () => {

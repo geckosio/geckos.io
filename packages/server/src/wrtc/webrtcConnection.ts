@@ -15,7 +15,7 @@ export default class WebRTCConnection extends Connection {
   public additionalCandidates: RTCIceCandidate[] = []
   private options: any
 
-  constructor(id: ChannelId, serverOptions: ServerOptions, public connections: Map<any, any>) {
+  constructor(id: ChannelId, serverOptions: ServerOptions, public connections: Map<any, any>, public userData: any) {
     super(id)
 
     const { iceServers = [], iceTransportPolicy = 'all', ...dataChannelOptions } = serverOptions
@@ -38,7 +38,7 @@ export default class WebRTCConnection extends Connection {
       if (this.peerConnection.connectionState === 'disconnected') this.close()
     }
 
-    this.channel = new CreateDataChannel(this, dataChannelOptions)
+    this.channel = new CreateDataChannel(this, dataChannelOptions, userData)
   }
 
   async doOffer() {

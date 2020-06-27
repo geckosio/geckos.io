@@ -19,7 +19,11 @@ export default class ServerChannel {
   // stores all reliable messages for about 15 seconds
   private receivedReliableMessages: { id: string; timestamp: Date; expire: number }[] = []
 
-  constructor(public webrtcConnection: WebRTCConnection, dataChannelOptions: Types.ServerOptions) {
+  constructor(
+    public webrtcConnection: WebRTCConnection,
+    public dataChannelOptions: Types.ServerOptions,
+    public userData: any
+  ) {
     this._id = webrtcConnection.id
     this._roomId = undefined
 

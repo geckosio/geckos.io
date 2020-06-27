@@ -37,7 +37,7 @@ First things first, install it via npm:
 npm install @geckos.io/client @geckos.io/server
 ```
 
-## Authorization (available soon)
+## Authorization and Authentication (available soon)
 
 Soon the client will be able to send a authorization header with the connection request. If the authorization fails, the server will respond with 401 (unauthorized).
 
@@ -66,9 +66,15 @@ const io: GeckosServer = geckos({
 
     // reach out to a database if needed
 
-    if (username === 'Yannick' && password === 'I2E4S') return true
+    // whatever you return here will be accessible via channel.userData
+    if (username === 'Yannick' && password === 'I2E4S') return { username, password }
+    // if you return false, the server will respond with 401 (unauthorized)
     else return false
   }
+})
+
+io.onConnection((channel: ServerChannel) => {
+  console.log('channel.userData', channel.userData) // { username: 'Yannick', password: 'I2E4S' }
 })
 ```
 
