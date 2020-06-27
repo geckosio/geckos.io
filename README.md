@@ -41,40 +41,41 @@ npm install @geckos.io/client @geckos.io/server
 
 Soon the client will be able to send a authorization header with the connection request. If the authorization fails, the server will respond with 401 (unauthorized).
 
-You can send any kind of authorization header (https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization) as a string.
+Whatever you add to the option authorization (must be a string) will be sent as a Authorization request header. You could, for example, send Basic base64-encoded credentials, Bearer tokens or a simple string, as in the example below.
+
+Read more about HTTP authentication here: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization.
 
 #### client
 
-```js
-// encode Basic authorization header
-const credentials = { username: 'Yannick', password: 'I2E4S' }
-const base64 = btoa(`${credentials.username}:${credentials.password}`)
-const authorization = `Basic ${base64}` // Basic eWFubmljazpJMkU0Uw==
-
-const channel = geckos({ authorization })
+```ts
+const username = 'Yannick'
+const password = '12E45'
+const auth = `${username} ${password}` // 'Yannick 12E45'
+const channel = geckos({ authorization: auth })
 ```
 
 #### server
 
-```js
+```ts
 const io: GeckosServer = geckos({
   authorization: async (header: string) => {
-    // decode Basic authorization header
-    const token = new Buffer(header.split(' ')[1], 'base64').toString('ascii')
-    const username = token.split(':')[0]
-    const password = token.split(':')[1]
+    const token = header.split(' ') // ['Yannick', '12E45']
+    const username = token[0] // 'Yannick'
+    const password = token[1] // '12E45'
 
-    // reach out to a database if needed
+    // reach out to a database if needed (this code is completely fictitious)
+    const user = await database.getByName(username)
 
-    // whatever you return here will be accessible via channel.userData
-    if (username === 'Yannick' && password === 'I2E4S') return { username, password }
+    // whatever you return here, will later be accessible via channel.userData
+    if (user.username === username && user.password === password)
+      return { username: user.username, level: user.level, points: user.points }
     // if you return false, the server will respond with 401 (unauthorized)
     else return false
   }
 })
 
 io.onConnection((channel: ServerChannel) => {
-  console.log('channel.userData', channel.userData) // { username: 'Yannick', password: 'I2E4S' }
+  console.log(channel.userData) // { username: 'Yannick', points: 8987, level: 13 }
 })
 ```
 
