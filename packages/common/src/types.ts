@@ -20,12 +20,14 @@ export interface ServerOptions {
   maxPacketLifeTime?: number
   cors?: CorsOptions
   autoManageBuffering?: boolean
+  authorization?: (header: string) => Promise<boolean>
 }
 
 export interface ClientOptions {
   iceServers?: RTCIceServer[]
   iceTransportPolicy?: RTCIceTransportPolicy
   url?: string
+  authorization?: string | undefined
   port?: number
   label?: string
 }

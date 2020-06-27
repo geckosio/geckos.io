@@ -15,9 +15,15 @@ export class ClientChannel {
   // stores all reliable messages for about 15 seconds
   private receivedReliableMessages: { id: string; timestamp: Date; expire: number }[] = []
 
-  constructor(url: string, port: number, label: string, rtcConfiguration: RTCConfiguration) {
+  constructor(
+    url: string,
+    authorization: string | undefined,
+    port: number,
+    label: string,
+    rtcConfiguration: RTCConfiguration
+  ) {
     this.url = `${url}:${port}`
-    this.connectionsManager = new ConnectionsManagerClient(this.url, label, rtcConfiguration)
+    this.connectionsManager = new ConnectionsManagerClient(this.url, authorization, label, rtcConfiguration)
     this.bridge = this.connectionsManager.bridge
 
     // remove all event listeners on disconnect
@@ -178,10 +184,11 @@ const geckosClient = (options: Types.ClientOptions = {}) => {
     iceServers = [],
     iceTransportPolicy = 'all',
     url = `${location.protocol}//${location.hostname}`,
+    authorization = undefined,
     port = 9208,
     label = 'geckos.io'
   } = options
-  return new ClientChannel(url, port, label, { iceServers, iceTransportPolicy })
+  return new ClientChannel(url, authorization, port, label, { iceServers, iceTransportPolicy })
 }
 
 export default geckosClient

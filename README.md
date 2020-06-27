@@ -37,6 +37,41 @@ First things first, install it via npm:
 npm install @geckos.io/client @geckos.io/server
 ```
 
+## Authorization (available soon)
+
+Soon the client will be able to send a authorization header with the connection request. If the authorization fails, the server will respond with 401 (unauthorized).
+
+You can send any kind of authorization header (https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization) as a string.
+
+#### client
+
+```js
+// encode Basic authorization header
+const credentials = { username: 'Yannick', password: 'I2E4S' }
+const base64 = btoa(`${credentials.username}:${credentials.password}`)
+const authorization = `Basic ${base64}` // Basic eWFubmljazpJMkU0Uw==
+
+const channel = geckos({ authorization })
+```
+
+#### server
+
+```js
+const io: GeckosServer = geckos({
+  authorization: async (header: string) => {
+    // decode Basic authorization header
+    const token = new Buffer(header.split(' ')[1], 'base64').toString('ascii')
+    const username = token.split(':')[0]
+    const password = token.split(':')[1]
+
+    // reach out to a database if needed
+
+    if (username === 'Yannick' && password === 'I2E4S') return true
+    else return false
+  }
+})
+```
+
 ## New in version > 1.5.0
 
 #### New autoManageBuffering option

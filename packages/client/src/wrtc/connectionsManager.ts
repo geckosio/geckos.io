@@ -20,7 +20,12 @@ export default class ConnectionsManagerClient {
     SendMessage(this.dataChannel, this.maxMessageSize, eventName, data)
   }
 
-  constructor(public url: string, public label: string, public rtcConfiguration: RTCConfiguration) {}
+  constructor(
+    public url: string,
+    public authorization: string | undefined,
+    public label: string,
+    public rtcConfiguration: RTCConfiguration
+  ) {}
 
   onDataChannel = (ev: RTCDataChannelEvent) => {
     const { channel } = ev
@@ -59,12 +64,13 @@ export default class ConnectionsManagerClient {
   async connect() {
     const host = `${this.url}/.wrtc/v1`
 
+    let headers: any = { 'Content-Type': 'application/json' }
+    if (this.authorization) headers = { ...headers, ['Authorization']: this.authorization }
+
     try {
       const res = await fetch(`${host}/connections`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        }
+        headers
       })
 
       this.remotePeerConnection = await res.json()

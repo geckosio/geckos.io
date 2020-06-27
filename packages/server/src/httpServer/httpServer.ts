@@ -21,6 +21,7 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
 
   server.on('request', async (req: http.IncomingMessage, res: http.ServerResponse) => {
     const pathname = req.url ? url.parse(req.url, true).pathname : undefined
+    const headers = req.headers
     const method = req.method
 
     // if the request is not part of the rootRegEx,
@@ -63,9 +64,14 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
       if (pathname && method) {
         if (method === 'POST' && path1) {
           try {
-            // create connection
-            const connection = await connectionsManager.createConnection()
+            // create connection (and check auth header)
+            const connection = await connectionsManager.createConnection(headers?.authorization)
 
+            // if unauthorized
+            if (connection === 'unauthorized') {
+              end(res, 401)
+              return
+            }
             // create the offer
             await connection.doOffer()
 
