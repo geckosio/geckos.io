@@ -29,7 +29,9 @@ export default class ConnectionsManagerServer {
     let userData: any
     if (authorization) {
       const res = await this.options?.authorization?.(authorization)
-      if (typeof res === 'boolean' && !res) return 'unauthorized'
+      if (typeof res === 'boolean' && res) userData = {}
+      else if (typeof res === 'boolean' && !res) return 401
+      else if (typeof res === 'number' && res >= 100 && res < 600) return res
       else userData = res
     }
 

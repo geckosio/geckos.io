@@ -66,16 +66,26 @@ const io: GeckosServer = geckos({
     // reach out to a database if needed (this code is completely fictitious)
     const user = await database.getByName(username)
 
-    // whatever you return here, will later be accessible via channel.userData
+    // whatever you return here, will later be accessible via channel.userData to authenticate the user
     if (user.username === username && user.password === password)
       return { username: user.username, level: user.level, points: user.points }
+
+    // if you return true, you will authorize the connection, without adding any data to channel.userData
+    return true
+
     // if you return false, the server will respond with 401 (unauthorized)
-    else return false
+    return false
+
+    // if you return a number between 100 and 599, the server will respond with the respective HTTP status code
+    return 400 // will return 400 (Bad Request)
+    return 404 // will return 404 (Not Found)
+    return 500 // will return 500 (Internal Server Error)
+    // and so on ...
   }
 })
 
 io.onConnection((channel: ServerChannel) => {
-  console.log(channel.userData) // { username: 'Yannick', points: 8987, level: 13 }
+  console.log(channel.userData) // { username: 'Yannick', level: 13, points: 8987, }
 })
 ```
 

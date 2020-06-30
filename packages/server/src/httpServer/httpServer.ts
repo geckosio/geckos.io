@@ -67,11 +67,13 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
             // create connection (and check auth header)
             const connection = await connectionsManager.createConnection(headers?.authorization)
 
-            // if unauthorized
-            if (connection === 'unauthorized') {
-              end(res, 401)
+            // on http status code
+            if (typeof connection === 'number') {
+              if (connection >= 100 && connection < 600) end(res, connection)
+              else end(res, 500)
               return
             }
+
             // create the offer
             await connection.doOffer()
 
