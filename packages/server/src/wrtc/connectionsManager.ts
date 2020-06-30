@@ -17,13 +17,12 @@ export default class ConnectionsManagerServer {
     } while (true)
   }
 
-  getConnection = (id: ChannelId) => {
+  getConnection(id: ChannelId) {
     return this.connections.get(id) || null
   }
 
-  getConnections = () => {
-    // TODO(yandeu) getConnections() does not return anything yet
-    return
+  getConnections() {
+    return this.connections
   }
 
   async createConnection(authorization: string | undefined) {

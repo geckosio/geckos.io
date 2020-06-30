@@ -20,9 +20,9 @@ import HttpServer from '../httpServer/httpServer'
 import WebRTCConnection from '../wrtc/webrtcConnection'
 
 export class GeckosServer {
-  private connectionsManager: ConnectionsManagerServer
   private _port: number
   private _cors: CorsOptions = { origin: '*' }
+  public connectionsManager: ConnectionsManagerServer
   public server: http.Server
 
   constructor(options: ServerOptions) {
