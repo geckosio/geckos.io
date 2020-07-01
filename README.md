@@ -37,9 +37,27 @@ First things first, install it via npm:
 npm install @geckos.io/client @geckos.io/server
 ```
 
-## Authorization and Authentication (available soon)
+---
 
-Soon the client will be able to send a authorization header with the connection request. If the authorization fails, the server will respond with 401 (unauthorized).
+## New in version > 1.6.0
+
+### Raw messages from the io scope
+
+Finally you can send rawMessages from the io scope.
+
+**server**
+
+```js
+// emit a raw message to all channels
+io.raw.emit(rawMessage)
+
+// emit a raw message to a specific room
+io.raw.room('roomId').emit(rawMessage)
+```
+
+### Authorization and Authentication
+
+The client is now able to send a authorization header with the connection request. If the authorization fails, the server will respond with 401 (unauthorized).
 
 Whatever you add to the option authorization (must be a string) will be sent as a Authorization request header. You could, for example, send Basic base64-encoded credentials, Bearer tokens or a simple string, as in the example below.
 
@@ -89,9 +107,11 @@ io.onConnection((channel: ServerChannel) => {
 })
 ```
 
+---
+
 ## New in version > 1.5.0
 
-#### New autoManageBuffering option
+### New autoManageBuffering option
 
 By default the RTCDataChannel queues data if it can't be send directly. This is very bad for multiplayer games, since we do not want to render old state. In version 1.5.0, the option **autoManageBuffering** was added. It is set to true by default. If **autoManageBuffering** is on, Geckos.io will prefer to drop messages instead of adding them to the send queue. (Messages with the option [{ reliable: true }](#reliable-messages), will still be added to the queue)
 
@@ -99,6 +119,8 @@ By default the RTCDataChannel queues data if it can't be send directly. This is 
 
 If you send 30Kbytes @60fps and the client only has a 10Mbit connection, he can never receive all messages. So it is necessary to drop some of them, which will be done automatically with **autoManageBuffering**.  
 Another good solution to this problem would be to decrease the send rate for that specific client. Use the new `channel.onDrop(drop => {})` method to track dropped messages. If, for example, you notice that 20% of the messages for a specific client are dropped, decrease the send rate.
+
+---
 
 ## Usage
 
