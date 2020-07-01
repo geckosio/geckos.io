@@ -3,7 +3,7 @@ import http from 'http'
 import ConnectionsManagerServer from '../wrtc/connectionsManager'
 import SetCORS from './setCors'
 import ParseBody from './parseBody'
-import { CorsOptions } from '../../../common/lib/types'
+import { CorsOptions } from '@geckos.io/common/lib/types'
 
 const end = (res: http.ServerResponse, statusCode: number) => {
   res.writeHead(statusCode)

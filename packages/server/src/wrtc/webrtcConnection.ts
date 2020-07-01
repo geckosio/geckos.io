@@ -1,7 +1,7 @@
 import Connection from './connection'
 import CreateDataChannel from '../geckos/channel'
 import Channel from '../geckos/channel'
-import { ChannelId, ServerOptions } from '../../../common/lib/types'
+import { ChannelId, ServerOptions } from '@geckos.io/common/lib/types'
 
 const DefaultRTCPeerConnection: RTCPeerConnection = require('wrtc').RTCPeerConnection
 

@@ -2,17 +2,8 @@ import bridge from '@geckos.io/common/lib/bridge'
 import http from 'http'
 import ServerChannel from './channel'
 import { EVENTS } from '@geckos.io/common/lib/constants'
-import {
-  Data,
-  RoomId,
-  // EventCallbackServer,
-  ConnectionEventCallbackServer,
-  // EventOptions,
-  EventName,
-  ServerOptions,
-  CorsOptions,
-  EmitOptions
-} from '../../../common/lib/types'
+import * as Types from '@geckos.io/common/lib/types'
+
 import { makeReliable } from '@geckos.io/common/lib/reliableMessage'
 import Connection from '../wrtc/connection'
 import ConnectionsManagerServer from '../wrtc/connectionsManager'
@@ -21,11 +12,11 @@ import WebRTCConnection from '../wrtc/webrtcConnection'
 
 export class GeckosServer {
   private _port: number
-  private _cors: CorsOptions = { origin: '*' }
+  private _cors: Types.CorsOptions = { origin: '*' }
   public connectionsManager: ConnectionsManagerServer
   public server: http.Server
 
-  constructor(options: ServerOptions) {
+  constructor(options: Types.ServerOptions) {
     this.connectionsManager = new ConnectionsManagerServer(options)
     this._cors = { ...this._cors, ...options.cors }
   }
@@ -86,7 +77,7 @@ export class GeckosServer {
    * @param data The data you want to send.
    * @param options EmitOptions
    */
-  emit(eventName: EventName, data: Data, options?: EmitOptions) {
+  emit(eventName: Types.EventName, data: Types.Data, options?: Types.EmitOptions) {
     this.connections.forEach((connection: WebRTCConnection) => {
       const { channel } = connection
 
@@ -106,9 +97,9 @@ export class GeckosServer {
    * Emit a message to a specific room.
    * @param roomId The roomId.
    */
-  room(roomId: RoomId = undefined) {
+  room(roomId: Types.RoomId = undefined) {
     return {
-      emit: (eventName: EventName, data: Data) => {
+      emit: (eventName: Types.EventName, data: Types.Data) => {
         this.connections.forEach((connection: WebRTCConnection) => {
           const { channel } = connection
           const { roomId: channelRoomId } = channel
@@ -122,9 +113,9 @@ export class GeckosServer {
   }
 
   /** Listen for a new connection. */
-  onConnection(callback: ConnectionEventCallbackServer) {
+  onConnection(callback: Types.ConnectionEventCallbackServer) {
     bridge.on(EVENTS.CONNECTION, (channel: ServerChannel) => {
-      let cb: ConnectionEventCallbackServer = channel => callback(channel)
+      let cb: Types.ConnectionEventCallbackServer = channel => callback(channel)
       cb(channel)
     })
   }
@@ -159,7 +150,7 @@ export class GeckosServer {
  * @param options.cors.origin String OR (req: http.IncomingMessage) => string. Default '*'
  * @param options.autoManageBuffering By default, geckos.io manages RTCDataChannel buffering for you. Default 'true'
  */
-const geckosServer = (options: ServerOptions = {}) => {
+const geckosServer = (options: Types.ServerOptions = {}) => {
   const { iceTransportPolicy } = options
   if (iceTransportPolicy === 'relay') {
     console.error(`WARNING: iceTransportPolicy "relay" does not work yet on the server!`)
