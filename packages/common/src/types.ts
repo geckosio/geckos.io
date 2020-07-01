@@ -41,6 +41,7 @@ export interface EmitOptions {
 type CorsOptionsOriginFunction = (req: http.IncomingMessage) => string
 export interface CorsOptions {
   origin: string | CorsOptionsOriginFunction
+  allowAuthorization?: boolean
 }
 
 export interface EventCallbackClient {
