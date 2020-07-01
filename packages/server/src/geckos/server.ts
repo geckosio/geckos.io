@@ -112,6 +112,20 @@ export class GeckosServer {
     }
   }
 
+  /** Emit a raw message */
+  get raw() {
+    return {
+      emit: (rawMessage: Types.RawMessage) => this.emit(EVENTS.RAW_MESSAGE, rawMessage),
+      room: (roomId: Types.RoomId = undefined) => {
+        return {
+          emit: (rawMessage: Types.RawMessage) => {
+            this.room(roomId).emit(EVENTS.RAW_MESSAGE, rawMessage)
+          }
+        }
+      }
+    }
+  }
+
   /** Listen for a new connection. */
   onConnection(callback: Types.ConnectionEventCallbackServer) {
     bridge.on(EVENTS.CONNECTION, (channel: ServerChannel) => {

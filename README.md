@@ -268,6 +268,7 @@ io.onConnection(channel => {
   io.emit('chat message', 'Hello everyone!')
 
   // emits a message to all channels in a specific room
+  // (if you do not pass a roomId, the message will be sent to everyone who is not in a room yet)
   io.room(roomId).emit('chat message', 'Hello everyone!')
 })
 ```
@@ -293,8 +294,23 @@ io.onConnection(channel => {
 
 You can send and receive `USVString`, `ArrayBuffer` and `ArrayBufferView` using rawMessages.
 
+**client**
+
 ```js
-// emit a raw message
+// emit a raw message to the server
+channel.raw.emit(rawMessage)
+```
+
+**server**
+
+```js
+// emit a raw message to all channels
+io.raw.emit(rawMessage)
+
+// emit a raw message to a specific room
+io.raw.room('roomId').emit(rawMessage)
+
+// emit a raw message to the channel
 channel.raw.emit(rawMessage)
 
 // emit a raw message to all users in the same room
