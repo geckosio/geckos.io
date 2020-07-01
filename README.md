@@ -15,7 +15,6 @@
 [![Dependency Status](https://david-dm.org/geckosio/geckos.io/status.svg?path=packages/server&style=flat-square)](https://david-dm.org/geckosio/geckos.io?path=packages%2Fserver)
 [![Downloads](https://img.shields.io/npm/dm/@geckos.io/server.svg?style=flat-square)](https://www.npmjs.com/package/@geckos.io/server)
 ![Node version](https://img.shields.io/node/v/@geckos.io/server.svg?style=flat-square)
-[![Minified bundle](https://img.shields.io/github/size/geckosio/geckos.io/bundles/latest/geckos.io-client.latest.min.js.svg?label=minified%20bundle&style=flat-square)](https://github.com/geckosio/geckos.io/tree/master/bundles)
 [![Codecov](https://img.shields.io/codecov/c/github/geckosio/geckos.io?logo=codecov&style=flat-square)](https://codecov.io/gh/geckosio/geckos.io)
 
 </div>
