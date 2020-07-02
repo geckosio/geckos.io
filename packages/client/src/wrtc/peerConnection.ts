@@ -15,7 +15,12 @@ export default class PeerConnection {
       mozRTCPeerConnection
 
     if (webRTCPcSupported) {
-      const { localPeerConnection, dataChannel, id, userData } = await connectionsManager.connect()
+      const { localPeerConnection, dataChannel, id, userData, error } = await connectionsManager.connect()
+
+      if (error) return { error }
+
+      if (!localPeerConnection || !dataChannel || !id || !userData)
+        return { error: new Error('Something went wrong in "await connectionsManager.connect()"') }
 
       this.localPeerConnection = localPeerConnection
       this.dataChannel = dataChannel

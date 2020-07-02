@@ -114,7 +114,7 @@ export class ClientChannel {
     if (response.error) callback(response.error)
     else {
       // set the userData
-      this.userData = response.userData
+      if (response.userData) this.userData = response.userData
       // keep track of the maxMessageSize
       this.maxMessageSize = this.connectionsManager.maxMessageSize = this.peerConnection.localPeerConnection.sctp?.maxMessageSize
       // init onConnectionStateChange event

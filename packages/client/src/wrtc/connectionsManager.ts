@@ -81,6 +81,7 @@ export default class ConnectionsManagerClient {
       this.remotePeerConnection = json
     } catch (error) {
       console.error(error.message)
+      return { error }
     }
 
     const { id, localDescription } = this.remotePeerConnection
@@ -164,6 +165,7 @@ export default class ConnectionsManagerClient {
         })
       } catch (error) {
         console.error(error.message)
+        return { error }
       }
 
       const waitForDataChannel = () => {
@@ -189,7 +191,7 @@ export default class ConnectionsManagerClient {
     } catch (error) {
       console.error(error.message)
       this.localPeerConnection.close()
-      throw error
+      return { error }
     }
   }
 }
