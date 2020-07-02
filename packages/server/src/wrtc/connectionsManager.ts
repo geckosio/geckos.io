@@ -26,15 +26,22 @@ export default class ConnectionsManagerServer {
   }
 
   async createConnection(authorization: string | undefined) {
+    // check authorization and get userData
     let userData: any
-    if (authorization) {
-      const res = await this.options?.authorization?.(authorization)
+    if (this.options?.authorization) {
+      if (typeof this.options.authorization !== 'function') {
+        console.log('[warning] Authorization is not a function!?')
+        return 500
+      }
+
+      const res = await this.options.authorization(authorization)
       if (typeof res === 'boolean' && res) userData = {}
       else if (typeof res === 'boolean' && !res) return 401
       else if (typeof res === 'number' && res >= 100 && res < 600) return res
       else userData = res
     }
 
+    // create the webrtc connection
     const connection = new WebRTCConnection(this.createId(), this.options, this.connections, userData)
     const pc = connection.peerConnection
 
