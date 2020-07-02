@@ -27,17 +27,17 @@ export default class ConnectionsManagerServer {
 
   async createConnection(authorization: string | undefined) {
     // check authorization and get userData
-    let userData: any
+    let userData = {}
     if (this.options?.authorization) {
       if (typeof this.options.authorization !== 'function') {
         console.log('[warning] Authorization is not a function!?')
-        return 500
+        return { status: 500 }
       }
 
       const res = await this.options.authorization(authorization)
       if (typeof res === 'boolean' && res) userData = {}
-      else if (typeof res === 'boolean' && !res) return 401
-      else if (typeof res === 'number' && res >= 100 && res < 600) return res
+      else if (typeof res === 'boolean' && !res) return { status: 401 }
+      else if (typeof res === 'number' && res >= 100 && res < 600) return { status: res }
       else userData = res
     }
 
@@ -56,7 +56,7 @@ export default class ConnectionsManagerServer {
     }
 
     this.connections.set(connection.id, connection)
-    return connection
+    return { connection, userData, status: 200 }
   }
 
   deleteConnection(connection: WebRTCConnection) {

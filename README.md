@@ -69,6 +69,10 @@ const username = 'Yannick'
 const password = '12E45'
 const auth = `${username} ${password}` // 'Yannick 12E45'
 const channel = geckos({ authorization: auth })
+
+channel.onConnect(error => {
+  console.log(channel.userData) // { username: 'Yannick', level: 13, points: 8987 }
+})
 ```
 
 #### server
@@ -102,7 +106,7 @@ const io: GeckosServer = geckos({
 })
 
 io.onConnection((channel: ServerChannel) => {
-  console.log(channel.userData) // { username: 'Yannick', level: 13, points: 8987, }
+  console.log(channel.userData) // { username: 'Yannick', level: 13, points: 8987 }
 })
 ```
 

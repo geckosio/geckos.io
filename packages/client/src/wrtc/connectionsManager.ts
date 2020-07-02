@@ -66,6 +66,7 @@ export default class ConnectionsManagerClient {
 
     let headers: any = { 'Content-Type': 'application/json' }
     if (this.authorization) headers = { ...headers, ['Authorization']: this.authorization }
+    let userData = {}
 
     try {
       const res = await fetch(`${host}/connections`, {
@@ -73,7 +74,11 @@ export default class ConnectionsManagerClient {
         headers
       })
 
-      this.remotePeerConnection = await res.json()
+      const json = await res.json()
+
+      userData = json.userData
+
+      this.remotePeerConnection = json
     } catch (error) {
       console.error(error.message)
     }
@@ -176,6 +181,7 @@ export default class ConnectionsManagerClient {
       if (!this.dataChannel) await waitForDataChannel()
 
       return {
+        userData,
         localPeerConnection: this.localPeerConnection,
         dataChannel: this.dataChannel,
         id: id

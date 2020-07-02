@@ -7,6 +7,7 @@ import * as Types from '@geckos.io/common/lib/types'
 
 export class ClientChannel {
   public maxMessageSize: number | undefined
+  public userData = {}
 
   private peerConnection: PeerConnection
   private connectionsManager: ConnectionsManagerClient
@@ -108,10 +109,12 @@ export class ClientChannel {
   async onConnect(callback: Types.ConnectionEventCallbackClient) {
     this.peerConnection = new PeerConnection()
 
-    const error = await this.peerConnection.connect(this.connectionsManager)
+    const response = await this.peerConnection.connect(this.connectionsManager)
 
-    if (error) callback(error)
+    if (response.error) callback(response.error)
     else {
+      // set the userData
+      this.userData = response.userData
       // keep track of the maxMessageSize
       this.maxMessageSize = this.connectionsManager.maxMessageSize = this.peerConnection.localPeerConnection.sctp?.maxMessageSize
       // init onConnectionStateChange event

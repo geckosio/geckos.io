@@ -15,17 +15,17 @@ export default class PeerConnection {
       mozRTCPeerConnection
 
     if (webRTCPcSupported) {
-      const { localPeerConnection, dataChannel, id } = await connectionsManager.connect()
+      const { localPeerConnection, dataChannel, id, userData } = await connectionsManager.connect()
 
       this.localPeerConnection = localPeerConnection
       this.dataChannel = dataChannel
       this.id = id
 
-      return null
+      return { userData }
     } else {
       let error = new Error(ERRORS.BROWSER_NOT_SUPPORTED)
       console.error(error.message)
-      return error
+      return { error }
     }
   }
 }

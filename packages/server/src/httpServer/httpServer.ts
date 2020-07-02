@@ -65,12 +65,17 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
         if (method === 'POST' && path1) {
           try {
             // create connection (and check auth header)
-            const connection = await connectionsManager.createConnection(headers?.authorization)
+            const { status, connection, userData } = await connectionsManager.createConnection(headers?.authorization)
 
             // on http status code
-            if (typeof connection === 'number') {
-              if (connection >= 100 && connection < 600) end(res, connection)
+            if (status !== 200) {
+              if (status >= 100 && status < 600) end(res, status)
               else end(res, 500)
+              return
+            }
+
+            if (!connection) {
+              end(res, 500)
               return
             }
 
@@ -88,6 +93,7 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
 
             res.write(
               JSON.stringify({
+                userData, // the userData for authentication
                 id,
                 iceConnectionState,
                 peerConnection,
