@@ -12,12 +12,18 @@ import WebRTCConnection from '../wrtc/webrtcConnection'
 
 export class GeckosServer {
   private _port: number
-  private _cors: Types.CorsOptions = { origin: '*' }
+  private _cors: Types.CorsOptions = { origin: '*', allowAuthorization: false }
   public connectionsManager: ConnectionsManagerServer
   public server: http.Server
 
   constructor(options: Types.ServerOptions) {
     this.connectionsManager = new ConnectionsManagerServer(options)
+
+    // auto adjust allow authorization in cors headers
+    if (typeof options.cors?.allowAuthorization === 'undefined' && typeof options.authorization === 'function')
+      this._cors.allowAuthorization = true
+
+    // merge cors options
     this._cors = { ...this._cors, ...options.cors }
   }
 
@@ -163,9 +169,11 @@ export class GeckosServer {
  * @param options.cors Set the CORS options.
  * @param options.cors.origin String OR (req: http.IncomingMessage) => string. Default '*'
  * @param options.autoManageBuffering By default, geckos.io manages RTCDataChannel buffering for you. Default 'true'
+ * @param options.authorization The async authorization callback
  */
 const geckosServer = (options: Types.ServerOptions = {}) => {
   const { iceTransportPolicy } = options
+
   if (iceTransportPolicy === 'relay') {
     console.error(`WARNING: iceTransportPolicy "relay" does not work yet on the server!`)
     options.iceTransportPolicy = 'all'

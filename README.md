@@ -229,6 +229,7 @@ import geckos from '@geckos.io/server'
  * @param options.cors
  * @param options.cors.origin String | (req) => string. Default '*'
  * @param options.autoManageBuffering By default, geckos.io manages RTCDataChannel buffering for you. Default 'true'
+ * @param options.authorization The async authorization callback
  */
 io = geckos(options)
 

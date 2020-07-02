@@ -15,7 +15,7 @@ const SetCORS = (req: http.IncomingMessage, res: http.ServerResponse, cors: Cors
   res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST')
 
   if (allowAuthorization) {
-    res.setHeader('Access-Control-Allow-Headers', 'authorization,content-type')
+    res.setHeader('Access-Control-Allow-Headers', 'authorization, content-type')
   } else {
     res.setHeader('Access-Control-Allow-Headers', 'content-type')
   }
