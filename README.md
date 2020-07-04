@@ -40,6 +40,21 @@ npm install @geckos.io/client @geckos.io/server
 
 ## New in version > 1.6.0
 
+### Connections Manager
+
+You now have access to the connections manager.
+
+```js
+// get any channel by its ID via the connectionsManager
+const connection = io.connectionsManager.getConnection(channel.id)
+if (connection) {
+  // here, you could emit a message ...
+  connection.channel.emit('chat message', 'You have been kicked for cheating!')
+  // ... or close the channel
+  connection.channel.close()
+}
+```
+
 ### Raw messages from the io scope
 
 Finally you can send rawMessages from the io scope.
