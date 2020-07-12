@@ -133,9 +133,9 @@ export class GeckosServer {
   }
 
   /** Listen for a new connection. */
-  onConnection(callback: Types.ConnectionEventCallbackServer) {
+  onConnection(callback: (channel: ServerChannel) => void) {
     bridge.on(EVENTS.CONNECTION, (channel: ServerChannel) => {
-      let cb: Types.ConnectionEventCallbackServer = channel => callback(channel)
+      let cb: (channel: ServerChannel) => void = channel => callback(channel)
       cb(channel)
     })
   }

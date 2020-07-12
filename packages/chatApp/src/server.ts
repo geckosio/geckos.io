@@ -1,4 +1,4 @@
-import geckos, { ServerChannel, Data, RawMessage, iceServers, GeckosServer } from '@geckos.io/server'
+import geckos, { Data, RawMessage, iceServers, GeckosServer } from '@geckos.io/server'
 
 // using with express
 import express from 'express'
@@ -28,7 +28,7 @@ server.listen(3000, () => {
   console.log('express is on http://localhost:3000')
 })
 
-io.onConnection((channel: ServerChannel) => {
+io.onConnection(channel => {
   channel.onDisconnect(reason => {
     // console.log('onDisconnect reason:', reason)
   })

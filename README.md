@@ -476,11 +476,11 @@ channel.onConnect(() => {
 })
 
 // server.js
-import geckos, { Data, Channel } from '@geckos.io/server'
+import geckos, { Data } from '@geckos.io/server'
 
 const io = geckos()
 
-io.onConnection((channel: Channel) => {
+io.onConnection(channel => {
   channel.on('chat message', (data: Data) => {
     // ...
   })

@@ -60,10 +60,6 @@ export interface ConnectionEventCallbackClient {
   (error?: Error): void
 }
 
-export interface ConnectionEventCallbackServer {
-  (channel: any): void
-}
-
 export interface DisconnectEventCallbackServer {
   (connectionState: 'disconnected' | 'failed' | 'closed'): void
 }
