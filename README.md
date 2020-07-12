@@ -190,6 +190,10 @@ io.onConnection(channel => {
 })
 ```
 
+## Troubleshooting
+
+Geckos does not run on `http://localhost:PORT/`? Try `http://127.0.0.1:PORT/` instead.
+
 ## Cheatsheet
 
 Here a list of available methods.
