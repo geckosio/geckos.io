@@ -7,7 +7,14 @@ import { join } from 'path'
 const app = express()
 const server = http.createServer(app)
 const io: GeckosServer = geckos({
-  iceServers: process.env.NODE_ENV === 'production' ? iceServers : []
+  iceServers: process.env.NODE_ENV === 'production' ? iceServers : [],
+  authorization: async (auth, request) => {
+    // console.log('auth', auth)
+    // console.log('ip', request.connection.remoteAddress)
+    // console.log('ip (behind proxy)', request.headers['x-forwarded-for'])
+    return true
+  }
+
   // cors: { origin: 'http://localhost:8080' }
   // cors: {
   //   origin: req => {

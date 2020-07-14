@@ -1,4 +1,4 @@
-import http from 'http'
+import { IncomingMessage } from 'http'
 
 const ArrayBufferView = Object.getPrototypeOf(Object.getPrototypeOf(new Uint8Array())).constructor
 export { ArrayBufferView }
@@ -20,7 +20,12 @@ export interface ServerOptions {
   maxPacketLifeTime?: number
   cors?: CorsOptions
   autoManageBuffering?: boolean
-  authorization?: (header: string | undefined) => Promise<boolean | any>
+  /**
+   * A async function to authenticate and authorize a user.
+   * @param auth The authentication token
+   * @param request The incoming http request
+   */
+  authorization?: (auth: string | undefined, request: IncomingMessage) => Promise<boolean | any>
 }
 
 export interface ClientOptions {
@@ -38,7 +43,7 @@ export interface EmitOptions {
   runs?: number
 }
 
-type CorsOptionsOriginFunction = (req: http.IncomingMessage) => string
+type CorsOptionsOriginFunction = (req: IncomingMessage) => string
 export interface CorsOptions {
   origin: string | CorsOptionsOriginFunction
   allowAuthorization?: boolean

@@ -2,6 +2,7 @@ import WebRTCConnection from './webrtcConnection'
 import { ChannelId, ServerOptions } from '@geckos.io/common/lib/types'
 import { EVENTS } from '@geckos.io/common/lib/constants'
 import makeRandomId from '@geckos.io/common/lib/makeRandomId'
+import { IncomingMessage } from 'http'
 
 export default class ConnectionsManagerServer {
   connections: Map<ChannelId, WebRTCConnection> = new Map()
@@ -25,7 +26,7 @@ export default class ConnectionsManagerServer {
     return this.connections
   }
 
-  async createConnection(authorization: string | undefined) {
+  async createConnection(authorization: string | undefined, req: IncomingMessage) {
     // check authorization and get userData
     let userData = {}
     if (this.options?.authorization) {
@@ -34,7 +35,7 @@ export default class ConnectionsManagerServer {
         return { status: 500 }
       }
 
-      const res = await this.options.authorization(authorization)
+      const res = await this.options.authorization(authorization, req)
       if (typeof res === 'boolean' && res) userData = {}
       else if (typeof res === 'boolean' && !res) return { status: 401 }
       else if (typeof res === 'number' && res >= 100 && res < 600) return { status: res }

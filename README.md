@@ -94,10 +94,18 @@ channel.onConnect(error => {
 
 ```ts
 const io: GeckosServer = geckos({
-  authorization: async (header: string) => {
-    const token = header.split(' ') // ['Yannick', '12E45']
+  /**
+   * A async function to authenticate and authorize a user.
+   * @param auth The authentication token
+   * @param request The incoming http request (available in >= v1.6.2)
+   */
+  authorization: async (auth: string | undefined, request: http.IncomingMessage)) => {
+    const token = auth.split(' ') // ['Yannick', '12E45']
     const username = token[0] // 'Yannick'
     const password = token[1] // '12E45'
+
+    // Use "request.connection.remoteAddress" to get the users ip.
+    // ("request.headers['x-forwarded-for']" if your server is behind a proxy)
 
     // reach out to a database if needed (this code is completely fictitious)
     const user = await database.getByName(username)

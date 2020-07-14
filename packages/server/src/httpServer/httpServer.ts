@@ -65,7 +65,10 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
         if (method === 'POST' && path1) {
           try {
             // create connection (and check auth header)
-            const { status, connection, userData } = await connectionsManager.createConnection(headers?.authorization)
+            const { status, connection, userData } = await connectionsManager.createConnection(
+              headers?.authorization,
+              req
+            )
 
             // on http status code
             if (status !== 200) {
