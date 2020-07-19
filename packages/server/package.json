@@ -43,10 +43,10 @@
   "dependencies": {
     "@geckos.io/common": "^1.6.1",
     "eventemitter3": "^4.0.0",
-    "wrtc": "^0.4.4"
+    "wrtc": "^0.4.6"
   },
   "devDependencies": {
-    "@types/node": "^12.0.10"
+    "@types/node": "^12.12.50"
   },
   "funding": {
     "url": "https://github.com/sponsors/yandeu"

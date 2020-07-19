@@ -6,6 +6,7 @@ packages/tests/output
 /node_modules
 *node_modules*
 /lib
+packages/**/package-lock.json
 */client/lib*
 */common/lib*
 */server/lib*
