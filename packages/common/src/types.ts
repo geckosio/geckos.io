@@ -20,6 +20,13 @@ export interface ServerOptions {
   maxPacketLifeTime?: number
   cors?: CorsOptions
   autoManageBuffering?: boolean
+  /** Set a custom port range for the WebRTC connection. */
+  portRange?: {
+    /** Minimum port range (defaults to 0) */
+    min: number
+    /** Minimum port range (defaults to 65535) */
+    max: number
+  }
   /**
    * A async function to authenticate and authorize a user.
    * @param auth The authentication token

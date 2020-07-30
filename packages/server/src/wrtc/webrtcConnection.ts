@@ -18,7 +18,7 @@ export default class WebRTCConnection extends Connection {
   constructor(id: ChannelId, serverOptions: ServerOptions, public connections: Map<any, any>, public userData: any) {
     super(id)
 
-    const { iceServers = [], iceTransportPolicy = 'all', ...dataChannelOptions } = serverOptions
+    const { iceServers = [], iceTransportPolicy = 'all', portRange, ...dataChannelOptions } = serverOptions
 
     this.options = {
       timeToHostCandidates: TIME_TO_HOST_CANDIDATES
@@ -30,6 +30,9 @@ export default class WebRTCConnection extends Connection {
       iceServers: iceServers,
       iceTransportPolicy: iceTransportPolicy
     }
+
+    // @ts-ignore   // portRange is a nonstandard API
+    if (portRange?.min && portRange?.max) configuration = { ...configuration, portRange }
 
     // @ts-ignore
     this.peerConnection = new DefaultRTCPeerConnection(configuration)

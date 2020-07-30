@@ -38,6 +38,24 @@ npm install @geckos.io/client @geckos.io/server
 
 ---
 
+## New in version > 1.7.0 (soon)
+
+### Custom Port Range
+
+Allows you to set a custom port range for the WebRTC connection.
+
+```js
+// server.js
+const io = geckos({
+  portRange: {
+    min: 10000,
+    max: 20000
+  }
+})
+```
+
+---
+
 ## New in version > 1.6.0
 
 ### Connections Manager
@@ -216,9 +234,9 @@ import geckos from '@geckos.io/client'
  * start geckos client with these options
  * @param options.url default is `${location.protocol}//${location.hostname}`
  * @param options.port default is 9208
- * @param options.label Default: 'geckos.io'.
- * @param options.iceServers Default: [].
- * @param options.iceTransportPolicy Default: 'all'.
+ * @param options.label Default: 'geckos.io'
+ * @param options.iceServers Default: []
+ * @param options.iceTransportPolicy Default: 'all'
  */
 const channel = geckos(options)
 
@@ -251,15 +269,18 @@ import geckos from '@geckos.io/server'
 
 /**
  * start geckos server with these options
- * @param options.iceServers Default: [].
- * @param options.iceTransportPolicy Default: 'all'.
- * @param options.label Default: 'geckos.io'.
- * @param options.ordered Default: false.
- * @param options.maxPacketLifeTime Default: null.
- * @param options.maxRetransmits Default: 0.
+ * @param options.iceServers Default: []
+ * @param options.iceTransportPolicy Default: 'all'
+ * @param options.label Default: 'geckos.io'
+ * @param options.ordered Default: false
+ * @param options.maxPacketLifeTime Default: null
+ * @param options.maxRetransmits Default: 0
  * @param options.cors
  * @param options.cors.origin String | (req) => string. Default '*'
  * @param options.autoManageBuffering By default, geckos.io manages RTCDataChannel buffering for you. Default 'true'
+ * @param options.portRange Custom port range for the WebRTC connection (available in >= v1.7.0)
+ * @param options.portRange.min Default: 0
+ * @param options.portRange.max Default: 65535
  * @param options.authorization The async authorization callback
  */
 io = geckos(options)
