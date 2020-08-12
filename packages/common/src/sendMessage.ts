@@ -1,7 +1,6 @@
 import { Data, RawMessage, EventName } from './types'
 import { isRawMessage } from './helpers'
 import { EVENTS } from './constants'
-import sizeof from 'object-sizeof'
 
 const SendMessage = (
   dataChannel: RTCDataChannel,
@@ -10,7 +9,9 @@ const SendMessage = (
   data: Data | RawMessage | null = null
 ) => {
   const send = (data: any) => {
-    if (typeof maxMessageSize === 'number' && sizeof(data) > maxMessageSize)
+    const bytes = data.byteLength ?? data.length * 2 // (times 2 for characters that uses 2 bytes per char)
+
+    if (typeof maxMessageSize === 'number' && bytes > maxMessageSize)
       throw new Error(`maxMessageSize of ${maxMessageSize} exceeded`)
     else dataChannel.send(data)
   }

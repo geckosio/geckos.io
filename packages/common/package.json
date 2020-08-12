@@ -25,8 +25,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "eventemitter3": "^4.0.4",
-    "object-sizeof": "^1.6.1"
+    "eventemitter3": "^4.0.4"
   },
   "funding": {
     "url": "https://github.com/sponsors/yandeu"
