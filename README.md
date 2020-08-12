@@ -38,7 +38,7 @@ npm install @geckos.io/client @geckos.io/server
 
 ---
 
-## New in version > 1.7.0 (soon)
+## New in version > 1.7.0
 
 ### Custom Port Range
 
