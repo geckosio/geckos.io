@@ -19,11 +19,11 @@ export class ClientChannel {
   constructor(
     url: string,
     authorization: string | undefined,
-    port: number,
+    port: number | null,
     label: string,
     rtcConfiguration: RTCConfiguration
   ) {
-    this.url = `${url}:${port}`
+    this.url = port ? `${url}:${port}` : url
     this.connectionsManager = new ConnectionsManagerClient(this.url, authorization, label, rtcConfiguration)
     this.bridge = this.connectionsManager.bridge
 
