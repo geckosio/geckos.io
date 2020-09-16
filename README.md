@@ -38,7 +38,47 @@ npm install @geckos.io/client @geckos.io/server
 
 ---
 
-## New in version > 1.7.0
+## New in version >= 1.7.1 (soon)
+
+You can now pass a more complex url to the client when you set port to `null`. This is useful if, for example, you use the geckos.io server behind a proxy.
+
+```js
+// client.js
+
+// default is
+const channel = geckos({
+  url: `${location.protocol}//${location.hostname}`,
+  port: 9208
+})
+
+// connect to http://1.2.3.4:3000
+const channel = geckos({
+  url: 'http://1.2.3.4',
+  port: 3000
+})
+
+// connect to https://geckos.example.com:9208
+const channel = geckos({
+  url: 'https://geckos.example.com',
+  port: 9208 // not required, since 9208 is the default
+})
+
+// connect to https://api.example.com:3000/geckos
+const channel = geckos({
+  url: 'https://api.example.com:3000/geckos',
+  port: null
+})
+
+// connect to https://api.example.com/geckos
+const channel = geckos({
+  url: 'https://api.example.com/geckos',
+  port: null
+})
+```
+
+---
+
+## New in version 1.7.0
 
 ### Custom Port Range
 
@@ -56,7 +96,7 @@ const io = geckos({
 
 ---
 
-## New in version > 1.6.0
+## New in version 1.6.0
 
 ### Connections Manager
 
@@ -153,7 +193,7 @@ io.onConnection((channel: ServerChannel) => {
 
 ---
 
-## New in version > 1.5.0
+## New in version 1.5.0
 
 ### New autoManageBuffering option
 
