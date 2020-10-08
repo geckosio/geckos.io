@@ -11,9 +11,13 @@ const SendMessage = (
   const send = (data: any) => {
     const bytes = data.byteLength ?? data.length * 2 // (times 2 for characters that uses 2 bytes per char)
 
-    if (typeof maxMessageSize === 'number' && bytes > maxMessageSize)
+    if (typeof maxMessageSize === 'number' && bytes > maxMessageSize) {
       throw new Error(`maxMessageSize of ${maxMessageSize} exceeded`)
-    else dataChannel.send(data)
+    } else {
+      Promise.resolve().then(() => {
+        dataChannel.send(data)
+      })
+    }
   }
 
   if (dataChannel.readyState === 'open') {
