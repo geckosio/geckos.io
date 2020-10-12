@@ -26,21 +26,29 @@ export default class ConnectionsManagerServer {
     return this.connections
   }
 
-  async createConnection(authorization: string | undefined, req: IncomingMessage) {
+  private async getUserData(authorization: string | undefined, req: IncomingMessage) {
     // check authorization and get userData
     let userData = {}
     if (this.options?.authorization) {
       if (typeof this.options.authorization !== 'function') {
         console.log('[warning] Authorization is not a function!?')
-        return { status: 500 }
+        return { _statusCode: 500 }
       }
 
       const res = await this.options.authorization(authorization, req)
       if (typeof res === 'boolean' && res) userData = {}
-      else if (typeof res === 'boolean' && !res) return { status: 401 }
-      else if (typeof res === 'number' && res >= 100 && res < 600) return { status: res }
+      else if (typeof res === 'boolean' && !res) return { _statusCode: 401 }
+      else if (typeof res === 'number' && res >= 100 && res < 600) return { _statusCode: res }
       else userData = res
     }
+
+    return userData
+  }
+
+  async createConnection(authorization: string | undefined, req: IncomingMessage) {
+    // get userData
+    let userData: any = await this.getUserData(authorization, req)
+    if (userData._statusCode) return userData
 
     // create the webrtc connection
     const connection = new WebRTCConnection(this.createId(), this.options, this.connections, userData)
@@ -57,7 +65,24 @@ export default class ConnectionsManagerServer {
     }
 
     this.connections.set(connection.id, connection)
-    return { connection, userData, status: 200 }
+
+    // create the offer
+    await connection.doOffer()
+
+    const { id, iceConnectionState, peerConnection, remoteDescription, localDescription, signalingState } = connection
+
+    return {
+      connection: {
+        id,
+        iceConnectionState,
+        peerConnection,
+        remoteDescription,
+        localDescription,
+        signalingState
+      },
+      userData,
+      status: 200
+    }
   }
 
   deleteConnection(connection: WebRTCConnection) {

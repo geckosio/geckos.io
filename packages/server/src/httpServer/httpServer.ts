@@ -77,13 +77,10 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
               return
             }
 
-            if (!connection) {
+            if (!connection || !connection.id) {
               end(res, 500)
               return
             }
-
-            // create the offer
-            await connection.doOffer()
 
             const {
               id,
