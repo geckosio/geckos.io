@@ -588,6 +588,8 @@ For now WebRTC in the best way to send fast (unordered and unreliable) messages 
 
 - [DatTank.io](https://dattank.io/) - is a free multiplayer browser online tank game.
 
+- [EthereumSpaceWar.com](https://ethereumspacewar.com) - a free multiplayer browser-based space RPG 
+
 ## Other cool Packages
 
 Take a look at these other packages you might be interested in.
