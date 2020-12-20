@@ -130,6 +130,9 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
               end(res, 400)
               return
             }
+          } else {
+            end(res, 400)
+            return
           }
         } else if (method === 'GET' && path3) {
           const ids = pathname.match(/[0-9a-zA-Z]{24}/g)
@@ -152,6 +155,9 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
               end(res, 400)
               return
             }
+          } else {
+            end(res, 400)
+            return
           }
         } else if (method === 'POST' && closePath) {
           const ids = pathname.match(/[0-9a-zA-Z]{24}/g)
@@ -159,9 +165,10 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
             const id = ids[0]
             const connection = connectionsManager.getConnection(id)
             connection?.close()
+          } else {
+            end(res, 400)
+            return
           }
-          res.end()
-          return
         } else {
           end(res, 404)
           return
