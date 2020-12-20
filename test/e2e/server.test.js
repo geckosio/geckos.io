@@ -81,16 +81,11 @@ describe('connection', () => {
         expect(reason).toBe('closed')
         done()
       })
+      // closing the server, will disconnect all users
+      server.close()
     })
   })
-})
 
-describe('shutdown', () => {
-  test('close the http server (will close all WebRTC connections)', done => {
-    server.close(() => {
-      done()
-    })
-  })
 })
 
 page.goto('http://localhost:5200/e2e/server.html')
