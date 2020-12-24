@@ -38,7 +38,7 @@ npm install @geckos.io/client @geckos.io/server
 
 ---
 
-## New in version >= 1.7.1 (soon)
+## New in version 1.7.1
 
 You can now pass a more complex url to the client when you set port to `null`. This is useful if, for example, you use the geckos.io server behind a proxy.
 

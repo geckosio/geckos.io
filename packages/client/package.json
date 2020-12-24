@@ -1,6 +1,6 @@
 {
   "name": "@geckos.io/client",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "Real-time client/server communication over UDP using WebRTC and Node.js",
   "main": "lib/index.js",
   "author": "Yannick Deubel (https://github.com/yandeu)",
@@ -38,12 +38,13 @@
   },
   "scripts": {
     "bundle": "npm run bundle:version",
-    "bundle:version": "../../node_modules/.bin/webpack --config webpack/webpack.prod.js --path=../../../bundles --packageVersion=${npm_package_version}",
+    "bundle:version": "cross-env-shell ../../node_modules/.bin/webpack --config webpack/webpack.prod.js --path=../../../bundles --packageVersion=${npm_package_version}",
     "build": "tsc --build tsconfig.json",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@geckos.io/common": "^1.7.0"
+    "@geckos.io/common": "^1.7.1",
+    "cross-env": "^7.0.3"
   },
   "funding": {
     "url": "https://github.com/sponsors/yandeu"
