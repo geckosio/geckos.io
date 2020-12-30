@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "start": "npm run dev",
+    "format":"prettier --write \"packages/**/!(*.d).ts\"",
     "lerna:ls": "lerna ls",
     "lerna:diff": "lerna diff",
     "lerna:changed": "lerna changed",
