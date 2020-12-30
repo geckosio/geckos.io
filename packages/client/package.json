@@ -38,7 +38,7 @@
   },
   "scripts": {
     "bundle": "npm run bundle:version",
-    "bundle:version": "cross-env-shell ../../node_modules/.bin/webpack --config webpack/webpack.prod.js --path=../../../bundles --packageVersion=${npm_package_version}",
+    "bundle:version": "cross-env-shell ../../node_modules/.bin/webpack --config webpack/webpack.prod.js --env path=../../../bundles --env packageVersion=${npm_package_version}",
     "build": "tsc --build tsconfig.json",
     "prepublishOnly": "npm run build"
   },
