@@ -168,7 +168,7 @@ export default class ConnectionsManagerClient {
         return { error }
       }
 
-      const waitForDataChannel = () => {
+      const waitForDataChannel = (): Promise<void> => {
         return new Promise(resolve => {
           this.localPeerConnection.addEventListener(
             'datachannel',

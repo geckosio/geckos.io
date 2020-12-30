@@ -105,7 +105,7 @@ export default class WebRTCConnection extends Connection {
     super.close()
   }
 
-  async waitUntilIceGatheringStateComplete(peerConnection: RTCPeerConnection, options: any) {
+  async waitUntilIceGatheringStateComplete(peerConnection: RTCPeerConnection, options: any): Promise<void> {
     if (peerConnection.iceGatheringState === 'complete') {
       return
     }
