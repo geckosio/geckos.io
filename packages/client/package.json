@@ -2,7 +2,8 @@
   "name": "@geckos.io/client",
   "version": "1.7.1",
   "description": "Real-time client/server communication over UDP using WebRTC and Node.js",
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "author": "Yannick Deubel (https://github.com/yandeu)",
   "license": "BSD-3-Clause",
   "keywords": [
@@ -32,9 +33,6 @@
   "homepage": "http://geckos.io",
   "directories": {
     "lib": "lib"
-  },
-  "engines": {
-    "node": "^8 || ^10 || ^11 || ^12 || ^13 || ^14"
   },
   "scripts": {
     "bundle": "npm run bundle:version",
