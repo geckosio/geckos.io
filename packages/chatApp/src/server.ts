@@ -28,7 +28,7 @@ io.addServer(server)
 
 app.use('/static/client', express.static(join(__dirname, '../client')))
 
-app.get('/', (req, res) => res.sendFile(join(__dirname, '../client/index.html')))
+app.get('/', (req: any, res: any) => res.sendFile(join(__dirname, '../client/index.html')))
 
 // have to user server instead of app
 server.listen(3000, () => {

@@ -1,12 +1,7 @@
 {
+  "extends": "../../tsconfig",
   "compilerOptions": {
-    "target": "es5",
-    "lib": ["dom"],
-    "sourceMap": true,
-    "strict": true,
-    "noImplicitAny": false,
-    "strictPropertyInitialization": false,
-    "moduleResolution": "node",
-    "esModuleInterop": true
+    "declaration": false,
+    "declarationMap": false
   }
 }
