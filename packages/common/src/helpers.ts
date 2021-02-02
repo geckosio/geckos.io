@@ -1,7 +1,11 @@
 import { ArrayBufferView, RawMessage, Data } from './types'
 
 const isRawMessage = (data: Data | RawMessage) => {
-  return typeof data === 'string' || data instanceof ArrayBuffer || data instanceof ArrayBufferView
+  return typeof data === 'string' || isBufferMessage(data)
+}
+
+const isBufferMessage = (data: any) => {
+  return data instanceof ArrayBuffer || data instanceof ArrayBufferView
 }
 
 const isObject = (data: Data) => {
@@ -22,4 +26,4 @@ const isJSONString = (data: Data) => {
   }
 }
 
-export { isRawMessage, isObject, isJSONString }
+export { isRawMessage, isBufferMessage, isObject, isJSONString }

@@ -1,5 +1,5 @@
 import { EVENTS, ERRORS } from './constants'
-import { isRawMessage, isJSONString } from './helpers'
+import { isRawMessage, isJSONString, isBufferMessage } from './helpers'
 
 const ParseMessage = (ev: MessageEvent) => {
   let { data } = ev
@@ -7,7 +7,20 @@ const ParseMessage = (ev: MessageEvent) => {
   let parsedData
   let JSONString = isJSONString(data)
 
-  if (!JSONString && isRawMessage(data)) {
+  // probably server-side
+  if (!data) {
+    if (isBufferMessage(ev)) {
+      key = EVENTS.RAW_MESSAGE
+      parsedData = ev
+    } else {
+      const json = JSON.parse(ev as any)
+      key = Object.keys(json)[0]
+      parsedData = Object.values(json)[0]
+    }
+  }
+
+  // client side
+  else if (!JSONString && isRawMessage(data)) {
     key = EVENTS.RAW_MESSAGE
     parsedData = data
   } else if (JSONString) {
