@@ -44,7 +44,7 @@
   "dependencies": {
     "@geckos.io/common": "^1.7.1",
     "eventemitter3": "^4.0.0",
-    "wrtc": "^0.4.6"
+    "node-datachannel": "0.0.20"
   },
   "devDependencies": {
     "@types/node": "^12.12.50"
