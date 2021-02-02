@@ -19,8 +19,6 @@ export default class WebRTCConnection extends Connection {
   constructor(id: ChannelId, serverOptions: ServerOptions, public connections: Map<any, any>, public userData: any) {
     super(id)
 
-    console.log('serverOptions', serverOptions)
-
     const { iceServers = [], iceTransportPolicy = 'all', portRange, ...dataChannelOptions } = serverOptions
 
     this.options = {
@@ -48,7 +46,7 @@ export default class WebRTCConnection extends Connection {
 
     // this.channel = new CreateDataChannel(this, dataChannelOptions, userData)
     this.peerConnection.onDataChannel(dc => {
-      console.log('Peer1 Got DataChannel: ', dc.getLabel())
+      // console.log('Peer1 Got DataChannel: ', dc.getLabel())
       // dc2 = dc;
       // dc2.onMessage((msg) => {
       //     console.log('Peer2 Received Msg:', msg);

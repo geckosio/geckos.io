@@ -56,8 +56,6 @@ export default class ConnectionsManagerServer {
     const pc = connection.peerConnection
 
     pc.onStateChange(state => {
-      console.log('Peer1 State:', state)
-
       // keep track of the maxMessageSize
       // if (state === 'connected') connection.channel.maxMessageSize = pc.sctp?.maxMessageSize
 
@@ -85,25 +83,16 @@ export default class ConnectionsManagerServer {
 
     pc.onGatheringStateChange(state => {
       gatheringState = state
-      console.log('GatheringState:', state)
     })
 
     pc.onLocalDescription((sdp, type) => {
       localDescription = { sdp, type }
-      console.log('SDP:', sdp)
-      console.log('Type:', type)
-      // console.log('json', connection.descriptionToJSON({ sdp, type }))
-      // peer2.setRemoteDescription(sdp, type);
     })
 
     pc.onLocalCandidate((candidate, mid) => {
       // @ts-ignore
       connection.additionalCandidates.push({ candidate, sdpMid: mid })
-      console.log('Candidate:', candidate)
-      console.log('Mid:', mid)
       candidates.push({ candidate, mid })
-
-      // peer2.addRemoteCandidate(candidate, mid);
     })
 
     const dc = pc.createDataChannel('geckos.io')
