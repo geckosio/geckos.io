@@ -121,9 +121,9 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
             }
 
             try {
-              await connection.applyAnswer(JSON.parse(body))
-              let connectionJSON = connection.toJSON()
-              res.write(JSON.stringify(connectionJSON.remoteDescription))
+              // await connection.applyAnswer(JSON.parse(body))
+              // let connectionJSON = connection.toJSON()
+              // res.write(JSON.stringify(connectionJSON.remoteDescription))
               res.end()
               return
             } catch (error) {

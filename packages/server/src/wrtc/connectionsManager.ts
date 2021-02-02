@@ -54,31 +54,56 @@ export default class ConnectionsManagerServer {
     const connection = new WebRTCConnection(this.createId(), this.options, this.connections, userData)
     const pc = connection.peerConnection
 
-    pc.onconnectionstatechange = () => {
-      // keep track of the maxMessageSize
-      if (pc.connectionState === 'connected') connection.channel.maxMessageSize = pc.sctp?.maxMessageSize
+    pc.onStateChange(state => {
+      console.log('Peer1 State:', state)
 
-      if (pc.connectionState === 'disconnected' || pc.connectionState === 'failed' || pc.connectionState === 'closed') {
-        connection.channel.eventEmitter.emit(EVENTS.DISCONNECT, pc.connectionState)
+      // keep track of the maxMessageSize
+      // if (state === 'connected') connection.channel.maxMessageSize = pc.sctp?.maxMessageSize
+
+      if (state === 'disconnected' || state === 'failed' || state === 'closed') {
+        connection.channel.eventEmitter.emit(EVENTS.DISCONNECT, state)
         this.deleteConnection(connection)
       }
-    }
+    })
+
+    // pc.onconnectionstatechange = () => {
+    //   // keep track of the maxMessageSize
+    //   if (pc.connectionState === 'connected') connection.channel.maxMessageSize = pc.sctp?.maxMessageSize
+
+    //   if (pc.connectionState === 'disconnected' || pc.connectionState === 'failed' || pc.connectionState === 'closed') {
+    //     connection.channel.eventEmitter.emit(EVENTS.DISCONNECT, pc.connectionState)
+    //     this.deleteConnection(connection)
+    //   }
+    // }
 
     this.connections.set(connection.id, connection)
 
-    // create the offer
-    await connection.doOffer()
+    pc.onGatheringStateChange(state => {
+      console.log('Peer1 GatheringState:', state)
+    })
+    pc.onLocalDescription((sdp, type) => {
+      console.log('Peer1 SDP:', sdp, ' Type:', type)
+      // peer2.setRemoteDescription(sdp, type);
+    })
+    pc.onLocalCandidate((candidate, mid) => {
+      console.log('Peer1 Candidate:', candidate)
+      // peer2.addRemoteCandidate(candidate, mid);
+    })
 
-    const { id, iceConnectionState, peerConnection, remoteDescription, localDescription, signalingState } = connection
+    // create the offer
+    // await connection.doOffer()
+
+    // const { id, iceConnectionState, peerConnection, remoteDescription, localDescription, signalingState } = connection
+    const { id, peerConnection } = connection
 
     return {
       connection: {
         id,
-        iceConnectionState,
         peerConnection,
-        remoteDescription,
-        localDescription,
-        signalingState
+        iceConnectionState: '',
+        remoteDescription: '',
+        localDescription: '',
+        signalingState: ''
       },
       userData,
       status: 200

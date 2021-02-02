@@ -3,7 +3,7 @@ import { isRawMessage } from './helpers'
 import { EVENTS } from './constants'
 
 const SendMessage = (
-  dataChannel: RTCDataChannel,
+  dataChannel: any | RTCDataChannel,
   maxMessageSize: number | undefined,
   eventName: EventName,
   data: Data | RawMessage | null = null
@@ -19,6 +19,8 @@ const SendMessage = (
       })
     }
   }
+
+  console.log('data', data)
 
   if (dataChannel.readyState === 'open') {
     try {

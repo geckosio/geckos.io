@@ -3,20 +3,23 @@ import CreateDataChannel from '../geckos/channel'
 import Channel from '../geckos/channel'
 import { ChannelId, ServerOptions } from '@geckos.io/common/lib/types'
 
-const DefaultRTCPeerConnection: RTCPeerConnection = require('wrtc').RTCPeerConnection
+// const DefaultRTCPeerConnection: RTCPeerConnection = require('wrtc').RTCPeerConnection
+import nodeDataChannel from 'node-datachannel'
 
 // strangely something it takes a long time
 // so I set it to 10 seconds
 const TIME_TO_HOST_CANDIDATES = 10000
 
 export default class WebRTCConnection extends Connection {
-  public peerConnection: RTCPeerConnection
+  public peerConnection: nodeDataChannel.PeerConnection
   public channel: Channel
   public additionalCandidates: RTCIceCandidate[] = []
   private options: any
 
   constructor(id: ChannelId, serverOptions: ServerOptions, public connections: Map<any, any>, public userData: any) {
     super(id)
+
+    console.log('serverOptions', serverOptions)
 
     const { iceServers = [], iceTransportPolicy = 'all', portRange, ...dataChannelOptions } = serverOptions
 
@@ -34,58 +37,70 @@ export default class WebRTCConnection extends Connection {
     // @ts-ignore   // portRange is a nonstandard API
     if (portRange?.min && portRange?.max) configuration = { ...configuration, portRange }
 
-    // @ts-ignore
-    this.peerConnection = new DefaultRTCPeerConnection(configuration)
+    // this.peerConnection = new DefaultRTCPeerConnection(configuration)
+    this.peerConnection = new nodeDataChannel.PeerConnection('geckos.io', {
+      iceServers: ['stun:stun.l.google.com:19302']
+    })
 
-    this.peerConnection.onconnectionstatechange = () => {
-      if (this.peerConnection.connectionState === 'disconnected') this.close()
-    }
+    this.peerConnection.onStateChange(state => {
+      if (state === 'disconnected') this.close()
+    })
 
-    this.channel = new CreateDataChannel(this, dataChannelOptions, userData)
+    // this.channel = new CreateDataChannel(this, dataChannelOptions, userData)
+    this.peerConnection.onDataChannel(dc => {
+      // console.log("Peer2 Got DataChannel: ", dc.getLabel());
+      // dc2 = dc;
+      // dc2.onMessage((msg) => {
+      //     console.log('Peer2 Received Msg:', msg);
+      // });
+      // dc2.sendMessage("Hello From Peer2");
+
+      this.channel = new CreateDataChannel(this, dc, userData)
+    })
   }
 
-  async doOffer() {
-    try {
-      const offer: RTCSessionDescriptionInit = await this.peerConnection.createOffer()
-      await this.peerConnection.setLocalDescription(offer)
-      // we do not wait, since we request the missing candidates later
-      /*await*/ this.waitUntilIceGatheringStateComplete(this.peerConnection, this.options)
-    } catch (error) {
-      console.error(error.messages)
-      this.close()
-      throw error
-    }
-  }
+  // async doOffer() {
+  //   try {
+  //     const offer: RTCSessionDescriptionInit = await this.peerConnection.createOffer()
+  //     await this.peerConnection.setLocalDescription(offer)
+  //     // we do not wait, since we request the missing candidates later
+  //     /*await*/ this.waitUntilIceGatheringStateComplete(this.peerConnection, this.options)
+  //   } catch (error) {
+  //     console.error(error.messages)
+  //     this.close()
+  //     throw error
+  //   }
+  // }
 
-  get iceConnectionState() {
-    return this.peerConnection.iceConnectionState
-  }
+  // get iceConnectionState() {
+  //   return this.peerConnection.iceConnectionState
+  // }
 
-  get localDescription() {
-    return this.descriptionToJSON(this.peerConnection.localDescription) //, true)
-  }
+  // get localDescription() {
+  //   return this.descriptionToJSON(this.peerConnection.localDescription) //, true)
+  // }
 
-  get remoteDescription() {
-    return this.descriptionToJSON(this.peerConnection.remoteDescription)
-  }
+  // get remoteDescription() {
+  //   return this.descriptionToJSON(this.peerConnection.remoteDescription)
+  // }
 
-  get signalingState() {
-    return this.peerConnection.signalingState
-  }
+  // get signalingState() {
+  //   return this.peerConnection.signalingState
+  // }
 
-  async applyAnswer(answer: RTCSessionDescription) {
-    await this.peerConnection.setRemoteDescription(answer)
-  }
+  // async applyAnswer(answer: RTCSessionDescription) {
+  //   await this.peerConnection.setRemoteDescription(answer)
+  // }
 
-  toJSON = () => {
-    return {
-      ...super.toJSON(),
-      iceConnectionState: this.iceConnectionState,
-      localDescription: this.localDescription,
-      remoteDescription: this.remoteDescription,
-      signalingState: this.signalingState
-    }
-  }
+  // toJSON = () => {
+  //   return {
+  //     ...super.toJSON(),
+  //     iceConnectionState: this.iceConnectionState,
+  //     localDescription: this.localDescription,
+  //     remoteDescription: this.remoteDescription,
+  //     signalingState: this.signalingState
+  //   }
+  // }
 
   descriptionToJSON(description: RTCSessionDescription | null, shouldDisableTrickleIce = false) {
     return !description

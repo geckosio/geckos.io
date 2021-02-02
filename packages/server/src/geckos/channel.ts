@@ -6,6 +6,7 @@ import { EVENTS, ERRORS } from '@geckos.io/common/lib/constants'
 import * as Types from '@geckos.io/common/lib/types'
 import SendMessage from '@geckos.io/common/lib/sendMessage'
 import { makeReliable } from '@geckos.io/common/lib/reliableMessage'
+import nodeDataChannel from 'node-datachannel'
 
 export default class ServerChannel {
   public maxMessageSize: number | undefined
@@ -13,7 +14,7 @@ export default class ServerChannel {
 
   private _roomId: Types.RoomId
   private _id: Types.ChannelId
-  private dataChannel: RTCDataChannel
+  // private dataChannel: RTCDataChannel
 
   eventEmitter = new EventEmitter()
   // stores all reliable messages for about 15 seconds
@@ -21,43 +22,42 @@ export default class ServerChannel {
 
   constructor(
     public webrtcConnection: WebRTCConnection,
-    public dataChannelOptions: Types.ServerOptions,
+    public dataChannel: nodeDataChannel.DataChannel,
     public userData: any
   ) {
-    this._id = webrtcConnection.id
+    this._id = '_' + Math.random().toString(36).substr(2, 9) //webrtcConnection.id
     this._roomId = undefined
 
-    const {
-      label = 'geckos.io',
-      ordered = false,
-      maxRetransmits = 0,
-      maxPacketLifeTime = undefined,
-      autoManageBuffering = true
-    } = dataChannelOptions
+    // const {
+    //   label = 'geckos.io',
+    //   ordered = false,
+    //   maxRetransmits = 0,
+    //   maxPacketLifeTime = undefined,
+    //   autoManageBuffering = true
+    // } = dataChannelOptions
 
-    this.autoManageBuffering = autoManageBuffering
+    // this.autoManageBuffering = autoManageBuffering
 
-    this.dataChannel = webrtcConnection.peerConnection.createDataChannel(label, {
-      ordered: ordered,
-      maxRetransmits: maxRetransmits,
-      maxPacketLifeTime: maxPacketLifeTime
+    // this.dataChannel = webrtcConnection.peerConnection.createDataChannel(label, {
+    //   ordered: ordered,
+    //   maxRetransmits: maxRetransmits,
+    //   maxPacketLifeTime: maxPacketLifeTime
+    // })
+
+    // this.dataChannel.binaryType = 'arraybuffer'
+    // this.dataChannel.isOpen
+
+    this.dataChannel.onOpen(() => {
+      this.dataChannel.onMessage(msg => {
+        const { key, data } = ParseMessage(msg as any)
+        this.eventEmitter.emit(key, data)
+      })
+      bridge.emit(EVENTS.CONNECTION, this)
     })
 
-    this.dataChannel.binaryType = 'arraybuffer'
-
-    this.dataChannel.onopen = () => {
-      this.dataChannel.onmessage = (ev: MessageEvent) => {
-        const { key, data } = ParseMessage(ev)
-        this.eventEmitter.emit(key, data)
-      }
-
-      // if the dataChannel is open we can safely emit that we have a new open connection
-      bridge.emit(EVENTS.CONNECTION, this)
-    }
-
-    this.dataChannel.onclose = () => {
+    this.dataChannel.onClosed(() => {
       // this.eventEmitter.removeAllListeners()
-    }
+    })
   }
 
   /** Get the channel's id. */
@@ -94,6 +94,7 @@ export default class ServerChannel {
 
   /** Close the webRTC connection. */
   close() {
+    // TODO(yandeu) Improve this
     this.webrtcConnection.close()
   }
 
@@ -231,7 +232,7 @@ export default class ServerChannel {
     if (!this._roomId || this._roomId === this._roomId)
       if (!this._id || this._id === this._id) {
         const isReliable = data && typeof data === 'object' && 'RELIABLE' in data
-        const buffering = this.autoManageBuffering && this.dataChannel.bufferedAmount > 0
+        const buffering = this.autoManageBuffering && this.dataChannel.bufferedAmount() > 0
         const drop = (reason: string, event: any, data: any) => {
           this.eventEmitter.emit(EVENTS.DROP, { reason, event, data })
         }
