@@ -8,7 +8,7 @@
     "dev": "npm-run-all --parallel watch:* dev:*",
     "dev:webpack-client": "webpack --config webpack/webpack.client.js --watch",
     "dev:webpack-server": "webpack --config webpack/webpack.server.js --watch",
-    "dev:nodemon": "nodemon dist/server/server.js",
+    "dev:nodemon": "nodemon --watch ../ -e js --delay 250ms dist/server/server.js ",
     "watch:common": "tsc --build --watch ../common/tsconfig.json",
     "watch:client": "tsc --build --watch ../client/tsconfig.json",
     "watch:server": "tsc --build --watch ../server/tsconfig.json"

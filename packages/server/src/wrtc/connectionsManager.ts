@@ -90,6 +90,17 @@ export default class ConnectionsManagerServer {
       // peer2.addRemoteCandidate(candidate, mid);
     })
 
+    // test
+    const pause = (ms: number): Promise<void> => {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve()
+        }, ms)
+      })
+    }
+
+    await pause(2000)
+
     // create the offer
     // await connection.doOffer()
 
