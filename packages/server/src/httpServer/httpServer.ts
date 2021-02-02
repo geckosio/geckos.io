@@ -121,6 +121,9 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
             }
 
             try {
+              const { sdp, type } = JSON.parse(body)
+              console.log('body', JSON.parse(body))
+              connection.peerConnection.setRemoteDescription(sdp, type)
               // await connection.applyAnswer(JSON.parse(body))
               // let connectionJSON = connection.toJSON()
               // res.write(JSON.stringify(connectionJSON.remoteDescription))

@@ -3,6 +3,7 @@ import { ChannelId, ServerOptions } from '@geckos.io/common/lib/types'
 import { EVENTS } from '@geckos.io/common/lib/constants'
 import makeRandomId from '@geckos.io/common/lib/makeRandomId'
 import { IncomingMessage } from 'http'
+import CreateDataChannel from '../geckos/channel'
 
 export default class ConnectionsManagerServer {
   connections: Map<ChannelId, WebRTCConnection> = new Map()
@@ -78,17 +79,36 @@ export default class ConnectionsManagerServer {
 
     this.connections.set(connection.id, connection)
 
+    let gatheringState
+    let localDescription
+    let candidates = []
+
     pc.onGatheringStateChange(state => {
-      console.log('Peer1 GatheringState:', state)
+      gatheringState = state
+      console.log('GatheringState:', state)
     })
+
     pc.onLocalDescription((sdp, type) => {
-      console.log('Peer1 SDP:', sdp, ' Type:', type)
+      localDescription = { sdp, type }
+      console.log('SDP:', sdp)
+      console.log('Type:', type)
+      // console.log('json', connection.descriptionToJSON({ sdp, type }))
       // peer2.setRemoteDescription(sdp, type);
     })
+
     pc.onLocalCandidate((candidate, mid) => {
-      console.log('Peer1 Candidate:', candidate)
+      // @ts-ignore
+      connection.additionalCandidates.push({ candidate, sdpMid: mid })
+      console.log('Candidate:', candidate)
+      console.log('Mid:', mid)
+      candidates.push({ candidate, mid })
+
       // peer2.addRemoteCandidate(candidate, mid);
     })
+
+    const dc = pc.createDataChannel('geckos.io')
+
+    connection.channel = new CreateDataChannel(connection, dc, userData)
 
     // test
     const pause = (ms: number): Promise<void> => {
@@ -99,7 +119,7 @@ export default class ConnectionsManagerServer {
       })
     }
 
-    await pause(2000)
+    await pause(2500)
 
     // create the offer
     // await connection.doOffer()
@@ -110,11 +130,11 @@ export default class ConnectionsManagerServer {
     return {
       connection: {
         id,
-        peerConnection,
-        iceConnectionState: '',
-        remoteDescription: '',
-        localDescription: '',
-        signalingState: ''
+        // peerConnection,
+        // iceConnectionState: '',
+        // remoteDescription: '',
+        localDescription
+        // signalingState: ''
       },
       userData,
       status: 200

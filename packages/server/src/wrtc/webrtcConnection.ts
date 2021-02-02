@@ -48,14 +48,12 @@ export default class WebRTCConnection extends Connection {
 
     // this.channel = new CreateDataChannel(this, dataChannelOptions, userData)
     this.peerConnection.onDataChannel(dc => {
-      // console.log("Peer2 Got DataChannel: ", dc.getLabel());
+      console.log('Peer1 Got DataChannel: ', dc.getLabel())
       // dc2 = dc;
       // dc2.onMessage((msg) => {
       //     console.log('Peer2 Received Msg:', msg);
       // });
       // dc2.sendMessage("Hello From Peer2");
-
-      this.channel = new CreateDataChannel(this, dc, userData)
     })
   }
 
@@ -102,7 +100,7 @@ export default class WebRTCConnection extends Connection {
   //   }
   // }
 
-  descriptionToJSON(description: RTCSessionDescription | null, shouldDisableTrickleIce = false) {
+  descriptionToJSON(description: RTCSessionDescription | null | any, shouldDisableTrickleIce = false) {
     return !description
       ? {}
       : {

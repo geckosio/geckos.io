@@ -76,6 +76,8 @@ export default class ConnectionsManagerClient {
 
       const json = await res.json()
 
+      console.log('json', json)
+
       userData = json.userData
 
       this.remotePeerConnection = json
