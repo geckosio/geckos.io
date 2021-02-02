@@ -16,7 +16,12 @@ export default class WebRTCConnection extends Connection {
   public additionalCandidates: RTCIceCandidate[] = []
   private options: any
 
-  constructor(id: ChannelId, serverOptions: ServerOptions, public connections: Map<any, any>, public userData: any) {
+  constructor(
+    id: ChannelId,
+    serverOptions: ServerOptions,
+    public connections: Map<ChannelId, WebRTCConnection>,
+    public userData: any
+  ) {
     super(id)
 
     const { iceServers = [], iceTransportPolicy = 'all', portRange, ...dataChannelOptions } = serverOptions
@@ -120,9 +125,6 @@ export default class WebRTCConnection extends Connection {
     this.channel.dataChannel = null
     // @ts-ignore
     this.peerConnection = null
-
-    this.channel.eventEmitter.removeAllListeners()
-    this.removeAllListeners()
 
     nodeDataChannel.cleanup()
   }

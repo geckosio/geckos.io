@@ -51,8 +51,11 @@ export default class ConnectionsManagerServer {
     let userData: any = await this.getUserData(authorization, req)
     if (userData._statusCode) return userData
 
+    const newId = this.createId()
+    console.log('createConnection', newId)
+
     // create the webrtc connection
-    const connection = new WebRTCConnection(this.createId(), this.options, this.connections, userData)
+    const connection = new WebRTCConnection(newId, this.options, this.connections, userData)
     const pc = connection.peerConnection
 
     pc.onStateChange(state => {
@@ -60,8 +63,7 @@ export default class ConnectionsManagerServer {
       // if (state === 'connected') connection.channel.maxMessageSize = pc.sctp?.maxMessageSize
 
       if (state === 'disconnected' || state === 'failed' || state === 'closed') {
-        connection.channel.eventEmitter.emit(EVENTS.DISCONNECT, state)
-        this.deleteConnection(connection)
+        this.deleteConnection(connection, state)
       }
     })
 
@@ -134,8 +136,16 @@ export default class ConnectionsManagerServer {
     }
   }
 
-  deleteConnection(connection: WebRTCConnection) {
+  deleteConnection(connection: WebRTCConnection, state: string) {
+    console.log('deleteConnection', connection.id)
     connection.close()
+
+    connection.channel.eventEmitter.on(EVENTS.DISCONNECT, () => {
+      connection.removeAllListeners()
+      connection.channel.eventEmitter.removeAllListeners()
+    })
+
+    connection.channel.eventEmitter.emit(EVENTS.DISCONNECT, state)
 
     if (this.connections.get(connection.id)) this.connections.delete(connection.id)
   }

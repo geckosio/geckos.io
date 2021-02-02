@@ -25,7 +25,7 @@ export default class ServerChannel {
     public dataChannel: nodeDataChannel.DataChannel,
     public userData: any
   ) {
-    this._id = '_' + Math.random().toString(36).substr(2, 9) //webrtcConnection.id
+    this._id = webrtcConnection.id
     this._roomId = undefined
 
     // const {
@@ -94,8 +94,9 @@ export default class ServerChannel {
 
   /** Close the webRTC connection. */
   close() {
-    // TODO(yandeu) Improve this
-    this.webrtcConnection.close()
+    const connection = this.webrtcConnection.connections.get(this.id)
+    if (connection) connection.close()
+    else console.log('connection not found!')
   }
 
   /** Join a room by its id. */
