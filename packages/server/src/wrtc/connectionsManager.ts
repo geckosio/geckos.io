@@ -52,7 +52,7 @@ export default class ConnectionsManagerServer {
     if (userData._statusCode) return userData
 
     const newId = this.createId()
-    console.log('createConnection', newId)
+    // console.log('createConnection', newId)
 
     // create the webrtc connection
     const connection = new WebRTCConnection(newId, this.options, this.connections, userData)
@@ -100,7 +100,7 @@ export default class ConnectionsManagerServer {
     const dc = pc.createDataChannel('geckos.io')
 
     dc.onClosed(() => {
-      console.log('onClosed')
+      // console.log('onClosed')
     })
 
     connection.channel = new CreateDataChannel(connection, dc, userData)
@@ -137,7 +137,7 @@ export default class ConnectionsManagerServer {
   }
 
   deleteConnection(connection: WebRTCConnection, state: string) {
-    console.log('deleteConnection', connection.id)
+    // console.log('deleteConnection', connection.id)
     connection.close()
 
     connection.channel.eventEmitter.on(EVENTS.DISCONNECT, () => {

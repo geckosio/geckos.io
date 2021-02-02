@@ -1,7 +1,11 @@
 import { ArrayBufferView, RawMessage, Data } from './types'
 
-const isRawMessage = (data: Data | RawMessage) => {
-  return typeof data === 'string' || isBufferMessage(data)
+// const isRawMessage = (data: Data | RawMessage) => {
+//   return typeof data === 'string' || isBufferMessage(data)
+// }
+
+const isStringMessage = (data: any) => {
+  return typeof data === 'string'
 }
 
 const isBufferMessage = (data: any) => {
@@ -12,7 +16,7 @@ const isObject = (data: Data) => {
   return typeof data === 'object'
 }
 
-const isJSONString = (data: Data) => {
+const isJSONMessage = (data: Data) => {
   try {
     // check if it is a string
     if (typeof data !== 'string') return false
@@ -26,4 +30,4 @@ const isJSONString = (data: Data) => {
   }
 }
 
-export { isRawMessage, isBufferMessage, isObject, isJSONString }
+export { isStringMessage, isBufferMessage, isObject, isJSONMessage }

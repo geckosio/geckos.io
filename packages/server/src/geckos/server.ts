@@ -44,6 +44,7 @@ export class GeckosServer {
 
     // on server close event
     this.server.once('close', () => {
+      console.log('on server close event')
       this.connectionsManager.connections.forEach((connection: Connection) => connection.close())
       bridge.removeAllListeners()
     })
@@ -68,6 +69,7 @@ export class GeckosServer {
 
     // on server close event
     this.server.once('close', () => {
+      console.log('on server close event')
       this.connectionsManager.connections.forEach((connection: Connection) => connection.close())
       bridge.removeAllListeners()
     })

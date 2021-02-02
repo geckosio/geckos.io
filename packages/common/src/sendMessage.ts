@@ -1,5 +1,5 @@
 import { Data, RawMessage, EventName } from './types'
-import { isBufferMessage, isRawMessage } from './helpers'
+import { isBufferMessage, isStringMessage } from './helpers'
 import { EVENTS } from './constants'
 
 const SendMessage = (
@@ -16,8 +16,10 @@ const SendMessage = (
     } else {
       Promise.resolve().then(() => {
         // server-side (send() does not exist on the server side)
+        // console.log('data', data)
         if (dataChannel.send) dataChannel.send(data)
         else {
+          // console.log('buffer', isBuffer)
           if (!isBuffer) dataChannel.sendMessage(data)
           else dataChannel.sendMessageBinary(data)
         }
@@ -29,7 +31,7 @@ const SendMessage = (
 
   if (dataChannel.readyState === 'open' || dataChannel.isOpen?.()) {
     try {
-      if (eventName === EVENTS.RAW_MESSAGE && data !== null && isRawMessage(data)) {
+      if (eventName === EVENTS.RAW_MESSAGE && data !== null && (isStringMessage(data) || isBufferMessage(data))) {
         send(data, isBufferMessage(data))
       } else {
         send(JSON.stringify({ [eventName]: data }), false)
