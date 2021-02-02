@@ -112,8 +112,19 @@ export default class WebRTCConnection extends Connection {
   }
 
   close() {
-    this.peerConnection.close()
+    if (this.channel.dataChannel?.isOpen()) this.channel.dataChannel.close()
+    if (this.peerConnection) this.peerConnection.close()
     super.close()
+
+    // @ts-ignore
+    this.channel.dataChannel = null
+    // @ts-ignore
+    this.peerConnection = null
+
+    this.channel.eventEmitter.removeAllListeners()
+    this.removeAllListeners()
+
+    nodeDataChannel.cleanup()
   }
 
   async waitUntilIceGatheringStateComplete(peerConnection: RTCPeerConnection, options: any): Promise<void> {

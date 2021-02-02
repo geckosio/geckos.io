@@ -97,6 +97,10 @@ export default class ConnectionsManagerServer {
 
     const dc = pc.createDataChannel('geckos.io')
 
+    dc.onClosed(() => {
+      console.log('onClosed')
+    })
+
     connection.channel = new CreateDataChannel(connection, dc, userData)
 
     // test
@@ -108,7 +112,7 @@ export default class ConnectionsManagerServer {
       })
     }
 
-    await pause(2500)
+    await pause(50)
 
     // create the offer
     // await connection.doOffer()
@@ -132,9 +136,7 @@ export default class ConnectionsManagerServer {
 
   deleteConnection(connection: WebRTCConnection) {
     connection.close()
-    connection.channel.eventEmitter.removeAllListeners()
-    connection.removeAllListeners()
 
-    this.connections.delete(connection.id)
+    if (this.connections.get(connection.id)) this.connections.delete(connection.id)
   }
 }

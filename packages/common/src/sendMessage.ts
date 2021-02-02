@@ -25,6 +25,8 @@ const SendMessage = (
     }
   }
 
+  if (!dataChannel) return
+
   if (dataChannel.readyState === 'open' || dataChannel.isOpen?.()) {
     try {
       if (eventName === EVENTS.RAW_MESSAGE && data !== null && isRawMessage(data)) {
