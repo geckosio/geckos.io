@@ -83,6 +83,11 @@ export default class ConnectionsManagerServer {
     let localDescription
     let candidates = []
 
+    pc.onDataChannel(dc => {
+      // TODO(yandeu) This does not work :/
+      console.log('Peer1 Got DataChannel: ', dc.getLabel())
+    })
+
     pc.onGatheringStateChange(state => {
       gatheringState = state
     })
@@ -98,10 +103,6 @@ export default class ConnectionsManagerServer {
     })
 
     const dc = pc.createDataChannel(this.options.label || 'geckos.io')
-
-    dc.onClosed(() => {
-      // console.log('onClosed')
-    })
 
     connection.channel = new CreateDataChannel(connection, dc, this.options, userData)
 
@@ -120,7 +121,7 @@ export default class ConnectionsManagerServer {
     // await connection.doOffer()
 
     // const { id, iceConnectionState, peerConnection, remoteDescription, localDescription, signalingState } = connection
-    const { id, peerConnection } = connection
+    const { id } = connection
 
     return {
       connection: {

@@ -26,38 +26,26 @@ export default class WebRTCConnection extends Connection {
 
     const { iceServers = [], iceTransportPolicy = 'all', portRange, ...dataChannelOptions } = serverOptions
 
+    // console.log('serverOptions', serverOptions)
+    // console.log('dataChannelOptions', dataChannelOptions)
+    // console.log('iceServers', iceServers)
+
     this.options = {
       timeToHostCandidates: TIME_TO_HOST_CANDIDATES
     }
 
-    let configuration: RTCConfiguration = {
-      // @ts-ignore
-      sdpSemantics: 'unified-plan',
-      iceServers: iceServers,
-      iceTransportPolicy: iceTransportPolicy
+    let configuration: nodeDataChannel.RtcConfig = {
+      // sdpSemantics: 'unified-plan',
+      // iceTransportPolicy: iceTransportPolicy,
+      iceServers: iceServers.map(ice => ice.urls as string)
     }
 
-    // @ts-ignore   // portRange is a nonstandard API
-    if (portRange?.min && portRange?.max) configuration = { ...configuration, portRange }
+    // portRange is a nonstandard API
+    if (portRange?.min && portRange?.max)
+      configuration = { ...configuration, portRangeBegin: portRange.min, portRangeEnd: portRange.max }
 
     // this.peerConnection = new DefaultRTCPeerConnection(configuration)
-    this.peerConnection = new nodeDataChannel.PeerConnection(id as string, {
-      iceServers: ['stun:stun.l.google.com:19302']
-    })
-
-    this.peerConnection.onStateChange(state => {
-      if (state === 'disconnected') this.close()
-    })
-
-    // this.channel = new CreateDataChannel(this, dataChannelOptions, userData)
-    this.peerConnection.onDataChannel(dc => {
-      // console.log('Peer1 Got DataChannel: ', dc.getLabel())
-      // dc2 = dc;
-      // dc2.onMessage((msg) => {
-      //     console.log('Peer2 Received Msg:', msg);
-      // });
-      // dc2.sendMessage("Hello From Peer2");
-    })
+    this.peerConnection = new nodeDataChannel.PeerConnection(id as string, configuration)
   }
 
   // async doOffer() {
