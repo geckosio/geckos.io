@@ -23,7 +23,10 @@
     "postinstall": "lerna bootstrap --no-ci && npm run build",
     "test": "npm run build-client-bundle && jest --coverage --forceExit",
     "clear": "rimraf packages/client/lib packages/common/lib packages/server/lib",
-    "build-client-bundle": "webpack --config packages/client/webpack/webpack.prod.js --env path=../../../test/.tmp --env packageVersion=latest"
+    "build-client-bundle": "webpack --config packages/client/webpack/webpack.prod.js --env path=../../../test/.tmp --env packageVersion=latest",
+    "prune": "npm-run-all prune:*",
+    "prune:node-modules": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +",
+    "prune:dist": "find . -name 'dist' -type d -prune -exec rm -rf '{}' +"
   },
   "keywords": [
     "realtime",
