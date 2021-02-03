@@ -71,7 +71,10 @@ describe('connection', () => {
 
         const interval = setInterval(() => {
           attempts++
-          channel.raw.emit(Buffer.alloc(50 * 1024))
+          channel.raw.emit(Buffer.alloc(64 * 1024))
+
+          attempts++
+          channel.raw.emit(Buffer.alloc(64 * 1024))
         }, 0)
       })
     })
