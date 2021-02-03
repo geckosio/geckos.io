@@ -47,10 +47,10 @@ describe('connection', () => {
     })
 
     test('to room loopback should be "OK"', done => {
-      channel.room.emit('chat message', 'Hello everyone in this room')
       channel.on('room test', data => {
         if (data === 'OK') done()
       })
+      channel.room.emit('chat message', 'Hello everyone in this room')
     })
 
     test('raw message should be "raw back"', done => {

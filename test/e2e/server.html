@@ -27,7 +27,10 @@
           channel.emit('chat message 2', 'Hello 2')
         })
 
-        channel.emit('chat message 1', 'Hello 1')
+        // TODO(yandeu) This should work without a timeout!
+        setTimeout(()=>{
+          channel.emit('chat message 1', 'Hello 1')
+        },500)
 
         channel.onRaw(rawMessage => {
           if (rawMessage === 'raw') channel.raw.emit('raw back')
