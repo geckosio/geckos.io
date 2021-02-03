@@ -60,7 +60,7 @@ export default class ConnectionsManagerServer {
 
     pc.onStateChange(state => {
       // keep track of the maxMessageSize
-      // if (state === 'connected') connection.channel.maxMessageSize = pc.sctp?.maxMessageSize
+      if (state === 'connected') connection.channel.maxMessageSize = +connection.channel.dataChannel.maxMessageSize()
 
       if (state === 'disconnected' || state === 'failed' || state === 'closed') {
         this.deleteConnection(connection, state)
