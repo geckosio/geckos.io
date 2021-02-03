@@ -19,7 +19,7 @@ jobs:
     strategy:
       # max-parallel: 1
       matrix:
-        node-version: [12.x, 14.x, 15.x]
+        node-version: [10.x, 12.x, 14.x, 15.x]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
