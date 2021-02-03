@@ -14,16 +14,19 @@ const SendMessage = (
     if (typeof maxMessageSize === 'number' && bytes > maxMessageSize) {
       throw new Error(`maxMessageSize of ${maxMessageSize} exceeded`)
     } else {
-      Promise.resolve().then(() => {
-        // server-side (send() does not exist on the server side)
-        // console.log('data', data)
-        if (dataChannel.send) dataChannel.send(data)
-        else {
-          // console.log('buffer', isBuffer)
-          if (!isBuffer) dataChannel.sendMessage(data)
-          else dataChannel.sendMessageBinary(data)
-        }
-      })
+      Promise.resolve()
+        .then(() => {
+          // server-side (send() does not exist on the server side)
+          // console.log('data', data)
+          if (dataChannel.send) dataChannel.send(data)
+          else {
+            if (!isBuffer) dataChannel.sendMessage(data)
+            else dataChannel.sendMessageBinary(Buffer.from(data))
+          }
+        })
+        .catch(error => {
+          console.log('error', error)
+        })
     }
   }
 
