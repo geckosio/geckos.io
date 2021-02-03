@@ -97,7 +97,7 @@ export default class ConnectionsManagerServer {
       candidates.push({ candidate, mid })
     })
 
-    const dc = pc.createDataChannel('geckos.io')
+    const dc = pc.createDataChannel(this.options.label || 'geckos.io')
 
     dc.onClosed(() => {
       // console.log('onClosed')

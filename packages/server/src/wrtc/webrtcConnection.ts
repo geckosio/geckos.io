@@ -41,7 +41,7 @@ export default class WebRTCConnection extends Connection {
     if (portRange?.min && portRange?.max) configuration = { ...configuration, portRange }
 
     // this.peerConnection = new DefaultRTCPeerConnection(configuration)
-    this.peerConnection = new nodeDataChannel.PeerConnection('geckos.io', {
+    this.peerConnection = new nodeDataChannel.PeerConnection(id as string, {
       iceServers: ['stun:stun.l.google.com:19302']
     })
 
