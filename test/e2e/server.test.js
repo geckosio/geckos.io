@@ -75,16 +75,16 @@ describe('connection', () => {
     })
   })
 
-  describe('close', () => {
-    test('server should notify of client closing the connection', done => {
-      channel.onDisconnect(reason => {
-        expect(reason).toBe('closed')
-        done()
-      })
-      // closing the server, will disconnect all users
-      server.close()
-    })
-  })
+  // describe('close', () => {
+  //   test('server should notify of client closing the connection', done => {
+  //     channel.onDisconnect(reason => {
+  //       expect(reason).toBe('closed')
+  //       done()
+  //     })
+  //     // closing the server, will disconnect all users
+  //     server.close()
+  //   })
+  // })
 
 })
 
