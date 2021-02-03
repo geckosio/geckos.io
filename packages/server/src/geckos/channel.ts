@@ -233,6 +233,9 @@ export default class ServerChannel {
   private _emit(eventName: Types.EventName, data: Types.Data | Types.RawMessage | null = null) {
     if (!this._roomId || this._roomId === this._roomId)
       if (!this._id || this._id === this._id) {
+
+        if(!this.dataChannel) return
+
         const isReliable = data && typeof data === 'object' && 'RELIABLE' in data
         const buffering = this.autoManageBuffering && +this.dataChannel.bufferedAmount() > 0
         const drop = (reason: string, event: any, data: any) => {
