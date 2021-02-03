@@ -23,20 +23,21 @@ export default class ServerChannel {
   constructor(
     public webrtcConnection: WebRTCConnection,
     public dataChannel: nodeDataChannel.DataChannel,
+    public dataChannelOptions: Types.ServerOptions,
     public userData: any
   ) {
     this._id = webrtcConnection.id
     this._roomId = undefined
 
-    // const {
-    //   label = 'geckos.io',
-    //   ordered = false,
-    //   maxRetransmits = 0,
-    //   maxPacketLifeTime = undefined,
-    //   autoManageBuffering = true
-    // } = dataChannelOptions
+    const {
+      label = 'geckos.io',
+      ordered = false,
+      maxRetransmits = 0,
+      maxPacketLifeTime = undefined,
+      autoManageBuffering = true
+    } = dataChannelOptions
 
-    // this.autoManageBuffering = autoManageBuffering
+    this.autoManageBuffering = autoManageBuffering
 
     // this.dataChannel = webrtcConnection.peerConnection.createDataChannel(label, {
     //   ordered: ordered,
@@ -233,7 +234,7 @@ export default class ServerChannel {
     if (!this._roomId || this._roomId === this._roomId)
       if (!this._id || this._id === this._id) {
         const isReliable = data && typeof data === 'object' && 'RELIABLE' in data
-        const buffering = this.autoManageBuffering && this.dataChannel.bufferedAmount() > 0
+        const buffering = this.autoManageBuffering && +this.dataChannel.bufferedAmount() > 0
         const drop = (reason: string, event: any, data: any) => {
           this.eventEmitter.emit(EVENTS.DROP, { reason, event, data })
         }

@@ -103,7 +103,7 @@ export default class ConnectionsManagerServer {
       // console.log('onClosed')
     })
 
-    connection.channel = new CreateDataChannel(connection, dc, userData)
+    connection.channel = new CreateDataChannel(connection, dc, this.options, userData)
 
     // test
     const pause = (ms: number): Promise<void> => {
