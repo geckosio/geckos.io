@@ -184,7 +184,9 @@ const io: GeckosServer = geckos({
     return 404 // will return 404 (Not Found)
     return 500 // will return 500 (Internal Server Error)
     // and so on ...
-  }
+  },
+  
+  cors: { allowAuthorization: true }, // required if the client and server are on separate domains
 })
 
 io.onConnection((channel: ServerChannel) => {
@@ -318,6 +320,7 @@ import geckos from '@geckos.io/server'
  * @param options.maxRetransmits Default: 0
  * @param options.cors
  * @param options.cors.origin String | (req) => string. Default '*'
+ * @param options.cors.allowAuthorization Default: false
  * @param options.autoManageBuffering By default, geckos.io manages RTCDataChannel buffering for you. Default 'true'
  * @param options.portRange Custom port range for the WebRTC connection (available in >= v1.7.0)
  * @param options.portRange.min Default: 0
