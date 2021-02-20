@@ -41,8 +41,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@geckos.io/common": "^2.0.0-dev.0",
-    "cross-env": "^7.0.3"
+    "@geckos.io/common": "^2.0.0-dev.0"
   },
   "funding": {
     "url": "https://github.com/sponsors/yandeu"

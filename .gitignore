@@ -13,3 +13,4 @@ packages/**/package-lock.json
 bundles/test*
 */.tmp/*
 coverage
+lerna-debug.log

@@ -38,12 +38,7 @@
   },
   "dependencies": {
     "@geckos.io/client": "^2.0.0-dev.0",
-    "@geckos.io/server": "^2.0.0-dev.0",
-    "source-map-support": "^0.5.19"
-  },
-  "devDependencies": {
-    "@types/express": "^4.17.11",
-    "@types/node": "^12.12.50"
+    "@geckos.io/server": "^2.0.0-dev.0"
   },
   "funding": {
     "url": "https://github.com/sponsors/yandeu"
