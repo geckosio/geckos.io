@@ -14,4 +14,3 @@ bundles/test*
 */.tmp/*
 coverage
 lerna-debug.log
-package-lock.json
