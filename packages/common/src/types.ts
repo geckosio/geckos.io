@@ -1,4 +1,4 @@
-import { IncomingMessage } from 'http'
+import type { IncomingMessage } from 'http'
 
 const ArrayBufferView = Object.getPrototypeOf(Object.getPrototypeOf(new Uint8Array())).constructor
 export { ArrayBufferView }
