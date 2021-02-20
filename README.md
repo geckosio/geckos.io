@@ -185,7 +185,7 @@ const io: GeckosServer = geckos({
     return 500 // will return 500 (Internal Server Error)
     // and so on ...
   },
-  
+
   cors: { allowAuthorization: true }, // required if the client and server are on separate domains
 })
 
@@ -620,4 +620,4 @@ To help developing geckos.io, install this repository via **`npm install`**. Tes
 
 ## License
 
-The BSD 3-Clause License (BSD-3-Clause) 2019 - [Yannick Deubel](https://github.com/yandeu). Please have a look at the [LICENSE](LICENSE) for more details.
+The BSD 3-Clause License (BSD-3-Clause) 2021 - [Yannick Deubel](https://github.com/yandeu). Please have a look at the [LICENSE](LICENSE) for more details.
