@@ -1,4 +1,4 @@
-import { IncomingMessage } from 'http'
+import type { IncomingMessage, OutgoingMessage } from 'http'
 
 const ArrayBufferView = Object.getPrototypeOf(Object.getPrototypeOf(new Uint8Array())).constructor
 export { ArrayBufferView }
@@ -31,8 +31,13 @@ export interface ServerOptions {
    * A async function to authenticate and authorize a user.
    * @param auth The authentication token
    * @param request The incoming http request
+   * @param response The outgoing http response
    */
-  authorization?: (auth: string | undefined, request: IncomingMessage) => Promise<boolean | any>
+  authorization?: (
+    auth: string | undefined,
+    request: IncomingMessage,
+    response: OutgoingMessage
+  ) => Promise<boolean | any>
 }
 
 export interface ClientOptions {

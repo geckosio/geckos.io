@@ -2,7 +2,7 @@ import WebRTCConnection from './webrtcConnection'
 import { ChannelId, ServerOptions } from '@geckos.io/common/lib/types'
 import { EVENTS } from '@geckos.io/common/lib/constants'
 import makeRandomId from '@geckos.io/common/lib/makeRandomId'
-import { IncomingMessage } from 'http'
+import type { IncomingMessage, OutgoingMessage } from 'http'
 
 export default class ConnectionsManagerServer {
   connections: Map<ChannelId, WebRTCConnection> = new Map()
@@ -26,7 +26,7 @@ export default class ConnectionsManagerServer {
     return this.connections
   }
 
-  private async getUserData(authorization: string | undefined, req: IncomingMessage) {
+  private async getUserData(authorization: string | undefined, request: IncomingMessage, response: OutgoingMessage) {
     // check authorization and get userData
     let userData = {}
     if (this.options?.authorization) {
@@ -35,7 +35,7 @@ export default class ConnectionsManagerServer {
         return { _statusCode: 500 }
       }
 
-      const res = await this.options.authorization(authorization, req)
+      const res = await this.options.authorization(authorization, request, response)
       if (typeof res === 'boolean' && res) userData = {}
       else if (typeof res === 'boolean' && !res) return { _statusCode: 401 }
       else if (typeof res === 'number' && res >= 100 && res < 600) return { _statusCode: res }
@@ -45,10 +45,10 @@ export default class ConnectionsManagerServer {
     return userData
   }
 
-  async createConnection(authorization: string | undefined, req: IncomingMessage) {
+  async createConnection(authorization: string | undefined, request: IncomingMessage, response: OutgoingMessage) {
     // get userData
-    let userData: any = await this.getUserData(authorization, req)
-    if (userData._statusCode) return userData
+    let userData: any = await this.getUserData(authorization, request, response)
+    if (userData._statusCode) return { userData, status: userData._statusCode }
 
     // create the webrtc connection
     const connection = new WebRTCConnection(this.createId(), this.options, this.connections, userData)

@@ -166,15 +166,19 @@ const io: GeckosServer = geckos({
   /**
    * A async function to authenticate and authorize a user.
    * @param auth The authentication token
-   * @param request The incoming http request (available in >= v1.6.2)
+   * @param request The incoming http request
+   * @param response The outgoing http response
    */
-  authorization: async (auth: string | undefined, request: http.IncomingMessage)) => {
+  authorization: async (auth: string | undefined, request: http.IncomingMessage, response: http.OutgoingMessage)) => {
     const token = auth.split(' ') // ['Yannick', '12E45']
     const username = token[0] // 'Yannick'
     const password = token[1] // '12E45'
 
     // Use "request.connection.remoteAddress" to get the users ip.
     // ("request.headers['x-forwarded-for']" if your server is behind a proxy)
+
+    // add a custom response header if you want
+    response.setHeader('www-authenticate', 'Bearer realm="example", error="invalid_token", error_description="The access token expired"')
 
     // reach out to a database if needed (this code is completely fictitious)
     const user = await database.getByName(username)
@@ -195,8 +199,7 @@ const io: GeckosServer = geckos({
     return 500 // will return 500 (Internal Server Error)
     // and so on ...
   },
-  
-  cors: { allowAuthorization: true }, // required if the client and server are on separate domains
+  cors: { allowAuthorization: true } // required if the client and server are on separate domains
 })
 
 io.onConnection((channel: ServerChannel) => {
