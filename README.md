@@ -22,6 +22,16 @@
 
 ---
 
+# :mega: Announcement: Version 2
+
+Version 2 will likely be available soon with a huge performance improvement. The API stays exactly as it is now. The only thing that changes is the WebRTC implementation. I switched from [wrtc](https://www.npmjs.com/package/wrtc) to [node-datachannel](https://www.npmjs.com/package/node-datachannel). node-datachannel is much lighter and faster compared to wrtc.
+
+You can test it today:
+```console
+ npm i @geckos.io/client@dev @geckos.io/server@dev
+```
+Want to know more? Join the [discussions](https://github.com/geckosio/geckos.io/discussions)!
+
 ## What is it made for?
 
 It's designed specifically for your HTML5 real-time multiplayer games by lowering the average latency and preventing huge latency spikes. It allows you to communicate with your node.js server via UDP, which is much faster than TCP (used by WebSocket). Take a look at the comparison video between UDP and TCP.
