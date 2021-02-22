@@ -85,22 +85,22 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
 
             const {
               id,
-              iceConnectionState,
-              peerConnection,
-              remoteDescription,
-              localDescription,
-              signalingState
+              // iceConnectionState,
+              // peerConnection,
+              // remoteDescription,
+              localDescription
+              // signalingState
             } = connection
 
             res.write(
               JSON.stringify({
                 userData, // the userData for authentication
                 id,
-                iceConnectionState,
-                peerConnection,
-                remoteDescription,
-                localDescription,
-                signalingState
+                // iceConnectionState,
+                // peerConnection,
+                // remoteDescription,
+                localDescription
+                // signalingState
               })
             )
 
