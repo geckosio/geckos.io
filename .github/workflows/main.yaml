@@ -10,7 +10,7 @@ on:
       - 'bundles/**'
       - 'readme/**'
       - '**.md'
-
+      
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -34,11 +34,12 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: npm install, build, and test
-        run: |
-          npm ci
-          npm run build
-          npm test
-      - uses: codecov/codecov-action@v1
-        env:
-          CI: true
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build Packages
+        run: npm run build
+
+      - name: Run Tests
+        run: npm test
+        uses: codecov/codecov-action@v1
