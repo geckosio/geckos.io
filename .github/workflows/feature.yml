@@ -50,5 +50,7 @@ jobs:
 
       - name: Run Tests
         run: npm test
-        # don't use codecov for features
+                
+      # don't use codecov for features
+      # - name: Upload coverage to Codecov
         # uses: codecov/codecov-action@v1
