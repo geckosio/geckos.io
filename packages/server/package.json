@@ -44,7 +44,7 @@
   "dependencies": {
     "@geckos.io/common": "^2.0.0-dev.1",
     "eventemitter3": "^4.0.7",
-    "node-datachannel": "0.0.21"
+    "node-datachannel": "0.0.23"
   },
   "funding": {
     "url": "https://github.com/sponsors/yandeu"
