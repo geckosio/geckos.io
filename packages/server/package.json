@@ -1,6 +1,6 @@
 {
   "name": "@geckos.io/server",
-  "version": "1.7.1",
+  "version": "1.7.2",
   "description": "Real-time client/server communication over UDP using WebRTC and Node.js",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -42,7 +42,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@geckos.io/common": "^1.7.1",
+    "@geckos.io/common": "^1.7.2",
     "eventemitter3": "^4.0.0",
     "wrtc": "^0.4.6"
   },
