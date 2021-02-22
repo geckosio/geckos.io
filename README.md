@@ -22,6 +22,18 @@
 
 ---
 
+# :mega: Announcement: Version 2
+
+Version 2 will likely be available soon with a huge performance improvement. The API stays exactly as it is now. The only thing that changes is the WebRTC implementation. I switched from [wrtc](https://www.npmjs.com/package/wrtc) to [node-datachannel](https://www.npmjs.com/package/node-datachannel). node-datachannel is much lighter and faster compared to wrtc.
+
+You can test it today:
+
+```console
+ npm i @geckos.io/client@dev @geckos.io/server@dev
+```
+
+Want to know more? Join the [discussions](https://github.com/geckosio/geckos.io/discussions)!
+
 ## What is it made for?
 
 It's designed specifically for your HTML5 real-time multiplayer games by lowering the average latency and preventing huge latency spikes. It allows you to communicate with your node.js server via UDP, which is much faster than TCP (used by WebSocket). Take a look at the comparison video between UDP and TCP.
@@ -156,15 +168,19 @@ const io: GeckosServer = geckos({
   /**
    * A async function to authenticate and authorize a user.
    * @param auth The authentication token
-   * @param request The incoming http request (available in >= v1.6.2)
+   * @param request The incoming http request
+   * @param response The outgoing http response
    */
-  authorization: async (auth: string | undefined, request: http.IncomingMessage)) => {
+  authorization: async (auth: string | undefined, request: http.IncomingMessage, response: http.OutgoingMessage)) => {
     const token = auth.split(' ') // ['Yannick', '12E45']
     const username = token[0] // 'Yannick'
     const password = token[1] // '12E45'
 
     // Use "request.connection.remoteAddress" to get the users ip.
     // ("request.headers['x-forwarded-for']" if your server is behind a proxy)
+
+    // add a custom response header if you want
+    response.setHeader('www-authenticate', 'Bearer realm="example", error="invalid_token", error_description="The access token expired"')
 
     // reach out to a database if needed (this code is completely fictitious)
     const user = await database.getByName(username)
@@ -185,8 +201,7 @@ const io: GeckosServer = geckos({
     return 500 // will return 500 (Internal Server Error)
     // and so on ...
   },
-
-  cors: { allowAuthorization: true }, // required if the client and server are on separate domains
+  cors: { allowAuthorization: true } // required if the client and server are on separate domains
 })
 
 io.onConnection((channel: ServerChannel) => {

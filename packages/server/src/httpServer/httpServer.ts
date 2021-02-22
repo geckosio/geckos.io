@@ -67,7 +67,8 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
             // create connection (and check auth header)
             const { status, connection, userData } = await connectionsManager.createConnection(
               headers?.authorization,
-              req
+              req,
+              res
             )
 
             // on http status code
