@@ -95,8 +95,7 @@ export default class ConnectionsManagerServer {
 
     connection.channel = new CreateDataChannel(connection, dc, this.options, userData)
 
-    // test
-    const pause = (ms: number): Promise<void> => {
+    const pause = (ms: number = 0): Promise<void> => {
       return new Promise(resolve => {
         setTimeout(() => {
           resolve()
@@ -104,7 +103,11 @@ export default class ConnectionsManagerServer {
       })
     }
 
-    await pause(50)
+    let waitForLocalDescription = 0
+    while (typeof localDescription === 'undefined' && waitForLocalDescription < 20) {
+      waitForLocalDescription++
+      await pause()
+    }
 
     const { id } = connection
 
