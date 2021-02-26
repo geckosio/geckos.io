@@ -19,7 +19,7 @@
           channel.emit('chat message 2', 'Hello 2')
         })
 
-        // TODO(yandeu) This should work without a timeout!
+        // works without setTimeout locally, but not on github workflow :/
         setTimeout(() => {
           channel.emit('chat message 1', 'Hello 1')
         })
