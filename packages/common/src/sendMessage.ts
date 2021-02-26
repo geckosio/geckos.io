@@ -1,6 +1,6 @@
 import { Data, RawMessage, EventName } from './types'
-import { isBufferMessage, isStringMessage } from './helpers'
 import { EVENTS } from './constants'
+import { isBufferMessage, isStringMessage } from './helpers'
 
 const SendMessage = (
   dataChannel: any | RTCDataChannel,
@@ -17,7 +17,6 @@ const SendMessage = (
       Promise.resolve()
         .then(() => {
           // server-side (send() does not exist on the server side)
-          // console.log('data', data)
           if (dataChannel.send) dataChannel.send(data)
           else {
             if (!isBuffer) dataChannel.sendMessage(data)

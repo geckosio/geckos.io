@@ -5,20 +5,11 @@ const ParseMessage = (ev: MessageEvent) => {
   let { data } = ev
   if (!data) data = ev
 
-  // console.log('data', data)
-
   const isBuffer = isBufferMessage(data)
-  // console.log('isBuffer', isBuffer)
-
   const isJson = isJSONMessage(data)
-  // console.log('isJson', isJson)
-
   const isString = isStringMessage(data)
-  // console.log('isString', isString)
 
   // if (!data && isRaw) return { key: EVENTS.RAW_MESSAGE, data }
-
-  // console.log('here?')
 
   // // probably server-side
   // if (!data) {

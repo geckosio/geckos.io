@@ -290,11 +290,11 @@ import geckos from '@geckos.io/client'
 
 /**
  * start geckos client with these options
- * @param options.url default is `${location.protocol}//${location.hostname}`
- * @param options.port default is 9208
- * @param options.label Default: 'geckos.io'
  * @param options.iceServers Default: []
  * @param options.iceTransportPolicy Default: 'all'
+ * @param options.label Default: 'geckos.io'
+ * @param options.port default is 9208
+ * @param options.url default is `${location.protocol}//${location.hostname}`
  */
 const channel = geckos(options)
 
@@ -327,20 +327,20 @@ import geckos from '@geckos.io/server'
 
 /**
  * start geckos server with these options
+ * @param options.authorization The async authorization callback
+ * @param options.autoManageBuffering By default, geckos.io manages RTCDataChannel buffering for you. Default 'true'
+ * @param options.cors
+ * @param options.cors.allowAuthorization Default: false
+ * @param options.cors.origin String | (req) => string. Default '*'
  * @param options.iceServers Default: []
  * @param options.iceTransportPolicy Default: 'all'
  * @param options.label Default: 'geckos.io'
- * @param options.ordered Default: false
  * @param options.maxPacketLifeTime Default: null
  * @param options.maxRetransmits Default: 0
- * @param options.cors
- * @param options.cors.origin String | (req) => string. Default '*'
- * @param options.cors.allowAuthorization Default: false
- * @param options.autoManageBuffering By default, geckos.io manages RTCDataChannel buffering for you. Default 'true'
+ * @param options.ordered Default: false
  * @param options.portRange Custom port range for the WebRTC connection (available in >= v1.7.0)
- * @param options.portRange.min Default: 0
  * @param options.portRange.max Default: 65535
- * @param options.authorization The async authorization callback
+ * @param options.portRange.min Default: 0
  */
 io = geckos(options)
 

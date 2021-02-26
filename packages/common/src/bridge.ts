@@ -8,9 +8,9 @@ export class Bridge {
     eventName: EventName,
     data?: Data,
     connection: {
-      senderId?: ChannelId
       id?: ChannelId
       roomId?: RoomId
+      senderId?: ChannelId
     } = {}
   ) {
     this.eventEmitter.emit(eventName, data, connection)

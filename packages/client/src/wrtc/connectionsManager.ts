@@ -1,7 +1,7 @@
-import { Bridge } from '@geckos.io/common/lib/bridge'
-import { RawMessage, Data, ChannelId, EventName } from '@geckos.io/common/lib/types'
 import ParseMessage from '@geckos.io/common/lib/parseMessage'
 import SendMessage from '@geckos.io/common/lib/sendMessage'
+import { Bridge } from '@geckos.io/common/lib/bridge'
+import { RawMessage, Data, ChannelId, EventName } from '@geckos.io/common/lib/types'
 
 interface RTCRemotePeerConnection {
   id: ChannelId
@@ -9,12 +9,12 @@ interface RTCRemotePeerConnection {
 }
 
 export default class ConnectionsManagerClient {
-  public maxMessageSize: number | undefined
-  public localPeerConnection: RTCPeerConnection
-  public remotePeerConnection: RTCRemotePeerConnection
+  public bridge = new Bridge()
   public dataChannel: RTCDataChannel
   public id: ChannelId
-  public bridge = new Bridge()
+  public localPeerConnection: RTCPeerConnection
+  public maxMessageSize: number | undefined
+  public remotePeerConnection: RTCRemotePeerConnection
 
   emit(eventName: EventName, data: Data | RawMessage | null = null) {
     SendMessage(this.dataChannel, this.maxMessageSize, eventName, data)

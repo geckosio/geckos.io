@@ -1,11 +1,11 @@
 import ConnectionsManagerClient from './connectionsManager'
-import { ERRORS } from '@geckos.io/common/lib/constants'
 import { ChannelId } from '@geckos.io/common/lib/types'
+import { ERRORS } from '@geckos.io/common/lib/constants'
 
 export default class PeerConnection {
-  localPeerConnection: RTCPeerConnection
   dataChannel: RTCDataChannel
   id: ChannelId
+  localPeerConnection: RTCPeerConnection
 
   async connect(connectionsManager: ConnectionsManagerClient) {
     let webRTCPcSupported =

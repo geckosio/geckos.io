@@ -1,10 +1,7 @@
-import Connection from './connection'
-import CreateDataChannel from '../geckos/channel'
 import Channel from '../geckos/channel'
-import { ChannelId, ServerOptions } from '@geckos.io/common/lib/types'
-
-// const DefaultRTCPeerConnection: RTCPeerConnection = require('wrtc').RTCPeerConnection
+import Connection from './connection'
 import nodeDataChannel from 'node-datachannel'
+import { ChannelId, ServerOptions } from '@geckos.io/common/lib/types'
 
 // strangely something it takes a long time
 // so I set it to 10 seconds
@@ -26,10 +23,6 @@ export default class WebRTCConnection extends Connection {
 
     const { iceServers = [], iceTransportPolicy = 'all', portRange, ...dataChannelOptions } = serverOptions
 
-    // console.log('serverOptions', serverOptions)
-    // console.log('dataChannelOptions', dataChannelOptions)
-    // console.log('iceServers', iceServers)
-
     this.options = {
       timeToHostCandidates: TIME_TO_HOST_CANDIDATES
     }
@@ -47,49 +40,6 @@ export default class WebRTCConnection extends Connection {
     // this.peerConnection = new DefaultRTCPeerConnection(configuration)
     this.peerConnection = new nodeDataChannel.PeerConnection(id as string, configuration)
   }
-
-  // async doOffer() {
-  //   try {
-  //     const offer: RTCSessionDescriptionInit = await this.peerConnection.createOffer()
-  //     await this.peerConnection.setLocalDescription(offer)
-  //     // we do not wait, since we request the missing candidates later
-  //     /*await*/ this.waitUntilIceGatheringStateComplete(this.peerConnection, this.options)
-  //   } catch (error) {
-  //     console.error(error.messages)
-  //     this.close()
-  //     throw error
-  //   }
-  // }
-
-  // get iceConnectionState() {
-  //   return this.peerConnection.iceConnectionState
-  // }
-
-  // get localDescription() {
-  //   return this.descriptionToJSON(this.peerConnection.localDescription) //, true)
-  // }
-
-  // get remoteDescription() {
-  //   return this.descriptionToJSON(this.peerConnection.remoteDescription)
-  // }
-
-  // get signalingState() {
-  //   return this.peerConnection.signalingState
-  // }
-
-  // async applyAnswer(answer: RTCSessionDescription) {
-  //   await this.peerConnection.setRemoteDescription(answer)
-  // }
-
-  // toJSON = () => {
-  //   return {
-  //     ...super.toJSON(),
-  //     iceConnectionState: this.iceConnectionState,
-  //     localDescription: this.localDescription,
-  //     remoteDescription: this.remoteDescription,
-  //     signalingState: this.signalingState
-  //   }
-  // }
 
   descriptionToJSON(description: RTCSessionDescription | null | any, shouldDisableTrickleIce = false) {
     return !description

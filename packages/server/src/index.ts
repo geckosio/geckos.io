@@ -1,5 +1,5 @@
-import server, { GeckosServer, ServerChannel } from './geckos/server'
 import iceServers from '@geckos.io/common/lib/iceServers'
+import server, { GeckosServer, ServerChannel } from './geckos/server'
 import { Data, RawMessage, ChannelId } from '@geckos.io/common/lib/types'
 
 export default server

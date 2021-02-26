@@ -1,8 +1,8 @@
-import url from 'url'
-import http from 'http'
 import ConnectionsManagerServer from '../wrtc/connectionsManager'
-import SetCORS from './setCors'
 import ParseBody from './parseBody'
+import SetCORS from './setCors'
+import http from 'http'
+import url from 'url'
 import { CorsOptions } from '@geckos.io/common/lib/types'
 
 const end = (res: http.ServerResponse, statusCode: number) => {
@@ -83,24 +83,13 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
               return
             }
 
-            const {
-              id,
-              // iceConnectionState,
-              // peerConnection,
-              // remoteDescription,
-              localDescription
-              // signalingState
-            } = connection
+            const { id, localDescription } = connection
 
             res.write(
               JSON.stringify({
                 userData, // the userData for authentication
                 id,
-                // iceConnectionState,
-                // peerConnection,
-                // remoteDescription,
                 localDescription
-                // signalingState
               })
             )
 
@@ -124,9 +113,6 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
             try {
               const { sdp, type } = JSON.parse(body)
               connection.peerConnection.setRemoteDescription(sdp, type)
-              // await connection.applyAnswer(JSON.parse(body))
-              // let connectionJSON = connection.toJSON()
-              // res.write(JSON.stringify(connectionJSON.remoteDescription))
               res.end()
               return
             } catch (error) {

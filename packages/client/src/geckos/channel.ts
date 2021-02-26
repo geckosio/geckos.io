@@ -1,20 +1,20 @@
-import { Bridge } from '@geckos.io/common/lib/bridge'
-import { makeReliable } from '@geckos.io/common/lib/reliableMessage'
-import { EVENTS } from '@geckos.io/common/lib/constants'
-import PeerConnection from '../wrtc/peerConnection'
-import ConnectionsManagerClient from '../wrtc/connectionsManager'
 import * as Types from '@geckos.io/common/lib/types'
+import ConnectionsManagerClient from '../wrtc/connectionsManager'
+import PeerConnection from '../wrtc/peerConnection'
+import { Bridge } from '@geckos.io/common/lib/bridge'
+import { EVENTS } from '@geckos.io/common/lib/constants'
+import { makeReliable } from '@geckos.io/common/lib/reliableMessage'
 
 export class ClientChannel {
   public maxMessageSize: number | undefined
   public userData = {}
 
-  private peerConnection: PeerConnection
-  private connectionsManager: ConnectionsManagerClient
-  private url: string
   private bridge: Bridge
+  private connectionsManager: ConnectionsManagerClient
+  private peerConnection: PeerConnection
   // stores all reliable messages for about 15 seconds
   private receivedReliableMessages: { id: string; timestamp: Date; expire: number }[] = []
+  private url: string
 
   constructor(
     url: string,
@@ -176,20 +176,20 @@ export class ClientChannel {
 
 /**
  * The geckos.io client library.
- * @param options.url The url of the server. Default: \`${location.protocol}//${location.hostname}\`.
- * @param options.port The port of the server. Default: 9208.
- * @param options.label The label of the DataChannel. Default: 'geckos.io'.
  * @param options.iceServers An array of RTCIceServers. See https://developer.mozilla.org/en-US/docs/Web/API/RTCIceServer.
  * @param options.iceTransportPolicy RTCIceTransportPolicy enum defines string constants which can be used to limit the transport policies of the ICE candidates to be considered during the connection process.
+ * @param options.label The label of the DataChannel. Default: 'geckos.io'.
+ * @param options.port The port of the server. Default: 9208.
+ * @param options.url The url of the server. Default: \`${location.protocol}//${location.hostname}\`.
  */
 const geckosClient = (options: Types.ClientOptions = {}) => {
   const {
+    authorization = undefined,
     iceServers = [],
     iceTransportPolicy = 'all',
-    url = `${location.protocol}//${location.hostname}`,
-    authorization = undefined,
+    label = 'geckos.io',
     port = 9208,
-    label = 'geckos.io'
+    url = `${location.protocol}//${location.hostname}`
   } = options
   return new ClientChannel(url, authorization, port, label, { iceServers, iceTransportPolicy })
 }

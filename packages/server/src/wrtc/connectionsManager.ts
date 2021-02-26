@@ -1,9 +1,9 @@
+import CreateDataChannel from '../geckos/channel'
 import WebRTCConnection from './webrtcConnection'
-import { ChannelId, ServerOptions } from '@geckos.io/common/lib/types'
-import { EVENTS } from '@geckos.io/common/lib/constants'
 import makeRandomId from '@geckos.io/common/lib/makeRandomId'
 import type { IncomingMessage, OutgoingMessage } from 'http'
-import CreateDataChannel from '../geckos/channel'
+import { ChannelId, ServerOptions } from '@geckos.io/common/lib/types'
+import { EVENTS } from '@geckos.io/common/lib/constants'
 
 export default class ConnectionsManagerServer {
   connections: Map<ChannelId, WebRTCConnection> = new Map()
@@ -52,7 +52,6 @@ export default class ConnectionsManagerServer {
     if (userData._statusCode) return { userData, status: userData._statusCode }
 
     const newId = this.createId()
-    // console.log('createConnection', newId)
 
     // create the webrtc connection
     const connection = new WebRTCConnection(newId, this.options, this.connections, userData)
@@ -66,16 +65,6 @@ export default class ConnectionsManagerServer {
         this.deleteConnection(connection, state)
       }
     })
-
-    // pc.onconnectionstatechange = () => {
-    //   // keep track of the maxMessageSize
-    //   if (pc.connectionState === 'connected') connection.channel.maxMessageSize = pc.sctp?.maxMessageSize
-
-    //   if (pc.connectionState === 'disconnected' || pc.connectionState === 'failed' || pc.connectionState === 'closed') {
-    //     connection.channel.eventEmitter.emit(EVENTS.DISCONNECT, pc.connectionState)
-    //     this.deleteConnection(connection)
-    //   }
-    // }
 
     this.connections.set(connection.id, connection)
 
@@ -117,20 +106,12 @@ export default class ConnectionsManagerServer {
 
     await pause(50)
 
-    // create the offer
-    // await connection.doOffer()
-
-    // const { id, iceConnectionState, peerConnection, remoteDescription, localDescription, signalingState } = connection
     const { id } = connection
 
     return {
       connection: {
         id,
-        // peerConnection,
-        // iceConnectionState: '',
-        // remoteDescription: '',
         localDescription
-        // signalingState: ''
       },
       userData,
       status: 200
@@ -138,7 +119,6 @@ export default class ConnectionsManagerServer {
   }
 
   deleteConnection(connection: WebRTCConnection, state: string) {
-    // console.log('deleteConnection', connection.id)
     connection.close()
 
     connection.channel.eventEmitter.on(EVENTS.DISCONNECT, () => {

@@ -1,16 +1,16 @@
-import bridge from '@geckos.io/common/lib/bridge'
-import WebRTCConnection from '../wrtc/webrtcConnection'
+import * as Types from '@geckos.io/common/lib/types'
 import EventEmitter from 'eventemitter3'
 import ParseMessage from '@geckos.io/common/lib/parseMessage'
-import { EVENTS, ERRORS } from '@geckos.io/common/lib/constants'
-import * as Types from '@geckos.io/common/lib/types'
 import SendMessage from '@geckos.io/common/lib/sendMessage'
-import { makeReliable } from '@geckos.io/common/lib/reliableMessage'
+import WebRTCConnection from '../wrtc/webrtcConnection'
+import bridge from '@geckos.io/common/lib/bridge'
 import nodeDataChannel from 'node-datachannel'
+import { EVENTS, ERRORS } from '@geckos.io/common/lib/constants'
+import { makeReliable } from '@geckos.io/common/lib/reliableMessage'
 
 export default class ServerChannel {
-  public maxMessageSize: number | undefined
   public autoManageBuffering: boolean
+  public maxMessageSize: number | undefined
 
   private _roomId: Types.RoomId
   private _id: Types.ChannelId
@@ -30,23 +30,14 @@ export default class ServerChannel {
     this._roomId = undefined
 
     const {
+      autoManageBuffering = true,
       label = 'geckos.io',
-      ordered = false,
-      maxRetransmits = 0,
       maxPacketLifeTime = undefined,
-      autoManageBuffering = true
+      maxRetransmits = 0,
+      ordered = false
     } = dataChannelOptions
 
     this.autoManageBuffering = autoManageBuffering
-
-    // this.dataChannel = webrtcConnection.peerConnection.createDataChannel(label, {
-    //   ordered: ordered,
-    //   maxRetransmits: maxRetransmits,
-    //   maxPacketLifeTime: maxPacketLifeTime
-    // })
-
-    // this.dataChannel.binaryType = 'arraybuffer'
-    // this.dataChannel.isOpen
 
     this.dataChannel.onOpen(() => {
       this.dataChannel.onMessage(msg => {

@@ -1,14 +1,14 @@
 const EVENTS = {
-  SEND_OVER_DATA_CHANNEL: 'sendOverDataChannel',
-  RECEIVED_FROM_DATA_CHANNEL: 'receiveFromDataChannel',
-  DISCONNECTED: 'disconnected',
-  DISCONNECT: 'disconnect',
-  CONNECTION: 'connection',
   CONNECT: 'connect',
-  ERROR: 'error',
+  CONNECTION: 'connection',
   DATA_CHANNEL_IS_OPEN: 'dataChannelIsOpen',
+  DISCONNECT: 'disconnect',
+  DISCONNECTED: 'disconnected',
+  DROP: 'dropped',
+  ERROR: 'error',
   RAW_MESSAGE: 'rawMessage',
-  DROP: 'dropped'
+  RECEIVED_FROM_DATA_CHANNEL: 'receiveFromDataChannel',
+  SEND_OVER_DATA_CHANNEL: 'sendOverDataChannel'
 }
 
 const ERRORS = {
