@@ -5,6 +5,9 @@ const express = require('express')
 const path = require('path')
 const app = express()
 
+// give enough time for io.server.close to be called on github workflow
+jest.setTimeout(120_000)
+
 app.use('/', express.static(path.join(__dirname, '../')))
 
 app.listen(5301)

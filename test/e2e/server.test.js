@@ -6,6 +6,9 @@ const app = express()
 const server = http.createServer(app)
 const io = geckos({ iceTransportPolicy: 'relay' })
 
+// give enough time for io.server.close to be called on github workflow
+jest.setTimeout(120_000)
+
 app.use('/', express.static(path.join(__dirname, '../')))
 
 io.addServer(server)
