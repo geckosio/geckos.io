@@ -75,17 +75,36 @@ describe('connection', () => {
     })
   })
 
-  // describe('close', () => {
-  //   test('server should notify of client closing the connection', done => {
-  //     channel.onDisconnect(reason => {
-  //       expect(reason).toBe('closed')
-  //       done()
-  //     })
-  //     // closing the server, will disconnect all users
-  //     server.close()
-  //   })
-  // })
+  describe('close', () => {
+    const delay = ms => {
+      return new Promise(resolve => {
+        setTimeout(resolve, ms)
+      })
+    }
 
+    test('server should notify of client closing the connection', done => {
+      let closed = false
+      let disconnected = false
+
+      channel.onDisconnect(reason => {
+        disconnected = /^closed|disconnected$/.test(reason)
+      })
+
+      io.server.close(() => {
+        closed = true
+        delay(10_000).then(() => {
+          expect(closed).toBe(true)
+          expect(disconnected).toBe(true)
+          done()
+        })
+      })
+    })
+
+    test('there should be no connection left', () => {
+      const connections = io.connectionsManager.connections.size
+      expect(connections).toBe(0)
+    })
+  })
 })
 
 page.goto('http://localhost:5200/e2e/server.html')

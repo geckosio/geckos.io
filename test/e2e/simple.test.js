@@ -50,13 +50,21 @@ describe('connection', () => {
     })
   })
 
-  // describe('shutdown', () => {
-  //   test('close the geckos server', done => {
-  //     io.server.close(() => {
-  //       done()
-  //     })
-  //   })
-  // })
+  describe('shutdown', () => {
+    const delay = ms => {
+      return new Promise(resolve => {
+        setTimeout(resolve, ms)
+      })
+    }
+
+    test('close the geckos server', done => {
+      io.server.close(() => {
+        delay(10_000).then(() => {
+          done()
+        })
+      })
+    })
+  })
 })
 
 page.goto('http://localhost:5301/e2e/simple.html')
