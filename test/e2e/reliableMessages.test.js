@@ -57,6 +57,15 @@ describe('connection', () => {
 page.goto('http://localhost:5400/e2e/reliableMessages.html')
 
 afterAll(async () => {
-  page.close()
-  server.close()
+  const close = () => {
+    return new Promise(resolve => {
+      server.close(() => {
+        resolve()
+      })
+    })
+  }
+
+  await close()
+  // await page.close()
+  // await browser.close()
 })

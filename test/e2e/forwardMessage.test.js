@@ -43,6 +43,6 @@ describe('connection', () => {
 
 page.goto('http://localhost:5600/e2e/forwardMessage.html')
 
-afterAll(async () => {
-  page.close()
-})
+// afterAll(async () => {
+//   page.close()
+// })

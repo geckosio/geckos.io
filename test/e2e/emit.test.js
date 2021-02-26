@@ -78,6 +78,15 @@ describe('connection', () => {
 page.goto('http://localhost:5500/e2e/emit.html')
 
 afterAll(async () => {
-  page.close()
-  server.close()
+  const close = () => {
+    return new Promise(resolve => {
+      server.close(() => {
+        resolve()
+      })
+    })
+  }
+
+  await close()
+  // await page.close()
+  // await browser.close()
 })

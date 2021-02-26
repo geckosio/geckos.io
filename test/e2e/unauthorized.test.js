@@ -42,6 +42,15 @@ describe('unauthorized', () => {
 page.goto('http://localhost:4000/e2e/unauthorized.html')
 
 afterAll(async () => {
-  server.close()
-  page.close()
+  const close = () => {
+    return new Promise(resolve => {
+      server.close(() => {
+        resolve()
+      })
+    })
+  }
+
+  await close()
+  // await page.close()
+  // await browser.close()
 })

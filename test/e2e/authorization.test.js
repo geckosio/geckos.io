@@ -43,6 +43,15 @@ describe('connection', () => {
 page.goto('http://localhost:5900/e2e/authorization.html')
 
 afterAll(async () => {
-  server.close()
-  page.close()
+  const close = () => {
+    return new Promise(resolve => {
+      server.close(() => {
+        resolve()
+      })
+    })
+  }
+
+  await close()
+  // await page.close()
+  // await browser.close()
 })

@@ -112,6 +112,6 @@ describe('connection', () => {
 
 page.goto('http://localhost:5200/e2e/server.html')
 
-afterAll(async () => {
-  page.close()
-})
+// afterAll(async () => {
+//   page.close()
+// })
