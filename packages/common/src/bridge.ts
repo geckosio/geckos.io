@@ -1,8 +1,12 @@
-import EventEmitter from 'eventemitter3'
+import { Events } from '@yandeu/events'
 import { Data, EventOptions, ChannelId, EventName, RoomId } from './types'
 
+interface BridgeEventMap {
+  [key: string]: (data?: Data, options?: EventOptions) => void
+}
+
 export class Bridge {
-  eventEmitter = new EventEmitter()
+  eventEmitter = new Events<BridgeEventMap>()
 
   emit(
     eventName: EventName,
@@ -17,7 +21,7 @@ export class Bridge {
   }
 
   on(eventName: EventName, cb: Function) {
-    return this.eventEmitter.on(eventName, (data: Data, options: EventOptions) => {
+    return this.eventEmitter.on(eventName, (data, options) => {
       cb(data, options)
     })
   }

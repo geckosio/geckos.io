@@ -1,5 +1,5 @@
 import * as Types from '@geckos.io/common/lib/types'
-import EventEmitter from 'eventemitter3'
+import { Events } from '@yandeu/events'
 import ParseMessage from '@geckos.io/common/lib/parseMessage'
 import SendMessage from '@geckos.io/common/lib/sendMessage'
 import WebRTCConnection from '../wrtc/webrtcConnection'
@@ -16,7 +16,7 @@ export default class ServerChannel {
   private _id: Types.ChannelId
   // private dataChannel: RTCDataChannel
 
-  eventEmitter = new EventEmitter()
+  eventEmitter = new Events()
   // stores all reliable messages for about 15 seconds
   private receivedReliableMessages: { id: string; timestamp: Date; expire: number }[] = []
 
