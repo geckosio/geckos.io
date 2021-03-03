@@ -53,7 +53,7 @@ export class ClientChannel {
     this.bridge.emit(EVENTS.DISCONNECTED)
 
     try {
-      const host = `${this.url}/.wrtc/v1`
+      const host = `${this.url}/.wrtc/v2`
       fetch(`${host}/connections/${this.id}/close`, {
         method: 'POST',
         headers: {

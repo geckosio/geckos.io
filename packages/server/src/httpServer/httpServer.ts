@@ -12,7 +12,7 @@ const end = (res: http.ServerResponse, statusCode: number) => {
 
 const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerServer, cors: CorsOptions) => {
   const prefix = '.wrtc'
-  const version = 'v1'
+  const version = 'v2'
   const root = `/${prefix}/${version}`
   const rootRegEx = new RegExp(`/${prefix}/${version}`)
 

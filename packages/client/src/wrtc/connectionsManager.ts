@@ -62,7 +62,7 @@ export default class ConnectionsManagerClient {
   }
 
   async connect() {
-    const host = `${this.url}/.wrtc/v1`
+    const host = `${this.url}/.wrtc/v2`
 
     let headers: any = { 'Content-Type': 'application/json' }
     if (this.authorization) headers = { ...headers, ['Authorization']: this.authorization }
