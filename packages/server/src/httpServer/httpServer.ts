@@ -1,9 +1,9 @@
 import ConnectionsManagerServer from '../wrtc/connectionsManager'
+import { CorsOptions } from '@geckos.io/common/lib/types'
 import ParseBody from './parseBody'
 import SetCORS from './setCors'
 import http from 'http'
 import url from 'url'
-import { CorsOptions } from '@geckos.io/common/lib/types'
 
 const end = (res: http.ServerResponse, statusCode: number) => {
   res.writeHead(statusCode)
@@ -34,9 +34,9 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
 
     if (pathname && rootRegEx.test(pathname)) {
       const path1 = pathname === `${root}/connections`
-      const path2 = new RegExp(`${prefix}\/${version}\/connections\/[0-9a-zA-Z]+\/remote-description`).test(pathname)
-      const path3 = new RegExp(`${prefix}\/${version}\/connections\/[0-9a-zA-Z]+\/additional-candidates`).test(pathname)
-      const closePath = new RegExp(`${prefix}\/${version}\/connections\/[0-9a-zA-Z]+\/close`).test(pathname)
+      const path2 = new RegExp(`${prefix}/${version}/connections/[0-9a-zA-Z]+/remote-description`).test(pathname)
+      const path3 = new RegExp(`${prefix}/${version}/connections/[0-9a-zA-Z]+/additional-candidates`).test(pathname)
+      const closePath = new RegExp(`${prefix}/${version}/connections/[0-9a-zA-Z]+/close`).test(pathname)
 
       SetCORS(req, res, cors)
 

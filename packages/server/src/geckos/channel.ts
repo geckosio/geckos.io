@@ -1,12 +1,12 @@
 import * as Types from '@geckos.io/common/lib/types'
+import { ERRORS, EVENTS } from '@geckos.io/common/lib/constants'
 import { Events } from '@yandeu/events'
 import ParseMessage from '@geckos.io/common/lib/parseMessage'
 import SendMessage from '@geckos.io/common/lib/sendMessage'
 import WebRTCConnection from '../wrtc/webrtcConnection'
 import bridge from '@geckos.io/common/lib/bridge'
-import nodeDataChannel from 'node-datachannel'
-import { EVENTS, ERRORS } from '@geckos.io/common/lib/constants'
 import { makeReliable } from '@geckos.io/common/lib/reliableMessage'
+import nodeDataChannel from 'node-datachannel'
 
 export default class ServerChannel {
   public autoManageBuffering: boolean
@@ -69,7 +69,7 @@ export default class ServerChannel {
    */
   onDisconnect(callback: Types.DisconnectEventCallbackServer) {
     this.eventEmitter.on(EVENTS.DISCONNECT, (connectionState: 'disconnected' | 'failed' | 'closed') => {
-      let cb: Types.DisconnectEventCallbackServer = connectionState => callback(connectionState)
+      const cb: Types.DisconnectEventCallbackServer = connectionState => callback(connectionState)
       cb(connectionState)
     })
   }
@@ -261,7 +261,7 @@ export default class ServerChannel {
    */
   onRaw(callback: Types.EventCallbackRawMessage) {
     this.eventEmitter.on(EVENTS.RAW_MESSAGE, (rawMessage: Types.RawMessage) => {
-      let cb: Types.EventCallbackRawMessage = (rawMessage: Types.RawMessage) => callback(rawMessage)
+      const cb: Types.EventCallbackRawMessage = (rawMessage: Types.RawMessage) => callback(rawMessage)
       cb(rawMessage)
     })
   }
@@ -273,7 +273,7 @@ export default class ServerChannel {
    */
   on(eventName: Types.EventName, callback: Types.EventCallbackServer) {
     this.eventEmitter.on(eventName, (data: any, senderId: Types.ChannelId = undefined) => {
-      let cb: Types.EventCallbackServer = (data: any, senderId: Types.ChannelId) => callback(data, senderId)
+      const cb: Types.EventCallbackServer = (data: any, senderId: Types.ChannelId) => callback(data, senderId)
       // check if message is reliable
       // and reject it if it has already been submitted
       const isReliableMessage: boolean = data && data.RELIABLE === 1 && data.ID !== 'undefined'

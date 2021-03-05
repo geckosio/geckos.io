@@ -25,8 +25,8 @@ export interface ServerOptions {
   ) => Promise<boolean | any>
   autoManageBuffering?: boolean
   cors?: CorsOptions
-  iceServers?: RTCIceServer[]
-  iceTransportPolicy?: RTCIceTransportPolicy
+  iceServers?: RTCIceServer[] // eslint-disable-line no-undef
+  iceTransportPolicy?: RTCIceTransportPolicy // eslint-disable-line no-undef
   label?: string
   maxPacketLifeTime?: number
   maxRetransmits?: number
@@ -42,8 +42,8 @@ export interface ServerOptions {
 
 export interface ClientOptions {
   authorization?: string | undefined
-  iceServers?: RTCIceServer[]
-  iceTransportPolicy?: RTCIceTransportPolicy
+  iceServers?: RTCIceServer[] // eslint-disable-line no-undef
+  iceTransportPolicy?: RTCIceTransportPolicy // eslint-disable-line no-undef
   label?: string
   port?: number
   url?: string

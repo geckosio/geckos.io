@@ -1,11 +1,11 @@
+import { ChannelId, Data, EventName, RawMessage } from '@geckos.io/common/lib/types'
+import { Bridge } from '@geckos.io/common/lib/bridge'
 import ParseMessage from '@geckos.io/common/lib/parseMessage'
 import SendMessage from '@geckos.io/common/lib/sendMessage'
-import { Bridge } from '@geckos.io/common/lib/bridge'
-import { RawMessage, Data, ChannelId, EventName } from '@geckos.io/common/lib/types'
 
 interface RTCRemotePeerConnection {
   id: ChannelId
-  localDescription: RTCSessionDescriptionInit
+  localDescription: RTCSessionDescriptionInit // eslint-disable-line no-undef
 }
 
 export default class ConnectionsManagerClient {
@@ -24,7 +24,7 @@ export default class ConnectionsManagerClient {
     public url: string,
     public authorization: string | undefined,
     public label: string,
-    public rtcConfiguration: RTCConfiguration
+    public rtcConfiguration: RTCConfiguration // eslint-disable-line no-undef
   ) {}
 
   onDataChannel = (ev: RTCDataChannelEvent) => {
@@ -55,7 +55,9 @@ export default class ConnectionsManagerClient {
 
     if (res.ok) {
       const candidates = await res.json()
+      // eslint-disable-next-line no-undef
       candidates.forEach((c: RTCIceCandidateInit) => {
+        // eslint-disable-line no-undef
         this.localPeerConnection.addIceCandidate(c)
       })
     }
@@ -111,17 +113,14 @@ export default class ConnectionsManagerClient {
     //   })
     // }, 2000)
 
+    // eslint-disable-next-line no-undef
     const configuration: RTCConfiguration = {
       // @ts-ignore
       sdpSemantics: 'unified-plan',
       ...this.rtcConfiguration
     }
 
-    const RTCPc =
-      RTCPeerConnection ||
-      webkitRTCPeerConnection ||
-      // @ts-ignore
-      mozRTCPeerConnection
+    const RTCPc = RTCPeerConnection || webkitRTCPeerConnection // eslint-disable-line no-undef
 
     // create rtc peer connection
     this.localPeerConnection = new RTCPc(configuration)

@@ -1,7 +1,7 @@
+import { ChannelId, ServerOptions } from '@geckos.io/common/lib/types'
 import Channel from '../geckos/channel'
 import Connection from './connection'
 import nodeDataChannel from 'node-datachannel'
-import { ChannelId, ServerOptions } from '@geckos.io/common/lib/types'
 
 // strangely something it takes a long time
 // so I set it to 10 seconds
@@ -85,7 +85,7 @@ export default class WebRTCConnection extends Connection {
           // console.log('Timed out waiting for all host candidates, will continue with what we have so far.')
           resolve()
         } else {
-          reject(new Error('Timed out waiting for host candidates State: ' + peerConnection.iceGatheringState))
+          reject(new Error(`Timed out waiting for host candidates State: ${peerConnection.iceGatheringState}`))
         }
       }, timeToHostCandidates)
 

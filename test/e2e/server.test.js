@@ -12,7 +12,7 @@ jest.setTimeout(120_000)
 app.use('/', express.static(path.join(__dirname, '../')))
 
 io.addServer(server)
-server.listen(5200)
+server.listen(5201)
 
 let channel
 
@@ -110,7 +110,7 @@ describe('connection', () => {
   })
 })
 
-page.goto('http://localhost:5200/e2e/server.html')
+page.goto('http://localhost:5201/e2e/server.html')
 
 // afterAll(async () => {
 //   page.close()

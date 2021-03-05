@@ -1,12 +1,12 @@
 import * as Types from '@geckos.io/common/lib/types'
 import Connection from '../wrtc/connection'
 import ConnectionsManagerServer from '../wrtc/connectionsManager'
+import { EVENTS } from '@geckos.io/common/lib/constants'
 import HttpServer from '../httpServer/httpServer'
 import ServerChannel from './channel'
 import WebRTCConnection from '../wrtc/webrtcConnection'
 import bridge from '@geckos.io/common/lib/bridge'
 import http from 'http'
-import { EVENTS } from '@geckos.io/common/lib/constants'
 import { makeReliable } from '@geckos.io/common/lib/reliableMessage'
 
 export class GeckosServer {
@@ -135,7 +135,7 @@ export class GeckosServer {
   /** Listen for a new connection. */
   onConnection(callback: (channel: ServerChannel) => void) {
     bridge.on(EVENTS.CONNECTION, (channel: ServerChannel) => {
-      let cb: (channel: ServerChannel) => void = channel => callback(channel)
+      const cb: (channel: ServerChannel) => void = channel => callback(channel)
       cb(channel)
     })
   }

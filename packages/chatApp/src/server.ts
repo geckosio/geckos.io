@@ -1,4 +1,4 @@
-import geckos, { Data, RawMessage, iceServers, GeckosServer } from '@geckos.io/server'
+import geckos, { Data, GeckosServer, RawMessage, iceServers } from '@geckos.io/server'
 
 // using with express
 import express from 'express'

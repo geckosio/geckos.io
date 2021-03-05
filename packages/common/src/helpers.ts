@@ -1,4 +1,4 @@
-import { ArrayBufferView, RawMessage, Data } from './types'
+import { ArrayBufferView, Data, RawMessage } from './types'
 
 // const isRawMessage = (data: Data | RawMessage) => {
 //   return typeof data === 'string' || isBufferMessage(data)

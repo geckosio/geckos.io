@@ -8,7 +8,7 @@ const list = document.getElementById('list')
 
 const appendMessage = (msg: Data) => {
   if (list) {
-    let li = document.createElement('li')
+    const li = document.createElement('li')
     li.innerHTML = msg as string
     list.appendChild(li)
   }
@@ -23,7 +23,7 @@ channel.onConnect(error => {
     console.log('You are connected', channel.id)
   }
 
-  channel.emit('chat message', `Hello everyone, I\'m ${channel.id}`)
+  channel.emit('chat message', `Hello everyone, I'm ${channel.id}`)
 
   channel.onDisconnect(() => {
     console.log('You got disconnected')
@@ -32,7 +32,7 @@ channel.onConnect(error => {
   if (button)
     button.addEventListener('click', e => {
       if (text) {
-        let content = text.value
+        const content = text.value
         if (content && content.trim().length > 0) {
           channel.emit('chat message', content.trim())
           text.value = ''
@@ -45,7 +45,7 @@ channel.onConnect(error => {
   })
 
   channel.on('some reliable event', (data: Data) => {
-    appendMessage('[RELIABLE] ' + data)
+    appendMessage(`[RELIABLE] ${data}`)
   })
 
   channel.emit('number', 33)
@@ -59,8 +59,8 @@ channel.onConnect(error => {
 
   // sending a raw message
   setTimeout(() => {
-    let buffer = new ArrayBuffer(2)
-    let bufferView = new DataView(buffer)
+    const buffer = new ArrayBuffer(2)
+    const bufferView = new DataView(buffer)
     bufferView.setInt8(0, 5)
     bufferView.setInt8(1, 12)
     channel.raw.emit(buffer)

@@ -1,9 +1,9 @@
+import { ChannelId, ServerOptions } from '@geckos.io/common/lib/types'
+import type { IncomingMessage, OutgoingMessage } from 'http'
 import CreateDataChannel from '../geckos/channel'
+import { EVENTS } from '@geckos.io/common/lib/constants'
 import WebRTCConnection from './webrtcConnection'
 import makeRandomId from '@geckos.io/common/lib/makeRandomId'
-import type { IncomingMessage, OutgoingMessage } from 'http'
-import { ChannelId, ServerOptions } from '@geckos.io/common/lib/types'
-import { EVENTS } from '@geckos.io/common/lib/constants'
 
 export default class ConnectionsManagerServer {
   connections: Map<ChannelId, WebRTCConnection> = new Map()
@@ -11,12 +11,11 @@ export default class ConnectionsManagerServer {
   constructor(public options: ServerOptions) {}
 
   private createId(): ChannelId {
-    do {
-      const id = makeRandomId(24)
-      if (!this.connections.has(id)) {
-        return id
-      }
-    } while (true)
+    let id = makeRandomId(24)
+
+    while (this.connections.has(id)) id = makeRandomId(24)
+
+    return id
   }
 
   getConnection(id: ChannelId) {
@@ -48,7 +47,7 @@ export default class ConnectionsManagerServer {
 
   async createConnection(authorization: string | undefined, request: IncomingMessage, response: OutgoingMessage) {
     // get userData
-    let userData: any = await this.getUserData(authorization, request, response)
+    const userData: any = await this.getUserData(authorization, request, response)
     if (userData._statusCode) return { userData, status: userData._statusCode }
 
     const newId = this.createId()
@@ -70,7 +69,7 @@ export default class ConnectionsManagerServer {
 
     let gatheringState
     let localDescription
-    let candidates = []
+    const candidates = []
 
     pc.onDataChannel(dc => {
       // TODO(yandeu) This does not work :/

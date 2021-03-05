@@ -1,4 +1,4 @@
-import { EVENTS, ERRORS } from './constants'
+import { ERRORS, EVENTS } from './constants'
 import { isBufferMessage, isJSONMessage, isStringMessage } from './helpers'
 
 const ParseMessage = (ev: MessageEvent) => {

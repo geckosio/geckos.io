@@ -5,6 +5,8 @@
   "private": true,
   "scripts": {
     "start": "npm run dev",
+    "lint": "eslint packages/**/!(*.d).ts",
+    "lint:fix": "eslint --fix packages/**/!(*.d).ts",
     "format": "prettier --write \"packages/**/!(*.d).ts\"",
     "lerna:ls": "lerna ls",
     "lerna:diff": "lerna diff",
@@ -55,6 +57,8 @@
   "devDependencies": {
     "@types/express": "^4.17.11",
     "@types/node": "^14.0.0",
+    "@yandeu/eslint-config": "^0.0.1",
+    "@yandeu/prettier-config": "^0.0.1",
     "copy-webpack-plugin": "^7.0.0",
     "cross-env": "^7.0.3",
     "express": "^4.16.4",

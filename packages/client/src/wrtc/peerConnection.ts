@@ -1,5 +1,5 @@
-import ConnectionsManagerClient from './connectionsManager'
 import { ChannelId } from '@geckos.io/common/lib/types'
+import ConnectionsManagerClient from './connectionsManager'
 import { ERRORS } from '@geckos.io/common/lib/constants'
 
 export default class PeerConnection {
@@ -8,11 +8,7 @@ export default class PeerConnection {
   localPeerConnection: RTCPeerConnection
 
   async connect(connectionsManager: ConnectionsManagerClient) {
-    let webRTCPcSupported =
-      RTCPeerConnection ||
-      webkitRTCPeerConnection ||
-      // @ts-ignore
-      mozRTCPeerConnection
+    const webRTCPcSupported = RTCPeerConnection || webkitRTCPeerConnection // eslint-disable-line no-undef
 
     if (webRTCPcSupported) {
       const { localPeerConnection, dataChannel, id, userData, error } = await connectionsManager.connect()
@@ -28,7 +24,7 @@ export default class PeerConnection {
 
       return { userData }
     } else {
-      let error = new Error(ERRORS.BROWSER_NOT_SUPPORTED)
+      const error = new Error(ERRORS.BROWSER_NOT_SUPPORTED)
       console.error(error.message)
       return { error }
     }

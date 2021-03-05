@@ -1,8 +1,8 @@
 import * as Types from '@geckos.io/common/lib/types'
-import ConnectionsManagerClient from '../wrtc/connectionsManager'
-import PeerConnection from '../wrtc/peerConnection'
 import { Bridge } from '@geckos.io/common/lib/bridge'
+import ConnectionsManagerClient from '../wrtc/connectionsManager'
 import { EVENTS } from '@geckos.io/common/lib/constants'
+import PeerConnection from '../wrtc/peerConnection'
 import { makeReliable } from '@geckos.io/common/lib/reliableMessage'
 
 export class ClientChannel {
@@ -21,7 +21,7 @@ export class ClientChannel {
     authorization: string | undefined,
     port: number | null,
     label: string,
-    rtcConfiguration: RTCConfiguration
+    rtcConfiguration: RTCConfiguration // eslint-disable-line no-undef
   ) {
     this.url = port ? `${url}:${port}` : url
     this.connectionsManager = new ConnectionsManagerClient(this.url, authorization, label, rtcConfiguration)
@@ -32,7 +32,7 @@ export class ClientChannel {
   }
 
   private onconnectionstatechange() {
-    let lpc = this.peerConnection.localPeerConnection
+    const lpc = this.peerConnection.localPeerConnection
 
     lpc.onconnectionstatechange = () => {
       if (lpc.connectionState === 'disconnected' || lpc.connectionState === 'closed')
@@ -97,7 +97,7 @@ export class ClientChannel {
    */
   onRaw(callback: Types.EventCallbackRawMessage) {
     this.bridge.on(EVENTS.RAW_MESSAGE, (rawMessage: Types.RawMessage) => {
-      let cb: Types.EventCallbackRawMessage = (rawMessage: Types.RawMessage) => callback(rawMessage)
+      const cb: Types.EventCallbackRawMessage = (rawMessage: Types.RawMessage) => callback(rawMessage)
       cb(rawMessage)
     })
   }
