@@ -1,3 +1,6 @@
 {
-  "extends": "@yandeu/eslint-config"
+  "extends": "@yandeu/eslint-config",
+  "rules": {
+    "no-undef": "off"
+  }
 }
