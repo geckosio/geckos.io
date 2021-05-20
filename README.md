@@ -342,6 +342,10 @@ import geckos from '@geckos.io/server'
  * @param options.maxPacketLifeTime Default: null
  * @param options.maxRetransmits Default: 0
  * @param options.ordered Default: false
+ * @param options.cors
+ * @param options.cors.origin String | (req) => string. Default '*'
+ * @param options.cors.allowAuthorization Default: false
+ * @param options.autoManageBuffering By default, geckos.io manages RTCDataChannel buffering for you. Default 'true'
  * @param options.portRange Custom port range for the WebRTC connection (available in >= v1.7.0)
  * @param options.portRange.max Default: 65535
  * @param options.portRange.min Default: 0
