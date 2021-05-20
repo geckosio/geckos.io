@@ -26,7 +26,7 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        node-version: [12.x, 14.x, 15.x]
+        node-version: [14.x, 16.x]
 
     steps:
       - name: install required packages for puppeteer
@@ -45,14 +45,14 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Run ESLint
-        run: npm run lint
-
       - name: Build Packages
         run: npm run build
 
       - name: Run Tests
         run: npm test
+
+      - name: Run ESLint
+        run: npm run lint
 
       # don't use codecov for features
       # - name: Upload coverage to Codecov
