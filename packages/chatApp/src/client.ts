@@ -17,6 +17,8 @@ const appendMessage = (msg: Data) => {
 channel.onConnect(error => {
   if (error) {
     console.error(error.message)
+    console.log('Status: ', error.status)
+    console.log('StatusText: ', error.statusText)
     appendMessage(error.message)
     return
   } else {

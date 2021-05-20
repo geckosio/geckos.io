@@ -73,8 +73,13 @@ export interface EventCallbackRawMessage {
   (rawMessage: RawMessage): void
 }
 
+export interface ConnectionError extends Error {
+  status: number
+  statusText: string
+}
+
 export interface ConnectionEventCallbackClient {
-  (error?: Error): void
+  (error?: ConnectionError): void
 }
 
 export interface DisconnectEventCallbackServer {

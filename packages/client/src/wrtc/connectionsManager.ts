@@ -76,6 +76,15 @@ export default class ConnectionsManagerClient {
         headers
       })
 
+      if (res.status >= 300) {
+        throw {
+          name: 'Error',
+          message: `Connection failed with status code ${res.status}.`,
+          status: res.status,
+          statusText: res.statusText
+        }
+      }
+
       const json = await res.json()
 
       userData = json.userData

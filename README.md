@@ -157,6 +157,10 @@ const auth = `${username} ${password}` // 'Yannick 12E45'
 const channel = geckos({ authorization: auth })
 
 channel.onConnect(error => {
+  if (error) {
+    console.error('Status: ', error.status)
+    console.error('StatusText: ', error.statusText)
+  }
   console.log(channel.userData) // { username: 'Yannick', level: 13, points: 8987 }
 })
 ```
