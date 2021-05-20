@@ -85,6 +85,11 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
 
             const { id, localDescription } = connection
 
+            if (!id || !localDescription) {
+              end(res, 500)
+              return
+            }
+
             res.write(
               JSON.stringify({
                 userData, // the userData for authentication
@@ -154,6 +159,8 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
             const id = ids[0]
             const connection = connectionsManager.getConnection(id)
             connection?.close()
+            res.end()
+            return
           } else {
             end(res, 400)
             return
