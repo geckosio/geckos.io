@@ -18,7 +18,7 @@ jobs:
     strategy:
       # max-parallel: 1
       matrix:
-        node-version: [12.x, 14.x]
+        node-version: [12.x, 14.x, 15.x, 16.x]
 
     steps:
       - name: install required packages for puppeteer
