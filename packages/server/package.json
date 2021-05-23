@@ -35,7 +35,7 @@
     "lib": "lib"
   },
   "engines": {
-    "node": "^8 || ^10 || ^11 || ^12 || ^13 || ^14"
+    "node": "^8 || ^10 || ^11 || ^12 || ^13 || ^14 || ^15 || ^16"
   },
   "scripts": {
     "build": "tsc --build tsconfig.json",
