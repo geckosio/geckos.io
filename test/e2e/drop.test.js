@@ -61,12 +61,17 @@ describe('connection', () => {
     describe('', () => {
       test('should drop some messages', done => {
         let attempts = 0
+        let _done = false
 
         channel.onDrop(drop => {
           expect(drop.reason).toBe('DROPPED_FROM_BUFFERING')
           expect(attempts).toBeGreaterThanOrEqual(1)
           clearInterval(interval)
-          done()
+
+          if (!_done) {
+            _done = true
+            done()
+          }
         })
 
         const interval = setInterval(() => {
