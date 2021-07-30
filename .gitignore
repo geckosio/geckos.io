@@ -4,7 +4,6 @@
 */server/lib*
 *node_modules*
 /.idea
-/.vscode
 /lib
 /node_modules
 /output
