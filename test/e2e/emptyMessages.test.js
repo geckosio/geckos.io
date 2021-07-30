@@ -1,7 +1,11 @@
-const geckos = require('../../packages/server/lib').default
-const http = require('http')
-const express = require('express')
-const path = require('path')
+/* eslint-disable sort-imports */
+import express  from 'express'
+import geckos from '../../packages/server/lib/index.js'
+import http  from 'http'
+import path from 'path'
+
+import {__dirname} from './_dirname.js'
+
 const app = express()
 const server = http.createServer(app)
 const io = geckos()

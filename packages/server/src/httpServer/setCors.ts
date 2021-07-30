@@ -1,4 +1,4 @@
-import { CorsOptions } from '@geckos.io/common/lib/types'
+import { CorsOptions } from '@geckos.io/common/lib/types.js'
 import http from 'http'
 
 const SetCORS = (req: http.IncomingMessage, res: http.ServerResponse, cors: CorsOptions) => {

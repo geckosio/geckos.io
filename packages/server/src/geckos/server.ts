@@ -1,13 +1,13 @@
-import * as Types from '@geckos.io/common/lib/types'
-import Connection from '../wrtc/connection'
-import ConnectionsManagerServer from '../wrtc/connectionsManager'
-import { EVENTS } from '@geckos.io/common/lib/constants'
-import HttpServer from '../httpServer/httpServer'
-import ServerChannel from './channel'
-import WebRTCConnection from '../wrtc/webrtcConnection'
-import bridge from '@geckos.io/common/lib/bridge'
+import * as Types from '@geckos.io/common/lib/types.js'
+import Connection from '../wrtc/connection.js'
+import ConnectionsManagerServer from '../wrtc/connectionsManager.js'
+import { EVENTS } from '@geckos.io/common/lib/constants.js'
+import HttpServer from '../httpServer/httpServer.js'
+import ServerChannel from './channel.js'
+import WebRTCConnection from '../wrtc/webrtcConnection.js'
+import bridge from '@geckos.io/common/lib/bridge.js'
 import http from 'http'
-import { makeReliable } from '@geckos.io/common/lib/reliableMessage'
+import { makeReliable } from '@geckos.io/common/lib/reliableMessage.js'
 
 export class GeckosServer {
   public connectionsManager: ConnectionsManagerServer

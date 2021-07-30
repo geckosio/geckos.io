@@ -3,6 +3,7 @@
   "description": "Real-time client/server communication over UDP using WebRTC and Node.js",
   "version": "2.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "start": "npm run dev",
     "lint": "eslint packages/**/*.ts",
@@ -24,9 +25,9 @@
     "publish-dev:client": "cd packages/client/ && npm publish --tag dev",
     "dev": "npm run build && cd packages/chatApp && npm run dev",
     "postinstall": "lerna bootstrap --no-ci && npm run build",
-    "test": "npm run build-client-bundle && jest --coverage --forceExit",
+    "test": "npm run build-client-bundle && cross-env-shell node --experimental-vm-modules node_modules/.bin/jest --coverage --forceExit",
     "clear": "rimraf packages/client/lib packages/common/lib packages/server/lib",
-    "build-client-bundle": "webpack --config packages/client/webpack/webpack.prod.js --env path=../../../test/.tmp --env packageVersion=latest",
+    "build-client-bundle": "webpack --config packages/client/webpack/webpack.prod.cjs --env path=../../../test/.tmp --env packageVersion=latest",
     "prune": "npm-run-all prune:*",
     "prune:node-modules": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +",
     "prune:dist": "find . -name 'dist' -type d -prune -exec rm -rf '{}' +"

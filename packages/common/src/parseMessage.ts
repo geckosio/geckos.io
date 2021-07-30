@@ -1,5 +1,5 @@
-import { ERRORS, EVENTS } from './constants'
-import { isBufferMessage, isJSONMessage, isStringMessage } from './helpers'
+import { ERRORS, EVENTS } from './constants.js'
+import { isBufferMessage, isJSONMessage, isStringMessage } from './helpers.js'
 
 const ParseMessage = (ev: MessageEvent) => {
   let { data } = ev

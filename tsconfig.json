@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
+    "target": "ES2019",
+    "module": "es2020",
+    "moduleResolution": "node",
+
     "lib": ["dom", "esnext"],
     "strict": true,
     "esModuleInterop": true,

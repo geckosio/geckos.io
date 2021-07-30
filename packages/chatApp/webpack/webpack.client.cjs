@@ -10,8 +10,8 @@ module.exports = {
   output: {
     publicPath: 'static/client',
     path: path.resolve(__dirname, '../dist/client'),
-    filename: '[name].bundle.js',
-    chunkFilename: '[name].chunk.js'
+    filename: '[name].bundle.js'
+    // chunkFilename: '[name].chunk.js'
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js']
@@ -24,18 +24,18 @@ module.exports = {
       }
     ]
   },
-  optimization: {
-    splitChunks: {
-      cacheGroups: {
-        commons: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
-          chunks: 'all',
-          filename: '[name].bundle.js'
-        }
-      }
-    }
-  },
+  // optimization: {
+  //   splitChunks: {
+  //     cacheGroups: {
+  //       commons: {
+  //         test: /[\\/]node_modules[\\/]/,
+  //         name: 'vendors',
+  //         chunks: 'all',
+  //         filename: '[name].bundle.js'
+  //       }
+  //     }
+  //   }
+  // },
   plugins: [
     new HtmlWebpackPlugin({
       template: 'src/index.html'

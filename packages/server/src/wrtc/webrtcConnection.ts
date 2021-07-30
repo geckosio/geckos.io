@@ -1,6 +1,6 @@
-import { ChannelId, ServerOptions } from '@geckos.io/common/lib/types'
-import Channel from '../geckos/channel'
-import Connection from './connection'
+import { ChannelId, ServerOptions } from '@geckos.io/common/lib/types.js'
+import Channel from '../geckos/channel.js'
+import Connection from './connection.js'
 import nodeDataChannel from 'node-datachannel'
 
 // strangely something it takes a long time

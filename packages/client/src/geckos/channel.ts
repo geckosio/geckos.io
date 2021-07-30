@@ -1,9 +1,9 @@
-import * as Types from '@geckos.io/common/lib/types'
-import { Bridge } from '@geckos.io/common/lib/bridge'
-import ConnectionsManagerClient from '../wrtc/connectionsManager'
-import { EVENTS } from '@geckos.io/common/lib/constants'
-import PeerConnection from '../wrtc/peerConnection'
-import { makeReliable } from '@geckos.io/common/lib/reliableMessage'
+import * as Types from '@geckos.io/common/lib/types.js'
+import { Bridge } from '@geckos.io/common/lib/bridge.js'
+import ConnectionsManagerClient from '../wrtc/connectionsManager.js'
+import { EVENTS } from '@geckos.io/common/lib/constants.js'
+import PeerConnection from '../wrtc/peerConnection.js'
+import { makeReliable } from '@geckos.io/common/lib/reliableMessage.js'
 
 export class ClientChannel {
   public maxMessageSize: number | undefined
@@ -116,7 +116,8 @@ export class ClientChannel {
       // set the userData
       if (response.userData) this.userData = response.userData
       // keep track of the maxMessageSize
-      this.maxMessageSize = this.connectionsManager.maxMessageSize = this.peerConnection.localPeerConnection.sctp?.maxMessageSize
+      this.maxMessageSize = this.connectionsManager.maxMessageSize =
+        this.peerConnection.localPeerConnection.sctp?.maxMessageSize
       // init onConnectionStateChange event
       this.onconnectionstatechange()
       // we are now ready

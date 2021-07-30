@@ -1,4 +1,4 @@
-import { ChannelId, Data, EventName, EventOptions, RoomId } from './types'
+import { ChannelId, Data, EventName, EventOptions, RoomId } from './types.js'
 import { Events } from '@yandeu/events'
 
 interface BridgeEventMap {

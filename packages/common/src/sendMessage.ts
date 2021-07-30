@@ -1,6 +1,6 @@
-import { Data, EventName, RawMessage } from './types'
-import { isBufferMessage, isStringMessage } from './helpers'
-import { EVENTS } from './constants'
+import { Data, EventName, RawMessage } from './types.js'
+import { isBufferMessage, isStringMessage } from './helpers.js'
+import { EVENTS } from './constants.js'
 
 const SendMessage = (
   dataChannel: any | RTCDataChannel,

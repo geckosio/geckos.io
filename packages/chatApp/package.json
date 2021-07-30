@@ -3,12 +3,13 @@
   "description": "Real-time client/server communication over UDP using WebRTC and Node.js",
   "version": "2.0.0-dev.4",
   "main": "dist",
+  "type": "module",
   "private": true,
   "scripts": {
     "dev": "npm-run-all --parallel watch:* dev:*",
-    "dev:webpack-client": "webpack --config webpack/webpack.client.js --watch",
-    "dev:webpack-server": "webpack --config webpack/webpack.server.js --watch",
-    "dev:nodemon": "nodemon --watch ../ -e js --delay 250ms dist/server/server.js ",
+    "dev:tsc": "tsc --watch",
+    "dev:webpack": "webpack --config webpack/webpack.client.cjs --watch",
+    "dev:nodemon": "nodemon --watch ../ -e js --delay 250ms lib/server.js ",
     "watch:common": "tsc --build --watch ../common/tsconfig.json",
     "watch:client": "tsc --build --watch ../client/tsconfig.json",
     "watch:server": "tsc --build --watch ../server/tsconfig.json"

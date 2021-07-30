@@ -1,4 +1,4 @@
-const SetCORS = require('../../packages/server/lib/httpServer/setCors').default
+import SetCORS from '../../packages/server/lib/httpServer/setCors.js'
 
 const req = { headers: { host: 'https://somewebsite.com' } }
 

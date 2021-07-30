@@ -1,6 +1,6 @@
-import { ChannelId } from '@geckos.io/common/lib/types'
-import ConnectionsManagerClient from './connectionsManager'
-import { ERRORS } from '@geckos.io/common/lib/constants'
+import { ChannelId } from '@geckos.io/common/lib/types.js'
+import ConnectionsManagerClient from './connectionsManager.js'
+import { ERRORS } from '@geckos.io/common/lib/constants.js'
 
 export default class PeerConnection {
   dataChannel: RTCDataChannel

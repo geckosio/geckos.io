@@ -1,8 +1,13 @@
-const geckos = require('../../packages/server/lib').default
-const io = geckos()
+/* eslint-disable sort-imports */
+import {jest} from '@jest/globals';
+import express  from 'express'
+import geckos from '../../packages/server/lib/index.js'
+import http  from 'http'
+import path from 'path'
 
-const express = require('express')
-const path = require('path')
+import {__dirname} from './_dirname.js'
+
+const io = geckos()
 const app = express()
 
 // give enough time for io.server.close to be called on github workflow

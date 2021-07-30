@@ -1,9 +1,9 @@
-import { ChannelId, ServerOptions } from '@geckos.io/common/lib/types'
+import { ChannelId, ServerOptions } from '@geckos.io/common/lib/types.js'
 import type { IncomingMessage, OutgoingMessage } from 'http'
-import CreateDataChannel from '../geckos/channel'
-import { EVENTS } from '@geckos.io/common/lib/constants'
-import WebRTCConnection from './webrtcConnection'
-import makeRandomId from '@geckos.io/common/lib/makeRandomId'
+import CreateDataChannel from '../geckos/channel.js'
+import { EVENTS } from '@geckos.io/common/lib/constants.js'
+import WebRTCConnection from './webrtcConnection.js'
+import makeRandomId from '@geckos.io/common/lib/makeRandomId.js'
 
 export default class ConnectionsManagerServer {
   connections: Map<ChannelId, WebRTCConnection> = new Map()

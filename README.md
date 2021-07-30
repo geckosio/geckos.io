@@ -17,6 +17,7 @@
 [![Downloads](https://img.shields.io/npm/dm/@geckos.io/server.svg?style=flat-square)](https://www.npmjs.com/package/@geckos.io/server)
 ![Node version](https://img.shields.io/node/v/@geckos.io/server.svg?style=flat-square)
 [![Codecov](https://img.shields.io/codecov/c/github/geckosio/geckos.io?logo=codecov&style=flat-square)](https://codecov.io/gh/geckosio/geckos.io)
+[![ES Modules Badge](https://img.shields.io/badge/Node.js-ES%20Modules-F7DF1E?style=flat-square)](https://github.com/yandeu/yandeu/blob/main/posts/2020-05-28-esm-for-nodejs.md)
 
 </div>
 
@@ -257,8 +258,6 @@ channel.onConnect(error => {
 #### server.js
 
 ```js
-const geckos = require('@geckos.io/server').default
-// or with es6
 import geckos from '@geckos.io/server'
 
 const io = geckos()
@@ -507,8 +506,9 @@ io.listen(3000) // default port is 9208
 ### Node.js HTTP Server
 
 ```js
-const geckos = require('@geckos.io/server').default
-const http = require('http')
+import geckos from '@geckos.io/server'
+import http from 'http'
+
 const server = http.createServer()
 const io = geckos()
 
@@ -522,9 +522,10 @@ server.listen(3000)
 ### Express
 
 ```js
-const geckos = require('@geckos.io/server').default
-const http = require('http')
-const express = require('express')
+import geckos from '@geckos.io/server'
+import http from 'http'
+import express from 'express'
+
 const app = express()
 const server = http.createServer(app)
 const io = geckos()
@@ -547,9 +548,6 @@ Port 9208/tcp (or another port you define) is used for the peer signaling. The p
 Geckos&#46;io provides a default list of ICE servers for testing. In production, you should probably use your own STUN and TURN servers.
 
 ```js
-const geckos = require('@geckos.io/server').default
-const { iceServers } = require('@geckos.io/server')
-// or
 import geckos, { iceServers } from '@geckos.io/server'
 
 // use an empty array if you are developing locally

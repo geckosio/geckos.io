@@ -1,11 +1,11 @@
-import * as Types from '@geckos.io/common/lib/types'
-import { ERRORS, EVENTS } from '@geckos.io/common/lib/constants'
+import * as Types from '@geckos.io/common/lib/types.js'
+import { ERRORS, EVENTS } from '@geckos.io/common/lib/constants.js'
 import { Events } from '@yandeu/events'
-import ParseMessage from '@geckos.io/common/lib/parseMessage'
-import SendMessage from '@geckos.io/common/lib/sendMessage'
-import WebRTCConnection from '../wrtc/webrtcConnection'
-import bridge from '@geckos.io/common/lib/bridge'
-import { makeReliable } from '@geckos.io/common/lib/reliableMessage'
+import ParseMessage from '@geckos.io/common/lib/parseMessage.js'
+import SendMessage from '@geckos.io/common/lib/sendMessage.js'
+import WebRTCConnection from '../wrtc/webrtcConnection.js'
+import bridge from '@geckos.io/common/lib/bridge.js'
+import { makeReliable } from '@geckos.io/common/lib/reliableMessage.js'
 import nodeDataChannel from 'node-datachannel'
 
 export default class ServerChannel {

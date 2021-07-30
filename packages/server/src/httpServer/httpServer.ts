@@ -1,7 +1,7 @@
-import ConnectionsManagerServer from '../wrtc/connectionsManager'
-import { CorsOptions } from '@geckos.io/common/lib/types'
-import ParseBody from './parseBody'
-import SetCORS from './setCors'
+import ConnectionsManagerServer from '../wrtc/connectionsManager.js'
+import { CorsOptions } from '@geckos.io/common/lib/types.js'
+import ParseBody from './parseBody.js'
+import SetCORS from './setCors.js'
 import http from 'http'
 import url from 'url'
 
