@@ -53,6 +53,9 @@ jobs:
 
       - name: Run ESLint
         run: npm run lint
+        
+      - name: Run Prettier
+        run: npm run format
 
       # don't use codecov for features
       # - name: Upload coverage to Codecov
