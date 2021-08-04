@@ -25,6 +25,8 @@
 
 # :mega: Version 2 Available!
 
+👉🏻 [Tweet about it!](http://twitter.com/share?text=geckos.io%20v2.0.0%20is%20now%20finally%20available!&url=https://github.com/geckosio/geckos.io)
+
 Version 2 has huge performance improvements. I switched from [wrtc](https://www.npmjs.com/package/wrtc) to [node-datachannel](https://www.npmjs.com/package/node-datachannel), which is much lighter and faster compared to wrtc.
 
 Geckos.io is now shipped as ECMAScript modules and will only support `Node.js ^14.15 and >=16`.
