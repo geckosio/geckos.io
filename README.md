@@ -35,6 +35,24 @@ You can test it today:
 
 Want to know more? Join the [discussions](https://github.com/geckosio/geckos.io/discussions)!
 
+## Menu
+
+- [What is it made for?](#what-is-it-made-for)
+- [Getting Started](#getting-started)
+- [Changelog](#changelog)
+- Documentation
+  - [Usage](#usage)
+  - [Troubleshooting](#troubleshooting)
+  - [Cheatsheet](#cheatsheet)
+  - [Raw Messages](#raw-messages)
+  - [Reliable Messages](#reliable-messages)
+  - [Server](#servers)
+  - [Deployment](#deployment)
+  - [ICE Servers](#ice-servers)
+  - [TypeScript](#typescript)
+  - [Examples](#examples)
+- And some more things at the end of this file.
+
 ## What is it made for?
 
 It's designed specifically for your HTML5 real-time multiplayer games by lowering the average latency and preventing huge latency spikes. It allows you to communicate with your node.js server via UDP, which is much faster than TCP (used by WebSocket). Take a look at the comparison video between UDP and TCP.
@@ -52,7 +70,9 @@ npm install @geckos.io/client @geckos.io/server
 
 ---
 
-## New in version 1.7.1
+## Changelog
+
+### New in version 1.7.1
 
 You can now pass a more complex url to the client when you set port to `null`. This is useful if, for example, you use the geckos.io server behind a proxy.
 
@@ -92,9 +112,9 @@ const channel = geckos({
 
 ---
 
-## New in version 1.7.0
+### New in version 1.7.0
 
-### Custom Port Range
+#### Custom Port Range
 
 Allows you to set a custom port range for the WebRTC connection.
 
@@ -110,9 +130,9 @@ const io = geckos({
 
 ---
 
-## New in version 1.6.0
+### New in version 1.6.0
 
-### Connections Manager
+#### Connections Manager
 
 You now have access to the connections manager.
 
@@ -127,7 +147,7 @@ if (connection) {
 }
 ```
 
-### Raw messages from the io scope
+#### Raw messages from the io scope
 
 Finally you can send rawMessages from the io scope.
 
@@ -141,7 +161,7 @@ io.raw.emit(rawMessage)
 io.raw.room('roomId').emit(rawMessage)
 ```
 
-### Authorization and Authentication
+#### Authorization and Authentication
 
 The client is now able to send a authorization header with the connection request. If the authorization fails, the server will respond with 401 (unauthorized).
 
@@ -216,9 +236,9 @@ io.onConnection((channel: ServerChannel) => {
 
 ---
 
-## New in version 1.5.0
+### New in version 1.5.0
 
-### New autoManageBuffering option
+#### New autoManageBuffering option
 
 By default the RTCDataChannel queues data if it can't be send directly. This is very bad for multiplayer games, since we do not want to render old state. In version 1.5.0, the option **autoManageBuffering** was added. It is set to true by default. If **autoManageBuffering** is on, Geckos.io will prefer to drop messages instead of adding them to the send queue. (Messages with the option [{ reliable: true }](#reliable-messages), will still be added to the queue)
 
@@ -285,7 +305,7 @@ Geckos does not run on `http://localhost:PORT/`? Try `http://127.0.0.1:PORT/` in
 
 Here a list of available methods.
 
-### Client
+#### Client
 
 ```js
 // import geckos.io client
@@ -322,7 +342,7 @@ channel.onConnect(error => {
 })
 ```
 
-### Server
+#### Server
 
 ```js
 // import geckos.io server
@@ -493,7 +513,7 @@ channel.emit(
 
 ## Servers
 
-### Standalone
+#### Standalone
 
 ```js
 import geckos from '@geckos.io/server'
@@ -503,7 +523,7 @@ io.onConnection( channel => { ... })
 io.listen(3000) // default port is 9208
 ```
 
-### Node.js HTTP Server
+#### Node.js HTTP Server
 
 ```js
 import geckos from '@geckos.io/server'
@@ -519,7 +539,7 @@ io.onConnection( channel => { ... })
 server.listen(3000)
 ```
 
-### Express
+#### Express
 
 ```js
 import geckos from '@geckos.io/server'
