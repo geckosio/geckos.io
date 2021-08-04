@@ -25,10 +25,13 @@ export interface ServerOptions {
   ) => Promise<boolean | any>
   autoManageBuffering?: boolean
   cors?: CorsOptions
-  iceServers?: RTCIceServer[] // eslint-disable-line no-undef
-  iceTransportPolicy?: RTCIceTransportPolicy // eslint-disable-line no-undef
+  iceServers?: RTCIceServer[]
+  /** @deprecated since version 2.0 (not available in node-datachannel) */
+  iceTransportPolicy?: RTCIceTransportPolicy
   label?: string
+  /** @deprecated since version 2.0 (not available in node-datachannel) */
   maxPacketLifeTime?: number
+  /** @deprecated since version 2.0 (not available in node-datachannel) */
   maxRetransmits?: number
   ordered?: boolean
   /** Set a custom port range for the WebRTC connection. */

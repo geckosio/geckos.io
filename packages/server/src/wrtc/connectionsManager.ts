@@ -1,4 +1,5 @@
 import { ChannelId, ServerOptions } from '@geckos.io/common/lib/types.js'
+import type { DataChannelInitConfig, RtcConfig } from 'node-datachannel'
 import type { IncomingMessage, OutgoingMessage } from 'http'
 import CreateDataChannel from '../geckos/channel.js'
 import { EVENTS } from '@geckos.io/common/lib/constants.js'
@@ -52,8 +53,36 @@ export default class ConnectionsManagerServer {
 
     const newId = this.createId()
 
+    const {
+      ordered = false,
+      label = 'geckos.io',
+      iceServers = [],
+      portRange
+      // iceTransportPolicy = 'all',
+      // maxPacketLifeTime = undefined,
+      // maxRetransmits = 0,
+    } = this.options
+
+    // DataChannel configuration
+    const dc_config: any /*DataChannelInitConfig*/ = {
+      reliability: {
+        unordered: !ordered
+      }
+    }
+
+    // WebRTCConnection configuration
+    let rtc_config: RtcConfig = {
+      // sdpSemantics: 'unified-plan',
+      // iceTransportPolicy: iceTransportPolicy,
+      iceServers: iceServers.map(ice => ice.urls as string)
+    }
+
+    // portRange is a nonstandard API
+    if (portRange?.min && portRange?.max)
+      rtc_config = { ...rtc_config, portRangeBegin: portRange.min, portRangeEnd: portRange.max }
+
     // create the webrtc connection
-    const connection = new WebRTCConnection(newId, this.options, this.connections, userData)
+    const connection = new WebRTCConnection(newId, rtc_config, this.connections, userData)
     const pc = connection.peerConnection
 
     pc.onStateChange(state => {
@@ -90,7 +119,7 @@ export default class ConnectionsManagerServer {
       candidates.push({ candidate, mid })
     })
 
-    const dc = pc.createDataChannel(this.options.label || 'geckos.io')
+    const dc = pc.createDataChannel(label, dc_config)
 
     connection.channel = new CreateDataChannel(connection, dc, this.options, userData)
 

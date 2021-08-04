@@ -1,12 +1,12 @@
 import * as Types from '@geckos.io/common/lib/types.js'
 import { ERRORS, EVENTS } from '@geckos.io/common/lib/constants.js'
+import type { DataChannel } from 'node-datachannel'
 import { Events } from '@yandeu/events'
 import ParseMessage from '@geckos.io/common/lib/parseMessage.js'
 import SendMessage from '@geckos.io/common/lib/sendMessage.js'
 import WebRTCConnection from '../wrtc/webrtcConnection.js'
 import bridge from '@geckos.io/common/lib/bridge.js'
 import { makeReliable } from '@geckos.io/common/lib/reliableMessage.js'
-import nodeDataChannel from 'node-datachannel'
 
 export default class ServerChannel {
   public autoManageBuffering: boolean
@@ -22,7 +22,7 @@ export default class ServerChannel {
 
   constructor(
     public webrtcConnection: WebRTCConnection,
-    public dataChannel: nodeDataChannel.DataChannel,
+    public dataChannel: DataChannel,
     public dataChannelOptions: Types.ServerOptions,
     public userData: any
   ) {
@@ -30,11 +30,9 @@ export default class ServerChannel {
     this._roomId = undefined
 
     const {
-      autoManageBuffering = true,
-      label = 'geckos.io',
-      maxPacketLifeTime = undefined,
-      maxRetransmits = 0,
-      ordered = false
+      autoManageBuffering = true
+      // maxPacketLifeTime = undefined,
+      // maxRetransmits = 0,
     } = dataChannelOptions
 
     this.autoManageBuffering = autoManageBuffering

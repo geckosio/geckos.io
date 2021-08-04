@@ -29,7 +29,9 @@ Version 2 has huge performance improvements. I switched from [wrtc](https://www.
 
 Geckos.io is now shipped as ECMAScript modules and will only support `Node.js ^14.15 and >=16`.
 
-The usage of geckos.io is the same as it was in v1. But some configurations have changed.
+The usage of geckos.io is the same as it was in v1. But some configurations have been removed:
+
+`iceTransportPolicy`, `maxPacketLifeTime`, and `maxRetransmits` have been removed from the `ServerOptions` because they are not supported by node-datachannel.
 
 ### Changes in version 2:
 

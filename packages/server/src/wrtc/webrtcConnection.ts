@@ -15,27 +15,15 @@ export default class WebRTCConnection extends Connection {
 
   constructor(
     id: ChannelId,
-    serverOptions: ServerOptions,
+    configuration: nodeDataChannel.RtcConfig,
     public connections: Map<ChannelId, WebRTCConnection>,
     public userData: any
   ) {
     super(id)
 
-    const { iceServers = [], iceTransportPolicy = 'all', portRange, ...dataChannelOptions } = serverOptions
-
     this.options = {
       timeToHostCandidates: TIME_TO_HOST_CANDIDATES
     }
-
-    let configuration: nodeDataChannel.RtcConfig = {
-      // sdpSemantics: 'unified-plan',
-      // iceTransportPolicy: iceTransportPolicy,
-      iceServers: iceServers.map(ice => ice.urls as string)
-    }
-
-    // portRange is a nonstandard API
-    if (portRange?.min && portRange?.max)
-      configuration = { ...configuration, portRangeBegin: portRange.min, portRangeEnd: portRange.max }
 
     // this.peerConnection = new DefaultRTCPeerConnection(configuration)
     this.peerConnection = new nodeDataChannel.PeerConnection(id as string, configuration)
