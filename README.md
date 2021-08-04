@@ -23,14 +23,22 @@
 
 ---
 
-# :mega: Announcement: Version 2
+# :mega: Version 2 Available!
 
-Version 2 will likely be available soon with a huge performance improvement. The API stays exactly as it is now. The only thing that changes is the WebRTC implementation. I switched from [wrtc](https://www.npmjs.com/package/wrtc) to [node-datachannel](https://www.npmjs.com/package/node-datachannel). node-datachannel is much lighter and faster compared to wrtc.
+Version 2 has huge performance improvements. I switched from [wrtc](https://www.npmjs.com/package/wrtc) to [node-datachannel](https://www.npmjs.com/package/node-datachannel), which is much lighter and faster compared to wrtc.
 
-You can test it today:
+Geckos.io is now shipped as ECMAScript modules and will only support `Node.js ^14.15 and >=16`.
+
+The usage of geckos.io is the same as it was in v1. But some configurations have changed.
+
+### Changes in version 2:
+
+TODO
+
+### Install it
 
 ```console
- npm i @geckos.io/client@dev @geckos.io/server@dev
+ npm i @geckos.io/client @geckos.io/server
 ```
 
 Want to know more? Join the [discussions](https://github.com/geckosio/geckos.io/discussions)!
