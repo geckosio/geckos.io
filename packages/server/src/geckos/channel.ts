@@ -1,26 +1,28 @@
-import bridge from '@geckos.io/common/lib/bridge'
-import WebRTCConnection from '../wrtc/webrtcConnection'
-import EventEmitter from 'eventemitter3'
-import ParseMessage from '@geckos.io/common/lib/parseMessage'
-import { EVENTS, ERRORS } from '@geckos.io/common/lib/constants'
-import * as Types from '@geckos.io/common/lib/types'
-import SendMessage from '@geckos.io/common/lib/sendMessage'
-import { makeReliable } from '@geckos.io/common/lib/reliableMessage'
+import * as Types from '@geckos.io/common/lib/types.js'
+import { ERRORS, EVENTS } from '@geckos.io/common/lib/constants.js'
+import type { DataChannel } from 'node-datachannel'
+import { Events } from '@yandeu/events'
+import ParseMessage from '@geckos.io/common/lib/parseMessage.js'
+import SendMessage from '@geckos.io/common/lib/sendMessage.js'
+import WebRTCConnection from '../wrtc/webrtcConnection.js'
+import bridge from '@geckos.io/common/lib/bridge.js'
+import { makeReliable } from '@geckos.io/common/lib/reliableMessage.js'
 
 export default class ServerChannel {
-  public maxMessageSize: number | undefined
   public autoManageBuffering: boolean
+  public maxMessageSize: number | undefined
 
   private _roomId: Types.RoomId
   private _id: Types.ChannelId
-  private dataChannel: RTCDataChannel
+  // private dataChannel: RTCDataChannel
 
-  eventEmitter = new EventEmitter()
+  eventEmitter = new Events()
   // stores all reliable messages for about 15 seconds
   private receivedReliableMessages: { id: string; timestamp: Date; expire: number }[] = []
 
   constructor(
     public webrtcConnection: WebRTCConnection,
+    public dataChannel: DataChannel,
     public dataChannelOptions: Types.ServerOptions,
     public userData: any
   ) {
@@ -28,36 +30,24 @@ export default class ServerChannel {
     this._roomId = undefined
 
     const {
-      label = 'geckos.io',
-      ordered = false,
-      maxRetransmits = 0,
-      maxPacketLifeTime = undefined,
       autoManageBuffering = true
+      // maxPacketLifeTime = undefined,
+      // maxRetransmits = 0,
     } = dataChannelOptions
 
     this.autoManageBuffering = autoManageBuffering
 
-    this.dataChannel = webrtcConnection.peerConnection.createDataChannel(label, {
-      ordered: ordered,
-      maxRetransmits: maxRetransmits,
-      maxPacketLifeTime: maxPacketLifeTime
+    this.dataChannel.onOpen(() => {
+      this.dataChannel.onMessage(msg => {
+        const { key, data } = ParseMessage(msg as any)
+        this.eventEmitter.emit(key, data)
+      })
+      bridge.emit(EVENTS.CONNECTION, this)
     })
 
-    this.dataChannel.binaryType = 'arraybuffer'
-
-    this.dataChannel.onopen = () => {
-      this.dataChannel.onmessage = (ev: MessageEvent) => {
-        const { key, data } = ParseMessage(ev)
-        this.eventEmitter.emit(key, data)
-      }
-
-      // if the dataChannel is open we can safely emit that we have a new open connection
-      bridge.emit(EVENTS.CONNECTION, this)
-    }
-
-    this.dataChannel.onclose = () => {
+    this.dataChannel.onClosed(() => {
       // this.eventEmitter.removeAllListeners()
-    }
+    })
   }
 
   /** Get the channel's id. */
@@ -77,7 +67,7 @@ export default class ServerChannel {
    */
   onDisconnect(callback: Types.DisconnectEventCallbackServer) {
     this.eventEmitter.on(EVENTS.DISCONNECT, (connectionState: 'disconnected' | 'failed' | 'closed') => {
-      let cb: Types.DisconnectEventCallbackServer = connectionState => callback(connectionState)
+      const cb: Types.DisconnectEventCallbackServer = connectionState => callback(connectionState)
       cb(connectionState)
     })
   }
@@ -94,7 +84,9 @@ export default class ServerChannel {
 
   /** Close the webRTC connection. */
   close() {
-    this.webrtcConnection.close()
+    const connection = this.webrtcConnection.connections.get(this.id)
+    if (connection) connection.close()
+    else console.log('connection not found!')
   }
 
   /** Join a room by its id. */
@@ -230,8 +222,10 @@ export default class ServerChannel {
   private _emit(eventName: Types.EventName, data: Types.Data | Types.RawMessage | null = null) {
     if (!this._roomId || this._roomId === this._roomId)
       if (!this._id || this._id === this._id) {
+        if (!this.dataChannel) return
+
         const isReliable = data && typeof data === 'object' && 'RELIABLE' in data
-        const buffering = this.autoManageBuffering && this.dataChannel.bufferedAmount > 0
+        const buffering = this.autoManageBuffering && +this.dataChannel.bufferedAmount() > 0
         const drop = (reason: string, event: any, data: any) => {
           this.eventEmitter.emit(EVENTS.DROP, { reason, event, data })
         }
@@ -265,7 +259,7 @@ export default class ServerChannel {
    */
   onRaw(callback: Types.EventCallbackRawMessage) {
     this.eventEmitter.on(EVENTS.RAW_MESSAGE, (rawMessage: Types.RawMessage) => {
-      let cb: Types.EventCallbackRawMessage = (rawMessage: Types.RawMessage) => callback(rawMessage)
+      const cb: Types.EventCallbackRawMessage = (rawMessage: Types.RawMessage) => callback(rawMessage)
       cb(rawMessage)
     })
   }
@@ -277,7 +271,7 @@ export default class ServerChannel {
    */
   on(eventName: Types.EventName, callback: Types.EventCallbackServer) {
     this.eventEmitter.on(eventName, (data: any, senderId: Types.ChannelId = undefined) => {
-      let cb: Types.EventCallbackServer = (data: any, senderId: Types.ChannelId) => callback(data, senderId)
+      const cb: Types.EventCallbackServer = (data: any, senderId: Types.ChannelId) => callback(data, senderId)
       // check if message is reliable
       // and reject it if it has already been submitted
       const isReliableMessage: boolean = data && data.RELIABLE === 1 && data.ID !== 'undefined'

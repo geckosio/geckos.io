@@ -1,5 +1,5 @@
 module.exports = {
   preset: 'jest-puppeteer',
-  testTimeout: 30000,
-  maxWorkers: 2
+  testTimeout: 45_000,
+  maxWorkers: 1
 }

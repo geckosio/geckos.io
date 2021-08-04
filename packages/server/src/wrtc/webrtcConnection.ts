@@ -1,93 +1,35 @@
-import Connection from './connection'
-import CreateDataChannel from '../geckos/channel'
-import Channel from '../geckos/channel'
-import { ChannelId, ServerOptions } from '@geckos.io/common/lib/types'
-
-const DefaultRTCPeerConnection: RTCPeerConnection = require('wrtc').RTCPeerConnection
+import { ChannelId, ServerOptions } from '@geckos.io/common/lib/types.js'
+import Channel from '../geckos/channel.js'
+import Connection from './connection.js'
+import nodeDataChannel from 'node-datachannel'
 
 // strangely something it takes a long time
 // so I set it to 10 seconds
 const TIME_TO_HOST_CANDIDATES = 10000
 
 export default class WebRTCConnection extends Connection {
-  public peerConnection: RTCPeerConnection
+  public peerConnection: nodeDataChannel.PeerConnection
   public channel: Channel
   public additionalCandidates: RTCIceCandidate[] = []
   private options: any
 
-  constructor(id: ChannelId, serverOptions: ServerOptions, public connections: Map<any, any>, public userData: any) {
+  constructor(
+    id: ChannelId,
+    configuration: nodeDataChannel.RtcConfig,
+    public connections: Map<ChannelId, WebRTCConnection>,
+    public userData: any
+  ) {
     super(id)
-
-    const { iceServers = [], iceTransportPolicy = 'all', portRange, ...dataChannelOptions } = serverOptions
 
     this.options = {
       timeToHostCandidates: TIME_TO_HOST_CANDIDATES
     }
 
-    let configuration: RTCConfiguration = {
-      // @ts-ignore
-      sdpSemantics: 'unified-plan',
-      iceServers: iceServers,
-      iceTransportPolicy: iceTransportPolicy
-    }
-
-    // @ts-ignore   // portRange is a nonstandard API
-    if (portRange?.min && portRange?.max) configuration = { ...configuration, portRange }
-
-    // @ts-ignore
-    this.peerConnection = new DefaultRTCPeerConnection(configuration)
-
-    this.peerConnection.onconnectionstatechange = () => {
-      if (this.peerConnection.connectionState === 'disconnected') this.close()
-    }
-
-    this.channel = new CreateDataChannel(this, dataChannelOptions, userData)
+    // this.peerConnection = new DefaultRTCPeerConnection(configuration)
+    this.peerConnection = new nodeDataChannel.PeerConnection(id as string, configuration)
   }
 
-  async doOffer() {
-    try {
-      const offer: RTCSessionDescriptionInit = await this.peerConnection.createOffer()
-      await this.peerConnection.setLocalDescription(offer)
-      // we do not wait, since we request the missing candidates later
-      /*await*/ this.waitUntilIceGatheringStateComplete(this.peerConnection, this.options)
-    } catch (error) {
-      console.error(error.messages)
-      this.close()
-      throw error
-    }
-  }
-
-  get iceConnectionState() {
-    return this.peerConnection.iceConnectionState
-  }
-
-  get localDescription() {
-    return this.descriptionToJSON(this.peerConnection.localDescription) //, true)
-  }
-
-  get remoteDescription() {
-    return this.descriptionToJSON(this.peerConnection.remoteDescription)
-  }
-
-  get signalingState() {
-    return this.peerConnection.signalingState
-  }
-
-  async applyAnswer(answer: RTCSessionDescription) {
-    await this.peerConnection.setRemoteDescription(answer)
-  }
-
-  toJSON = () => {
-    return {
-      ...super.toJSON(),
-      iceConnectionState: this.iceConnectionState,
-      localDescription: this.localDescription,
-      remoteDescription: this.remoteDescription,
-      signalingState: this.signalingState
-    }
-  }
-
-  descriptionToJSON(description: RTCSessionDescription | null, shouldDisableTrickleIce = false) {
+  descriptionToJSON(description: RTCSessionDescription | null | any, shouldDisableTrickleIce = false) {
     return !description
       ? {}
       : {
@@ -101,8 +43,16 @@ export default class WebRTCConnection extends Connection {
   }
 
   close() {
-    this.peerConnection.close()
+    if (this.channel.dataChannel?.isOpen()) this.channel.dataChannel.close()
+    if (this.peerConnection) this.peerConnection.close()
     super.close()
+
+    // @ts-ignore
+    this.channel.dataChannel = null
+    // @ts-ignore
+    this.peerConnection = null
+
+    nodeDataChannel.cleanup()
   }
 
   async waitUntilIceGatheringStateComplete(peerConnection: RTCPeerConnection, options: any): Promise<void> {
@@ -123,7 +73,7 @@ export default class WebRTCConnection extends Connection {
           // console.log('Timed out waiting for all host candidates, will continue with what we have so far.')
           resolve()
         } else {
-          reject(new Error('Timed out waiting for host candidates State: ' + peerConnection.iceGatheringState))
+          reject(new Error(`Timed out waiting for host candidates State: ${peerConnection.iceGatheringState}`))
         }
       }, timeToHostCandidates)
 

@@ -1,20 +1,20 @@
-import { Bridge } from '@geckos.io/common/lib/bridge'
-import { RawMessage, Data, ChannelId, EventName } from '@geckos.io/common/lib/types'
-import ParseMessage from '@geckos.io/common/lib/parseMessage'
-import SendMessage from '@geckos.io/common/lib/sendMessage'
+import { ChannelId, Data, EventName, RawMessage } from '@geckos.io/common/lib/types.js'
+import { Bridge } from '@geckos.io/common/lib/bridge.js'
+import ParseMessage from '@geckos.io/common/lib/parseMessage.js'
+import SendMessage from '@geckos.io/common/lib/sendMessage.js'
 
 interface RTCRemotePeerConnection {
   id: ChannelId
-  localDescription: RTCSessionDescriptionInit
+  localDescription: RTCSessionDescriptionInit // eslint-disable-line no-undef
 }
 
 export default class ConnectionsManagerClient {
-  public maxMessageSize: number | undefined
-  public localPeerConnection: RTCPeerConnection
-  public remotePeerConnection: RTCRemotePeerConnection
+  public bridge = new Bridge()
   public dataChannel: RTCDataChannel
   public id: ChannelId
-  public bridge = new Bridge()
+  public localPeerConnection: RTCPeerConnection
+  public maxMessageSize: number | undefined
+  public remotePeerConnection: RTCRemotePeerConnection
 
   emit(eventName: EventName, data: Data | RawMessage | null = null) {
     SendMessage(this.dataChannel, this.maxMessageSize, eventName, data)
@@ -24,7 +24,7 @@ export default class ConnectionsManagerClient {
     public url: string,
     public authorization: string | undefined,
     public label: string,
-    public rtcConfiguration: RTCConfiguration
+    public rtcConfiguration: RTCConfiguration // eslint-disable-line no-undef
   ) {}
 
   onDataChannel = (ev: RTCDataChannelEvent) => {
@@ -55,14 +55,16 @@ export default class ConnectionsManagerClient {
 
     if (res.ok) {
       const candidates = await res.json()
+      // eslint-disable-next-line no-undef
       candidates.forEach((c: RTCIceCandidateInit) => {
+        // eslint-disable-line no-undef
         this.localPeerConnection.addIceCandidate(c)
       })
     }
   }
 
   async connect() {
-    const host = `${this.url}/.wrtc/v1`
+    const host = `${this.url}/.wrtc/v2`
 
     let headers: any = { 'Content-Type': 'application/json' }
     if (this.authorization) headers = { ...headers, ['Authorization']: this.authorization }
@@ -73,6 +75,15 @@ export default class ConnectionsManagerClient {
         method: 'POST',
         headers
       })
+
+      if (res.status >= 300) {
+        throw {
+          name: 'Error',
+          message: `Connection failed with status code ${res.status}.`,
+          status: res.status,
+          statusText: res.statusText
+        }
+      }
 
       const json = await res.json()
 
@@ -111,17 +122,14 @@ export default class ConnectionsManagerClient {
     //   })
     // }, 2000)
 
+    // eslint-disable-next-line no-undef
     const configuration: RTCConfiguration = {
       // @ts-ignore
       sdpSemantics: 'unified-plan',
       ...this.rtcConfiguration
     }
 
-    const RTCPc =
-      RTCPeerConnection ||
-      webkitRTCPeerConnection ||
-      // @ts-ignore
-      mozRTCPeerConnection
+    const RTCPc = RTCPeerConnection || webkitRTCPeerConnection // eslint-disable-line no-undef
 
     // create rtc peer connection
     this.localPeerConnection = new RTCPc(configuration)

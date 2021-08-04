@@ -11,6 +11,7 @@
 [![Minified bundle](https://img.shields.io/github/size/geckosio/geckos.io/bundles/latest/geckos.io-client.latest.min.js.svg?label=minified%20bundle&style=flat-square)](https://github.com/geckosio/geckos.io/tree/master/bundles)
 ![Snyk Vulnerabilities for GitHub Repo (Specific Manifest)](https://img.shields.io/snyk/vulnerabilities/github/geckosio/geckos.io/packages/client/package.json.svg?style=flat-square)
 ![NPM](https://img.shields.io/npm/l/@geckos.io/client.svg?style=flat-square)
+[![ES Modules Badge](https://img.shields.io/badge/Node.js-ES%20Modules-F7DF1E?style=flat-square)](https://github.com/yandeu/yandeu/blob/main/posts/2020-05-28-esm-for-nodejs.md)
 
 Real-time client/server communication over UDP using **WebRTC** and **Node.js**.
 

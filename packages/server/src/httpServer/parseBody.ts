@@ -2,7 +2,7 @@ import http from 'http'
 
 const ParseBody = async (req: http.IncomingMessage) => {
   return new Promise((resolve, reject) => {
-    let body: any = []
+    const body: any = []
     req
       .on('error', error => {
         console.log('ParseBody error: ', error.message)

@@ -3,6 +3,7 @@
   "version": "1.7.2",
   "description": "The common module for @geckos.io/server and @geckos.io/client.",
   "main": "lib",
+  "type": "module",
   "author": "Yannick Deubel (https://github.com/yandeu)",
   "license": "BSD-3-Clause",
   "keywords": [
@@ -25,7 +26,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "eventemitter3": "^4.0.4"
+    "@yandeu/events": "0.0.5"
   },
   "funding": {
     "url": "https://github.com/sponsors/yandeu"

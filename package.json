@@ -1,11 +1,15 @@
 {
   "name": "geckos.io",
   "description": "Real-time client/server communication over UDP using WebRTC and Node.js",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "start": "npm run dev",
-    "format": "prettier --write \"packages/**/!(*.d).ts\"",
+    "lint": "eslint packages/**/*.ts",
+    "lint:fix": "eslint --fix packages/**/*.ts",
+    "format": "prettier --check \"packages/**/!(*.d).ts\"",
+    "format:write": "prettier --write \"packages/**/!(*.d).ts\"",
     "lerna:ls": "lerna ls",
     "lerna:diff": "lerna diff",
     "lerna:changed": "lerna changed",
@@ -14,16 +18,19 @@
     "build:client": "tsc --build packages/client/tsconfig.json",
     "build:server": "tsc --build packages/server/tsconfig.json",
     "build": "npm run clear && npm run build:common && npm run build:client && npm run build:server",
-    "publish": "npm-run-all build publish:*",
-    "publish:common": "cd packages/common/ && npm publish",
-    "publish:server": "cd packages/server/ && npm publish",
-    "publish:client": "cd packages/client/ && npm publish",
+    "publish": "cross-env-shell \"echo You probably don't want to release a non-dev version!\"",
+    "publish-dev": "npm-run-all build publish-dev:*",
+    "publish-dev:common": "cd packages/common/ && npm publish --tag dev",
+    "publish-dev:server": "cd packages/server/ && npm publish --tag dev",
+    "publish-dev:client": "cd packages/client/ && npm publish --tag dev",
     "dev": "npm run build && cd packages/chatApp && npm run dev",
-    "prettier": "prettier --write 'src/**/*.ts' && prettier --write 'dev/chatApp/**/*.ts'",
     "postinstall": "lerna bootstrap --no-ci && npm run build",
-    "test": "npm run build-client-bundle && jest --coverage --forceExit",
+    "test": "npm run build-client-bundle && cross-env-shell NODE_OPTIONS=--experimental-vm-modules node_modules/.bin/jest --coverage --forceExit",
     "clear": "rimraf packages/client/lib packages/common/lib packages/server/lib",
-    "build-client-bundle": "webpack --config packages/client/webpack/webpack.prod.js --env path=../../../test/.tmp --env packageVersion=latest"
+    "build-client-bundle": "webpack --config packages/client/webpack/webpack.prod.cjs --env path=../../../test/.tmp --env packageVersion=latest",
+    "prune": "npm-run-all prune:*",
+    "prune:node-modules": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +",
+    "prune:dist": "find . -name 'dist' -type d -prune -exec rm -rf '{}' +"
   },
   "keywords": [
     "realtime",
@@ -48,26 +55,30 @@
   "directories": {
     "lib": "lib"
   },
-  "dependencies": {
-    "source-map-support": "^0.5.11"
-  },
   "devDependencies": {
-    "copy-webpack-plugin": "^7.0.0",
+    "@types/express": "^4.17.11",
+    "@types/node": "^16.3.1",
+    "@yandeu/eslint-config": "^0.0.2",
+    "@yandeu/prettier-config": "^0.0.2",
+    "copy-webpack-plugin": "^9.0.1",
+    "cross-env": "^7.0.3",
+    "eslint": "^7.21.0",
     "express": "^4.16.4",
-    "html-webpack-plugin": "^4.5.1",
-    "jest": "^26.6.3",
-    "jest-puppeteer": "^4.1.1",
-    "lerna": "^3.22.1",
+    "html-webpack-plugin": "^5.2.0",
+    "jest": "^27.0.6",
+    "jest-puppeteer": "^5.0.3",
+    "lerna": "^4.0.0",
     "nodemon": "^2.0.7",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.2.1",
-    "puppeteer": "^5.5.0",
+    "puppeteer": "^9.1.1",
     "rimraf": "^3.0.2",
-    "ts-loader": "^8.0.14",
+    "source-map-support": "^0.5.11",
+    "ts-loader": "^9.2.1",
     "typescript": "^4.1.3",
     "webpack": "^5.16.0",
     "webpack-cli": "^4.4.0",
-    "webpack-node-externals": "^2.5.2"
+    "webpack-node-externals": "^3.0.0"
   },
   "funding": {
     "url": "https://github.com/sponsors/yandeu"

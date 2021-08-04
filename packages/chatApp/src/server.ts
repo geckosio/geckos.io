@@ -1,4 +1,11 @@
-import geckos, { Data, RawMessage, iceServers, GeckosServer } from '@geckos.io/server'
+/* eslint-disable sort-imports */
+import geckos, { Data, GeckosServer, RawMessage, iceServers } from '@geckos.io/server'
+
+// https://stackoverflow.com/a/55944697
+import { dirname } from 'path'
+import { fileURLToPath } from 'url'
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 // using with express
 import express from 'express'
@@ -26,9 +33,9 @@ const io: GeckosServer = geckos({
 
 io.addServer(server)
 
-app.use('/static/client', express.static(join(__dirname, '../client')))
+app.use('/static/client', express.static(join(__dirname, '../dist/client')))
 
-app.get('/', (req: any, res: any) => res.sendFile(join(__dirname, '../client/index.html')))
+app.get('/', (req: any, res: any) => res.sendFile(join(__dirname, '../dist/client/index.html')))
 
 // have to user server instead of app
 server.listen(3000, () => {
@@ -37,7 +44,8 @@ server.listen(3000, () => {
 
 io.onConnection(channel => {
   channel.onDisconnect(reason => {
-    // console.log('onDisconnect reason:', reason)
+    console.log('onDisconnect reason:', reason)
+    io.emit('chat message', `Channel "${channel.id}" got disconnected!`)
   })
 
   channel.emit('chat message', `Welcome to the chat ${channel.id}!`)

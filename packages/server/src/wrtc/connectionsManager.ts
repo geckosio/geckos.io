@@ -1,8 +1,10 @@
-import WebRTCConnection from './webrtcConnection'
-import { ChannelId, ServerOptions } from '@geckos.io/common/lib/types'
-import { EVENTS } from '@geckos.io/common/lib/constants'
-import makeRandomId from '@geckos.io/common/lib/makeRandomId'
+import { ChannelId, ServerOptions } from '@geckos.io/common/lib/types.js'
+import type { DataChannelInitConfig, RtcConfig } from 'node-datachannel'
 import type { IncomingMessage, OutgoingMessage } from 'http'
+import CreateDataChannel from '../geckos/channel.js'
+import { EVENTS } from '@geckos.io/common/lib/constants.js'
+import WebRTCConnection from './webrtcConnection.js'
+import makeRandomId from '@geckos.io/common/lib/makeRandomId.js'
 
 export default class ConnectionsManagerServer {
   connections: Map<ChannelId, WebRTCConnection> = new Map()
@@ -10,12 +12,11 @@ export default class ConnectionsManagerServer {
   constructor(public options: ServerOptions) {}
 
   private createId(): ChannelId {
-    do {
-      const id = makeRandomId(24)
-      if (!this.connections.has(id)) {
-        return id
-      }
-    } while (true)
+    let id = makeRandomId(24)
+
+    while (this.connections.has(id)) id = makeRandomId(24)
+
+    return id
   }
 
   getConnection(id: ChannelId) {
@@ -47,49 +48,117 @@ export default class ConnectionsManagerServer {
 
   async createConnection(authorization: string | undefined, request: IncomingMessage, response: OutgoingMessage) {
     // get userData
-    let userData: any = await this.getUserData(authorization, request, response)
+    const userData: any = await this.getUserData(authorization, request, response)
     if (userData._statusCode) return { userData, status: userData._statusCode }
 
-    // create the webrtc connection
-    const connection = new WebRTCConnection(this.createId(), this.options, this.connections, userData)
-    const pc = connection.peerConnection
+    const newId = this.createId()
 
-    pc.onconnectionstatechange = () => {
-      // keep track of the maxMessageSize
-      if (pc.connectionState === 'connected') connection.channel.maxMessageSize = pc.sctp?.maxMessageSize
+    const {
+      ordered = false,
+      label = 'geckos.io',
+      iceServers = [],
+      portRange
+      // iceTransportPolicy = 'all',
+      // maxPacketLifeTime = undefined,
+      // maxRetransmits = 0,
+    } = this.options
 
-      if (pc.connectionState === 'disconnected' || pc.connectionState === 'failed' || pc.connectionState === 'closed') {
-        connection.channel.eventEmitter.emit(EVENTS.DISCONNECT, pc.connectionState)
-        this.deleteConnection(connection)
+    // DataChannel configuration
+    const dc_config: any /*DataChannelInitConfig*/ = {
+      reliability: {
+        unordered: !ordered
       }
     }
 
+    // WebRTCConnection configuration
+    let rtc_config: RtcConfig = {
+      // sdpSemantics: 'unified-plan',
+      // iceTransportPolicy: iceTransportPolicy,
+      iceServers: iceServers.map(ice => ice.urls as string)
+    }
+
+    // portRange is a nonstandard API
+    if (portRange?.min && portRange?.max)
+      rtc_config = { ...rtc_config, portRangeBegin: portRange.min, portRangeEnd: portRange.max }
+
+    // create the webrtc connection
+    const connection = new WebRTCConnection(newId, rtc_config, this.connections, userData)
+    const pc = connection.peerConnection
+
+    pc.onStateChange(state => {
+      // keep track of the maxMessageSize
+      if (state === 'connected') connection.channel.maxMessageSize = +connection.channel.dataChannel.maxMessageSize()
+
+      if (state === 'disconnected' || state === 'failed' || state === 'closed') {
+        this.deleteConnection(connection, state)
+      }
+    })
+
     this.connections.set(connection.id, connection)
 
-    // create the offer
-    await connection.doOffer()
+    let gatheringState
+    let localDescription
+    const candidates = []
 
-    const { id, iceConnectionState, peerConnection, remoteDescription, localDescription, signalingState } = connection
+    pc.onDataChannel(dc => {
+      // TODO(yandeu) This does not work :/
+      console.log('Peer1 Got DataChannel: ', dc.getLabel())
+    })
+
+    pc.onGatheringStateChange(state => {
+      gatheringState = state
+    })
+
+    pc.onLocalDescription((sdp, type) => {
+      localDescription = { sdp, type }
+    })
+
+    pc.onLocalCandidate((candidate, mid) => {
+      // @ts-ignore
+      connection.additionalCandidates.push({ candidate, sdpMid: mid })
+      candidates.push({ candidate, mid })
+    })
+
+    const dc = pc.createDataChannel(label, dc_config)
+
+    connection.channel = new CreateDataChannel(connection, dc, this.options, userData)
+
+    const pause = (ms: number = 0): Promise<void> => {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve()
+        }, ms)
+      })
+    }
+
+    let waitForLocalDescription = 0
+    while (typeof localDescription === 'undefined' && waitForLocalDescription < 20) {
+      waitForLocalDescription++
+      await pause()
+    }
+
+    const { id } = connection
 
     return {
       connection: {
         id,
-        iceConnectionState,
-        peerConnection,
-        remoteDescription,
-        localDescription,
-        signalingState
+        localDescription
       },
       userData,
       status: 200
     }
   }
 
-  deleteConnection(connection: WebRTCConnection) {
+  deleteConnection(connection: WebRTCConnection, state: string) {
     connection.close()
-    connection.channel.eventEmitter.removeAllListeners()
-    connection.removeAllListeners()
 
-    this.connections.delete(connection.id)
+    connection.channel.eventEmitter.on(EVENTS.DISCONNECT, () => {
+      connection.removeAllListeners()
+      connection.channel.eventEmitter.removeAllListeners()
+    })
+
+    connection.channel.eventEmitter.emit(EVENTS.DISCONNECT, state)
+
+    if (this.connections.get(connection.id)) this.connections.delete(connection.id)
   }
 }

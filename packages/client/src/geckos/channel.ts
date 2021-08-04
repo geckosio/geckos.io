@@ -1,27 +1,27 @@
-import { Bridge } from '@geckos.io/common/lib/bridge'
-import { makeReliable } from '@geckos.io/common/lib/reliableMessage'
-import { EVENTS } from '@geckos.io/common/lib/constants'
-import PeerConnection from '../wrtc/peerConnection'
-import ConnectionsManagerClient from '../wrtc/connectionsManager'
-import * as Types from '@geckos.io/common/lib/types'
+import * as Types from '@geckos.io/common/lib/types.js'
+import { Bridge } from '@geckos.io/common/lib/bridge.js'
+import ConnectionsManagerClient from '../wrtc/connectionsManager.js'
+import { EVENTS } from '@geckos.io/common/lib/constants.js'
+import PeerConnection from '../wrtc/peerConnection.js'
+import { makeReliable } from '@geckos.io/common/lib/reliableMessage.js'
 
 export class ClientChannel {
   public maxMessageSize: number | undefined
   public userData = {}
 
-  private peerConnection: PeerConnection
-  private connectionsManager: ConnectionsManagerClient
-  private url: string
   private bridge: Bridge
+  private connectionsManager: ConnectionsManagerClient
+  private peerConnection: PeerConnection
   // stores all reliable messages for about 15 seconds
   private receivedReliableMessages: { id: string; timestamp: Date; expire: number }[] = []
+  private url: string
 
   constructor(
     url: string,
     authorization: string | undefined,
     port: number | null,
     label: string,
-    rtcConfiguration: RTCConfiguration
+    rtcConfiguration: RTCConfiguration // eslint-disable-line no-undef
   ) {
     this.url = port ? `${url}:${port}` : url
     this.connectionsManager = new ConnectionsManagerClient(this.url, authorization, label, rtcConfiguration)
@@ -32,7 +32,7 @@ export class ClientChannel {
   }
 
   private onconnectionstatechange() {
-    let lpc = this.peerConnection.localPeerConnection
+    const lpc = this.peerConnection.localPeerConnection
 
     lpc.onconnectionstatechange = () => {
       if (lpc.connectionState === 'disconnected' || lpc.connectionState === 'closed')
@@ -53,7 +53,7 @@ export class ClientChannel {
     this.bridge.emit(EVENTS.DISCONNECTED)
 
     try {
-      const host = `${this.url}/.wrtc/v1`
+      const host = `${this.url}/.wrtc/v2`
       fetch(`${host}/connections/${this.id}/close`, {
         method: 'POST',
         headers: {
@@ -97,7 +97,7 @@ export class ClientChannel {
    */
   onRaw(callback: Types.EventCallbackRawMessage) {
     this.bridge.on(EVENTS.RAW_MESSAGE, (rawMessage: Types.RawMessage) => {
-      let cb: Types.EventCallbackRawMessage = (rawMessage: Types.RawMessage) => callback(rawMessage)
+      const cb: Types.EventCallbackRawMessage = (rawMessage: Types.RawMessage) => callback(rawMessage)
       cb(rawMessage)
     })
   }
@@ -116,7 +116,8 @@ export class ClientChannel {
       // set the userData
       if (response.userData) this.userData = response.userData
       // keep track of the maxMessageSize
-      this.maxMessageSize = this.connectionsManager.maxMessageSize = this.peerConnection.localPeerConnection.sctp?.maxMessageSize
+      this.maxMessageSize = this.connectionsManager.maxMessageSize =
+        this.peerConnection.localPeerConnection.sctp?.maxMessageSize
       // init onConnectionStateChange event
       this.onconnectionstatechange()
       // we are now ready
@@ -176,20 +177,20 @@ export class ClientChannel {
 
 /**
  * The geckos.io client library.
- * @param options.url The url of the server. Default: \`${location.protocol}//${location.hostname}\`.
- * @param options.port The port of the server. Default: 9208.
- * @param options.label The label of the DataChannel. Default: 'geckos.io'.
  * @param options.iceServers An array of RTCIceServers. See https://developer.mozilla.org/en-US/docs/Web/API/RTCIceServer.
  * @param options.iceTransportPolicy RTCIceTransportPolicy enum defines string constants which can be used to limit the transport policies of the ICE candidates to be considered during the connection process.
+ * @param options.label The label of the DataChannel. Default: 'geckos.io'.
+ * @param options.port The port of the server. Default: 9208.
+ * @param options.url The url of the server. Default: \`${location.protocol}//${location.hostname}\`.
  */
 const geckosClient = (options: Types.ClientOptions = {}) => {
   const {
+    authorization = undefined,
     iceServers = [],
     iceTransportPolicy = 'all',
-    url = `${location.protocol}//${location.hostname}`,
-    authorization = undefined,
+    label = 'geckos.io',
     port = 9208,
-    label = 'geckos.io'
+    url = `${location.protocol}//${location.hostname}`
   } = options
   return new ClientChannel(url, authorization, port, label, { iceServers, iceTransportPolicy })
 }

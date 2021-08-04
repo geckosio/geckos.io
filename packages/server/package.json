@@ -4,6 +4,7 @@
   "description": "Real-time client/server communication over UDP using WebRTC and Node.js",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
+  "type": "module",
   "author": "Yannick Deubel (https://github.com/yandeu)",
   "license": "BSD-3-Clause",
   "keywords": [
@@ -35,7 +36,7 @@
     "lib": "lib"
   },
   "engines": {
-    "node": "^8 || ^10 || ^11 || ^12 || ^13 || ^14"
+    "node": "^14.15 || >=16"
   },
   "scripts": {
     "build": "tsc --build tsconfig.json",
@@ -43,11 +44,8 @@
   },
   "dependencies": {
     "@geckos.io/common": "^1.7.2",
-    "eventemitter3": "^4.0.0",
-    "wrtc": "^0.4.6"
-  },
-  "devDependencies": {
-    "@types/node": "^12.12.50"
+    "@yandeu/events": "0.0.5",
+    "node-datachannel": "0.1.5"
   },
   "funding": {
     "url": "https://github.com/sponsors/yandeu"

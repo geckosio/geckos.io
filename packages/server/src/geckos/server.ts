@@ -1,20 +1,20 @@
-import bridge from '@geckos.io/common/lib/bridge'
+import * as Types from '@geckos.io/common/lib/types.js'
+import Connection from '../wrtc/connection.js'
+import ConnectionsManagerServer from '../wrtc/connectionsManager.js'
+import { EVENTS } from '@geckos.io/common/lib/constants.js'
+import HttpServer from '../httpServer/httpServer.js'
+import ServerChannel from './channel.js'
+import WebRTCConnection from '../wrtc/webrtcConnection.js'
+import bridge from '@geckos.io/common/lib/bridge.js'
 import http from 'http'
-import ServerChannel from './channel'
-import { EVENTS } from '@geckos.io/common/lib/constants'
-import * as Types from '@geckos.io/common/lib/types'
-
-import { makeReliable } from '@geckos.io/common/lib/reliableMessage'
-import Connection from '../wrtc/connection'
-import ConnectionsManagerServer from '../wrtc/connectionsManager'
-import HttpServer from '../httpServer/httpServer'
-import WebRTCConnection from '../wrtc/webrtcConnection'
+import { makeReliable } from '@geckos.io/common/lib/reliableMessage.js'
 
 export class GeckosServer {
-  private _port: number
-  private _cors: Types.CorsOptions = { origin: '*', allowAuthorization: false }
   public connectionsManager: ConnectionsManagerServer
   public server: http.Server
+
+  private _port: number
+  private _cors: Types.CorsOptions = { origin: '*', allowAuthorization: false }
 
   constructor(options: Types.ServerOptions) {
     this.connectionsManager = new ConnectionsManagerServer(options)
@@ -53,7 +53,7 @@ export class GeckosServer {
 
     // start the server
     this.server.listen(port, () => {
-      console.log(`Geckos.io signaling server is running on http://localhost:${port}`)
+      console.log(`Geckos.io signaling server is running on port ${port}`)
     })
   }
 
@@ -135,41 +135,29 @@ export class GeckosServer {
   /** Listen for a new connection. */
   onConnection(callback: (channel: ServerChannel) => void) {
     bridge.on(EVENTS.CONNECTION, (channel: ServerChannel) => {
-      let cb: (channel: ServerChannel) => void = channel => callback(channel)
+      const cb: (channel: ServerChannel) => void = channel => callback(channel)
       cb(channel)
     })
   }
-
-  // /**
-  //  * Listen for a message.
-  //  * @param eventName The event name.
-  //  * @param callback The event callback.
-  //  */
-  // on(eventName: EventName, callback: EventCallbackServer) {
-  //   this._on(eventName, callback)
-  // }
-
-  // private _on(eventName: EventName, callback: Function = () => {}) {
-  //   bridge.on(eventName, (channel: ServerChannel, eventOptions: EventOptions) => {
-  //     let cb: any = (channel: ServerChannel, eventOptions: EventOptions) => callback(channel, eventOptions)
-  //     cb(channel, eventOptions.senderId)
-  //   })
-  // }
 }
 
 /**
  * The geckos.io server library.
  * @param options Pass the geckos.io server options.
+ * @param options.authorization The async authorization callback
+ * @param options.autoManageBuffering By default, geckos.io manages RTCDataChannel buffering for you. Default 'true'
+ * @param options.cors Set the CORS options.
+ * @param options.cors.allowAuthorization Required if the client and server are on separate domains. Default: false
+ * @param options.cors.origin String OR (req: http.IncomingMessage) => string. Default '*'
  * @param options.iceServers An array of RTCIceServers. See https://developer.mozilla.org/en-US/docs/Web/API/RTCIceServer.
  * @param options.iceTransportPolicy RTCIceTransportPolicy enum defines string constants which can be used to limit the transport policies of the ICE candidates to be considered during the connection process.
  * @param options.label A human-readable name for the channel. This string may not be longer than 65,535 bytes. Default: 'geckos.io'.
- * @param options.ordered Indicates whether or not messages sent on the RTCDataChannel are required to arrive at their destination in the same order in which they were sent (true), or if they're allowed to arrive out-of-order (false). Default: false.
  * @param options.maxPacketLifeTime The maximum number of milliseconds that attempts to transfer a message may take in unreliable mode. While this value is a 16-bit unsigned number, each user agent may clamp it to whatever maximum it deems appropriate. Default: null.
  * @param options.maxRetransmits The maximum number of times the user agent should attempt to retransmit a message which fails the first time in unreliable mode. While this value is a16-bit unsigned number, each user agent may clamp it to whatever maximum it deems appropriate. Default: 0.
- * @param options.cors Set the CORS options.
- * @param options.cors.origin String OR (req: http.IncomingMessage) => string. Default '*'
- * @param options.autoManageBuffering By default, geckos.io manages RTCDataChannel buffering for you. Default 'true'
- * @param options.authorization The async authorization callback
+ * @param options.ordered Indicates whether or not messages sent on the RTCDataChannel are required to arrive at their destination in the same order in which they were sent (true), or if they're allowed to arrive out-of-order (false). Default: false.
+ * @param options.portRange Custom port range for the WebRTC connection (available in >= v1.7.0)
+ * @param options.portRange.max Default: 65535
+ * @param options.portRange.min Default: 0
  */
 const geckosServer = (options: Types.ServerOptions = {}) => {
   const { iceTransportPolicy } = options

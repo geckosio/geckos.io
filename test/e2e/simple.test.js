@@ -1,9 +1,17 @@
-const geckos = require('../../packages/server/lib').default
-const io = geckos()
+/* eslint-disable sort-imports */
+import {jest} from '@jest/globals';
+import express  from 'express'
+import geckos from '../../packages/server/lib/index.js'
+import http  from 'http'
+import path from 'path'
 
-const express = require('express')
-const path = require('path')
+import {__dirname} from './_dirname.js'
+
+const io = geckos()
 const app = express()
+
+// give enough time for io.server.close to be called on github workflow
+jest.setTimeout(120_000)
 
 app.use('/', express.static(path.join(__dirname, '../')))
 
@@ -51,9 +59,17 @@ describe('connection', () => {
   })
 
   describe('shutdown', () => {
+    const delay = ms => {
+      return new Promise(resolve => {
+        setTimeout(resolve, ms)
+      })
+    }
+
     test('close the geckos server', done => {
       io.server.close(() => {
-        done()
+        delay(10_000).then(() => {
+          done()
+        })
       })
     })
   })
@@ -61,6 +77,6 @@ describe('connection', () => {
 
 page.goto('http://localhost:5301/e2e/simple.html')
 
-afterAll(async () => {
-  page.close()
-})
+// afterAll(async () => {
+//   page.close()
+// })

@@ -7,7 +7,7 @@
     <script>
       'use strict'
 
-      var channel = geckos({ port: 5200 })
+      var channel = geckos({ port: 5201 })
 
       channel.onConnect(error => {
         if (error) {
@@ -27,7 +27,10 @@
           channel.emit('chat message 2', 'Hello 2')
         })
 
-        channel.emit('chat message 1', 'Hello 1')
+        // works without setTimeout locally, but not on github workflow :/
+        setTimeout(() => {
+          channel.emit('chat message 1', 'Hello 1')
+        })
 
         channel.onRaw(rawMessage => {
           if (rawMessage === 'raw') channel.raw.emit('raw back')
@@ -37,9 +40,10 @@
           channel.emit('broadcast')
         })
 
-        setTimeout(() => {
-          channel.close()
-        }, 2000)
+        // the server will close the connection by calling io.server.close()
+        // setTimeout(() => {
+        //   channel.close()
+        // }, 2000)
       })
     </script>
   </body>

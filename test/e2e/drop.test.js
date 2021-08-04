@@ -1,7 +1,12 @@
-const geckos = require('../../packages/server/lib').default
-const http = require('http')
-const express = require('express')
-const path = require('path')
+/* eslint-disable sort-imports */
+import express  from 'express'
+import geckos from '../../packages/server/lib/index.js'
+import http  from 'http'
+import path from 'path'
+
+import {__dirname} from './_dirname.js'
+
+
 const app = express()
 const server = http.createServer(app)
 const io = geckos()
@@ -61,17 +66,25 @@ describe('connection', () => {
     describe('', () => {
       test('should drop some messages', done => {
         let attempts = 0
+        let _done = false
 
         channel.onDrop(drop => {
           expect(drop.reason).toBe('DROPPED_FROM_BUFFERING')
           expect(attempts).toBeGreaterThanOrEqual(1)
           clearInterval(interval)
-          done()
+
+          if (!_done) {
+            _done = true
+            done()
+          }
         })
 
         const interval = setInterval(() => {
           attempts++
-          channel.raw.emit(Buffer.alloc(50 * 1024))
+          channel.raw.emit(Buffer.alloc(64 * 1024))
+
+          attempts++
+          channel.raw.emit(Buffer.alloc(64 * 1024))
         }, 0)
       })
     })
@@ -81,6 +94,15 @@ describe('connection', () => {
 page.goto('http://localhost:5700/e2e/drop.html')
 
 afterAll(async () => {
-  page.close()
-  server.close()
+  const close = () => {
+    return new Promise(resolve => {
+      server.close(() => {
+        resolve()
+      })
+    })
+  }
+
+  await close()
+  // await page.close()
+  // await browser.close()
 })

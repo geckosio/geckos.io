@@ -1,9 +1,9 @@
-import url from 'url'
+import ConnectionsManagerServer from '../wrtc/connectionsManager.js'
+import { CorsOptions } from '@geckos.io/common/lib/types.js'
+import ParseBody from './parseBody.js'
+import SetCORS from './setCors.js'
 import http from 'http'
-import ConnectionsManagerServer from '../wrtc/connectionsManager'
-import SetCORS from './setCors'
-import ParseBody from './parseBody'
-import { CorsOptions } from '@geckos.io/common/lib/types'
+import url from 'url'
 
 const end = (res: http.ServerResponse, statusCode: number) => {
   res.writeHead(statusCode)
@@ -12,7 +12,7 @@ const end = (res: http.ServerResponse, statusCode: number) => {
 
 const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerServer, cors: CorsOptions) => {
   const prefix = '.wrtc'
-  const version = 'v1'
+  const version = 'v2'
   const root = `/${prefix}/${version}`
   const rootRegEx = new RegExp(`/${prefix}/${version}`)
 
@@ -34,9 +34,9 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
 
     if (pathname && rootRegEx.test(pathname)) {
       const path1 = pathname === `${root}/connections`
-      const path2 = new RegExp(`${prefix}\/${version}\/connections\/[0-9a-zA-Z]+\/remote-description`).test(pathname)
-      const path3 = new RegExp(`${prefix}\/${version}\/connections\/[0-9a-zA-Z]+\/additional-candidates`).test(pathname)
-      const closePath = new RegExp(`${prefix}\/${version}\/connections\/[0-9a-zA-Z]+\/close`).test(pathname)
+      const path2 = new RegExp(`${prefix}/${version}/connections/[0-9a-zA-Z]+/remote-description`).test(pathname)
+      const path3 = new RegExp(`${prefix}/${version}/connections/[0-9a-zA-Z]+/additional-candidates`).test(pathname)
+      const closePath = new RegExp(`${prefix}/${version}/connections/[0-9a-zA-Z]+/close`).test(pathname)
 
       SetCORS(req, res, cors)
 
@@ -83,24 +83,18 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
               return
             }
 
-            const {
-              id,
-              iceConnectionState,
-              peerConnection,
-              remoteDescription,
-              localDescription,
-              signalingState
-            } = connection
+            const { id, localDescription } = connection
+
+            if (!id || !localDescription) {
+              end(res, 500)
+              return
+            }
 
             res.write(
               JSON.stringify({
                 userData, // the userData for authentication
                 id,
-                iceConnectionState,
-                peerConnection,
-                remoteDescription,
-                localDescription,
-                signalingState
+                localDescription
               })
             )
 
@@ -122,9 +116,8 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
             }
 
             try {
-              await connection.applyAnswer(JSON.parse(body))
-              let connectionJSON = connection.toJSON()
-              res.write(JSON.stringify(connectionJSON.remoteDescription))
+              const { sdp, type } = JSON.parse(body)
+              connection.peerConnection.setRemoteDescription(sdp, type)
               res.end()
               return
             } catch (error) {
@@ -166,6 +159,8 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
             const id = ids[0]
             const connection = connectionsManager.getConnection(id)
             connection?.close()
+            res.end()
+            return
           } else {
             end(res, 400)
             return

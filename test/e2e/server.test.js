@@ -1,15 +1,23 @@
-const geckos = require('../../packages/server/lib').default
-const http = require('http')
-const express = require('express')
-const path = require('path')
+/* eslint-disable sort-imports */
+import {jest} from '@jest/globals';
+import express  from 'express'
+import geckos from '../../packages/server/lib/index.js'
+import http  from 'http'
+import path from 'path'
+
+import {__dirname} from './_dirname.js'
+
 const app = express()
 const server = http.createServer(app)
 const io = geckos({ iceTransportPolicy: 'relay' })
 
+// give enough time for io.server.close to be called on github workflow
+jest.setTimeout(120_000)
+
 app.use('/', express.static(path.join(__dirname, '../')))
 
 io.addServer(server)
-server.listen(5200)
+server.listen(5201)
 
 let channel
 
@@ -47,10 +55,10 @@ describe('connection', () => {
     })
 
     test('to room loopback should be "OK"', done => {
-      channel.room.emit('chat message', 'Hello everyone in this room')
       channel.on('room test', data => {
         if (data === 'OK') done()
       })
+      channel.room.emit('chat message', 'Hello everyone in this room')
     })
 
     test('raw message should be "raw back"', done => {
@@ -76,20 +84,39 @@ describe('connection', () => {
   })
 
   describe('close', () => {
-    test('server should notify of client closing the connection', done => {
-      channel.onDisconnect(reason => {
-        expect(reason).toBe('closed')
-        done()
+    const delay = ms => {
+      return new Promise(resolve => {
+        setTimeout(resolve, ms)
       })
-      // closing the server, will disconnect all users
-      server.close()
+    }
+
+    test('server should notify of client closing the connection', done => {
+      let closed = false
+      let disconnected = false
+
+      channel.onDisconnect(reason => {
+        disconnected = /^closed|disconnected$/.test(reason)
+      })
+
+      io.server.close(() => {
+        closed = true
+        delay(10_000).then(() => {
+          expect(closed).toBe(true)
+          expect(disconnected).toBe(true)
+          done()
+        })
+      })
+    })
+
+    test('there should be no connection left', () => {
+      const connections = io.connectionsManager.connections.size
+      expect(connections).toBe(0)
     })
   })
-
 })
 
-page.goto('http://localhost:5200/e2e/server.html')
+page.goto('http://localhost:5201/e2e/server.html')
 
-afterAll(async () => {
-  page.close()
-})
+// afterAll(async () => {
+//   page.close()
+// })

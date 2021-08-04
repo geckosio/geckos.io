@@ -10,6 +10,7 @@
 ![Node version](https://img.shields.io/node/v/@geckos.io/server.svg?style=flat-square)
 ![Snyk Vulnerabilities for GitHub Repo (Specific Manifest)](https://img.shields.io/snyk/vulnerabilities/github/geckosio/geckos.io/packages/server/package.json.svg?style=flat-square)
 ![NPM](https://img.shields.io/npm/l/@geckos.io/server.svg?style=flat-square)
+[![ES Modules Badge](https://img.shields.io/badge/Node.js-ES%20Modules-F7DF1E?style=flat-square)](https://github.com/yandeu/yandeu/blob/main/posts/2020-05-28-esm-for-nodejs.md)
 
 Real-time client/server communication over UDP using **WebRTC** and **Node.js**.
 
@@ -26,8 +27,6 @@ npm install @geckos.io/server
 ## How to use
 
 ```js
-const geckos = require('@geckos.io/server').default
-// or with es6
 import geckos from '@geckos.io/server'
 
 const io = geckos()

@@ -1,5 +1,5 @@
+import { ChannelId } from '@geckos.io/common/lib/types.js'
 import { EventEmitter } from 'events'
-import { ChannelId } from '@geckos.io/common/lib/types'
 
 export default class Connection extends EventEmitter {
   id: ChannelId

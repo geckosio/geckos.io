@@ -17,20 +17,49 @@
 [![Downloads](https://img.shields.io/npm/dm/@geckos.io/server.svg?style=flat-square)](https://www.npmjs.com/package/@geckos.io/server)
 ![Node version](https://img.shields.io/node/v/@geckos.io/server.svg?style=flat-square)
 [![Codecov](https://img.shields.io/codecov/c/github/geckosio/geckos.io?logo=codecov&style=flat-square)](https://codecov.io/gh/geckosio/geckos.io)
+[![ES Modules Badge](https://img.shields.io/badge/Node.js-ES%20Modules-F7DF1E?style=flat-square)](https://github.com/yandeu/yandeu/blob/main/posts/2020-05-28-esm-for-nodejs.md)
 
 </div>
 
 ---
 
-# :mega: Announcement: Version 2
+# :mega: Version 2 Available!
 
-Version 2 will likely be available soon with a huge performance improvement. The API stays exactly as it is now. The only thing that changes is the WebRTC implementation. I switched from [wrtc](https://www.npmjs.com/package/wrtc) to [node-datachannel](https://www.npmjs.com/package/node-datachannel). node-datachannel is much lighter and faster compared to wrtc.
+Version 2 has huge performance improvements. I switched from [wrtc](https://www.npmjs.com/package/wrtc) to [node-datachannel](https://www.npmjs.com/package/node-datachannel), which is much lighter and faster compared to wrtc.
 
-You can test it today:
+Geckos.io is now shipped as ECMAScript modules and will only support `Node.js ^14.15 and >=16`.
+
+### Changes in version 2:
+
+The usage of geckos.io is the same as it was in v1. But some configurations have been removed:
+
+`iceTransportPolicy`, `maxPacketLifeTime`, and `maxRetransmits` have been removed from the `ServerOptions` because they are not supported by node-datachannel.
+
+### Install it
+
 ```console
- npm i @geckos.io/client@dev @geckos.io/server@dev
+ npm i @geckos.io/client @geckos.io/server
 ```
+
 Want to know more? Join the [discussions](https://github.com/geckosio/geckos.io/discussions)!
+
+## Menu
+
+- [What is it made for?](#what-is-it-made-for)
+- [Getting Started](#getting-started)
+- [Changelog](#changelog)
+- Documentation
+  - [Usage](#usage)
+  - [Troubleshooting](#troubleshooting)
+  - [Cheatsheet](#cheatsheet)
+  - [Raw Messages](#raw-messages)
+  - [Reliable Messages](#reliable-messages)
+  - [Server](#servers)
+  - [Deployment](#deployment)
+  - [ICE Servers](#ice-servers)
+  - [TypeScript](#typescript)
+  - [Examples](#examples)
+- And some more things at the end of this file.
 
 ## What is it made for?
 
@@ -49,7 +78,9 @@ npm install @geckos.io/client @geckos.io/server
 
 ---
 
-## New in version 1.7.1
+## Changelog
+
+### New in version 1.7.1
 
 You can now pass a more complex url to the client when you set port to `null`. This is useful if, for example, you use the geckos.io server behind a proxy.
 
@@ -89,9 +120,9 @@ const channel = geckos({
 
 ---
 
-## New in version 1.7.0
+### New in version 1.7.0
 
-### Custom Port Range
+#### Custom Port Range
 
 Allows you to set a custom port range for the WebRTC connection.
 
@@ -107,9 +138,9 @@ const io = geckos({
 
 ---
 
-## New in version 1.6.0
+### New in version 1.6.0
 
-### Connections Manager
+#### Connections Manager
 
 You now have access to the connections manager.
 
@@ -124,7 +155,7 @@ if (connection) {
 }
 ```
 
-### Raw messages from the io scope
+#### Raw messages from the io scope
 
 Finally you can send rawMessages from the io scope.
 
@@ -138,7 +169,7 @@ io.raw.emit(rawMessage)
 io.raw.room('roomId').emit(rawMessage)
 ```
 
-### Authorization and Authentication
+#### Authorization and Authentication
 
 The client is now able to send a authorization header with the connection request. If the authorization fails, the server will respond with 401 (unauthorized).
 
@@ -155,6 +186,10 @@ const auth = `${username} ${password}` // 'Yannick 12E45'
 const channel = geckos({ authorization: auth })
 
 channel.onConnect(error => {
+  if (error) {
+    console.error('Status: ', error.status)
+    console.error('StatusText: ', error.statusText)
+  }
   console.log(channel.userData) // { username: 'Yannick', level: 13, points: 8987 }
 })
 ```
@@ -209,9 +244,9 @@ io.onConnection((channel: ServerChannel) => {
 
 ---
 
-## New in version 1.5.0
+### New in version 1.5.0
 
-### New autoManageBuffering option
+#### New autoManageBuffering option
 
 By default the RTCDataChannel queues data if it can't be send directly. This is very bad for multiplayer games, since we do not want to render old state. In version 1.5.0, the option **autoManageBuffering** was added. It is set to true by default. If **autoManageBuffering** is on, Geckos.io will prefer to drop messages instead of adding them to the send queue. (Messages with the option [{ reliable: true }](#reliable-messages), will still be added to the queue)
 
@@ -251,8 +286,6 @@ channel.onConnect(error => {
 #### server.js
 
 ```js
-const geckos = require('@geckos.io/server').default
-// or with es6
 import geckos from '@geckos.io/server'
 
 const io = geckos()
@@ -280,7 +313,7 @@ Geckos does not run on `http://localhost:PORT/`? Try `http://127.0.0.1:PORT/` in
 
 Here a list of available methods.
 
-### Client
+#### Client
 
 ```js
 // import geckos.io client
@@ -288,11 +321,11 @@ import geckos from '@geckos.io/client'
 
 /**
  * start geckos client with these options
- * @param options.url default is `${location.protocol}//${location.hostname}`
- * @param options.port default is 9208
- * @param options.label Default: 'geckos.io'
  * @param options.iceServers Default: []
  * @param options.iceTransportPolicy Default: 'all'
+ * @param options.label Default: 'geckos.io'
+ * @param options.port default is 9208
+ * @param options.url default is `${location.protocol}//${location.hostname}`
  */
 const channel = geckos(options)
 
@@ -317,7 +350,7 @@ channel.onConnect(error => {
 })
 ```
 
-### Server
+#### Server
 
 ```js
 // import geckos.io server
@@ -325,20 +358,24 @@ import geckos from '@geckos.io/server'
 
 /**
  * start geckos server with these options
+ * @param options.authorization The async authorization callback
+ * @param options.autoManageBuffering By default, geckos.io manages RTCDataChannel buffering for you. Default 'true'
+ * @param options.cors
+ * @param options.cors.allowAuthorization Default: false
+ * @param options.cors.origin String | (req) => string. Default '*'
  * @param options.iceServers Default: []
  * @param options.iceTransportPolicy Default: 'all'
  * @param options.label Default: 'geckos.io'
- * @param options.ordered Default: false
  * @param options.maxPacketLifeTime Default: null
  * @param options.maxRetransmits Default: 0
+ * @param options.ordered Default: false
  * @param options.cors
  * @param options.cors.origin String | (req) => string. Default '*'
  * @param options.cors.allowAuthorization Default: false
  * @param options.autoManageBuffering By default, geckos.io manages RTCDataChannel buffering for you. Default 'true'
  * @param options.portRange Custom port range for the WebRTC connection (available in >= v1.7.0)
- * @param options.portRange.min Default: 0
  * @param options.portRange.max Default: 65535
- * @param options.authorization The async authorization callback
+ * @param options.portRange.min Default: 0
  */
 io = geckos(options)
 
@@ -484,7 +521,7 @@ channel.emit(
 
 ## Servers
 
-### Standalone
+#### Standalone
 
 ```js
 import geckos from '@geckos.io/server'
@@ -494,11 +531,12 @@ io.onConnection( channel => { ... })
 io.listen(3000) // default port is 9208
 ```
 
-### Node.js HTTP Server
+#### Node.js HTTP Server
 
 ```js
-const geckos = require('@geckos.io/server').default
-const http = require('http')
+import geckos from '@geckos.io/server'
+import http from 'http'
+
 const server = http.createServer()
 const io = geckos()
 
@@ -509,12 +547,13 @@ io.onConnection( channel => { ... })
 server.listen(3000)
 ```
 
-### Express
+#### Express
 
 ```js
-const geckos = require('@geckos.io/server').default
-const http = require('http')
-const express = require('express')
+import geckos from '@geckos.io/server'
+import http from 'http'
+import express from 'express'
+
 const app = express()
 const server = http.createServer(app)
 const io = geckos()
@@ -537,9 +576,6 @@ Port 9208/tcp (or another port you define) is used for the peer signaling. The p
 Geckos&#46;io provides a default list of ICE servers for testing. In production, you should probably use your own STUN and TURN servers.
 
 ```js
-const geckos = require('@geckos.io/server').default
-const { iceServers } = require('@geckos.io/server')
-// or
 import geckos, { iceServers } from '@geckos.io/server'
 
 // use an empty array if you are developing locally
@@ -633,4 +669,4 @@ To help developing geckos.io, install this repository via **`npm install`**. Tes
 
 ## License
 
-The BSD 3-Clause License (BSD-3-Clause) 2019 - [Yannick Deubel](https://github.com/yandeu). Please have a look at the [LICENSE](LICENSE) for more details.
+The BSD 3-Clause License (BSD-3-Clause) 2021 - [Yannick Deubel](https://github.com/yandeu). Please have a look at the [LICENSE](LICENSE) for more details.

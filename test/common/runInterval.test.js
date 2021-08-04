@@ -1,4 +1,5 @@
-const runInterval = require('../../packages/common/lib/runInterval').default
+import {jest} from '@jest/globals';
+import runInterval from '../../packages/common/lib/runInterval.js'
 
 jest.spyOn(global.console, 'error')
 
