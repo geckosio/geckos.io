@@ -31,12 +31,6 @@ Version 2 has huge performance improvements. I switched from [wrtc](https://www.
 
 Geckos.io is now shipped as ECMAScript modules and will only support `Node.js ^14.15 and >=16`.
 
-### Changes in version 2:
-
-The usage of geckos.io is the same as it was in v1. But some configurations have been removed:
-
-`iceTransportPolicy`, `maxPacketLifeTime`, and `maxRetransmits` have been removed from the `ServerOptions` because they are not supported by node-datachannel.
-
 ### Install it
 
 ```console
@@ -77,6 +71,8 @@ First things first, install it via npm:
 ```console
 npm install @geckos.io/client @geckos.io/server
 ```
+
+And now, read the [Documentation](#usage).
 
 ---
 
@@ -362,19 +358,15 @@ import geckos from '@geckos.io/server'
  * start geckos server with these options
  * @param options.authorization The async authorization callback
  * @param options.autoManageBuffering By default, geckos.io manages RTCDataChannel buffering for you. Default 'true'
- * @param options.cors
- * @param options.cors.allowAuthorization Default: false
- * @param options.cors.origin String | (req) => string. Default '*'
- * @param options.iceServers Default: []
- * @param options.iceTransportPolicy Default: 'all'
- * @param options.label Default: 'geckos.io'
- * @param options.maxPacketLifeTime Default: null
- * @param options.maxRetransmits Default: 0
- * @param options.ordered Default: false
- * @param options.cors
- * @param options.cors.origin String | (req) => string. Default '*'
- * @param options.cors.allowAuthorization Default: false
- * @param options.autoManageBuffering By default, geckos.io manages RTCDataChannel buffering for you. Default 'true'
+ * @param options.cors Set the CORS options.
+ * @param options.cors.allowAuthorization Required if the client and server are on separate domains. Default: false
+ * @param options.cors.origin String OR (req: http.IncomingMessage) => string. Default '*'
+ * @param options.iceServers An array of RTCIceServers. See https://developer.mozilla.org/en-US/docs/Web/API/RTCIceServer.
+ * @param options.iceTransportPolicy RTCIceTransportPolicy enum defines string constants which can be used to limit the transport policies of the ICE candidates to be considered during the connection process.
+ * @param options.label A human-readable name for the channel. This string may not be longer than 65,535 bytes. Default: 'geckos.io'.
+ * @param options.maxPacketLifeTime The maximum number of milliseconds that attempts to transfer a message may take in unreliable mode. While this value is a 16-bit unsigned number, each user agent may clamp it to whatever maximum it deems appropriate. Default: undefined.
+ * @param options.maxRetransmits The maximum number of times the user agent should attempt to retransmit a message which fails the first time in unreliable mode. While this value is a16-bit unsigned number, each user agent may clamp it to whatever maximum it deems appropriate. Default: 0.
+ * @param options.ordered Indicates whether or not messages sent on the RTCDataChannel are required to arrive at their destination in the same order in which they were sent (true), or if they're allowed to arrive out-of-order (false). Default: false.
  * @param options.portRange Custom port range for the WebRTC connection (available in >= v1.7.0)
  * @param options.portRange.max Default: 65535
  * @param options.portRange.min Default: 0

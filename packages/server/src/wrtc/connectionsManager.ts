@@ -57,14 +57,16 @@ export default class ConnectionsManagerServer {
       ordered = false,
       label = 'geckos.io',
       iceServers = [],
-      portRange
-      // iceTransportPolicy = 'all',
-      // maxPacketLifeTime = undefined,
-      // maxRetransmits = 0,
+      portRange,
+      iceTransportPolicy = 'all',
+      maxPacketLifeTime = undefined,
+      maxRetransmits = 0
     } = this.options
 
     // DataChannel configuration
-    const dc_config: any /*DataChannelInitConfig*/ = {
+    const dc_config: DataChannelInitConfig = {
+      maxPacketLifeTime,
+      maxRetransmits,
       reliability: {
         unordered: !ordered
       }
@@ -73,7 +75,7 @@ export default class ConnectionsManagerServer {
     // WebRTCConnection configuration
     let rtc_config: RtcConfig = {
       // sdpSemantics: 'unified-plan',
-      // iceTransportPolicy: iceTransportPolicy,
+      iceTransportPolicy: iceTransportPolicy,
       iceServers: iceServers.map(ice => ice.urls as string)
     }
 

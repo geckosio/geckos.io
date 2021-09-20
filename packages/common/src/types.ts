@@ -11,6 +11,7 @@ export type RawMessage = USVString | ArrayBuffer | ArrayBufferView
 export type RoomId = ChannelId
 export type USVString = string
 
+/** The geckos.io server options. */
 export interface ServerOptions {
   /**
    * A async function to authenticate and authorize a user.
@@ -23,16 +24,21 @@ export interface ServerOptions {
     request: IncomingMessage,
     response: OutgoingMessage
   ) => Promise<boolean | any>
+  /** By default, geckos.io manages RTCDataChannel buffering for you. Default 'true' */
   autoManageBuffering?: boolean
+  /** Set the CORS options. */
   cors?: CorsOptions
+  /** An array of RTCIceServers. See https://developer.mozilla.org/en-US/docs/Web/API/RTCIceServer. */
   iceServers?: RTCIceServer[]
-  /** @deprecated since version 2.0 (not available in node-datachannel) */
+  /** RTCIceTransportPolicy enum defines string constants which can be used to limit the transport policies of the ICE candidates to be considered during the connection process. */
   iceTransportPolicy?: RTCIceTransportPolicy
+  /** A human-readable name for the channel. This string may not be longer than 65,535 bytes. Default: 'geckos.io'. */
   label?: string
-  /** @deprecated since version 2.0 (not available in node-datachannel) */
+  /** The maximum number of milliseconds that attempts to transfer a message may take in unreliable mode. While this value is a 16-bit unsigned number, each user agent may clamp it to whatever maximum it deems appropriate. Default: undefined. */
   maxPacketLifeTime?: number
-  /** @deprecated since version 2.0 (not available in node-datachannel) */
+  /** options.maxRetransmits The maximum number of times the user agent should attempt to retransmit a message which fails the first time in unreliable mode. While this value is a16-bit unsigned number, each user agent may clamp it to whatever maximum it deems appropriate. Default: 0. */
   maxRetransmits?: number
+  /** Indicates whether or not messages sent on the RTCDataChannel are required to arrive at their destination in the same order in which they were sent (true), or if they're allowed to arrive out-of-order (false). Default: false. */
   ordered?: boolean
   /** Set a custom port range for the WebRTC connection. */
   portRange?: {
@@ -45,8 +51,8 @@ export interface ServerOptions {
 
 export interface ClientOptions {
   authorization?: string | undefined
-  iceServers?: RTCIceServer[] // eslint-disable-line no-undef
-  iceTransportPolicy?: RTCIceTransportPolicy // eslint-disable-line no-undef
+  iceServers?: RTCIceServer[]
+  iceTransportPolicy?: RTCIceTransportPolicy
   label?: string
   port?: number
   url?: string
@@ -59,8 +65,12 @@ export interface EmitOptions {
 }
 
 type CorsOptionsOriginFunction = (req: IncomingMessage) => string
+
+/** The CORS options. */
 export interface CorsOptions {
+  /** Required if the client and server are on separate domains. Default: false */
   allowAuthorization?: boolean
+  /** String OR (req: http.IncomingMessage) => string. Default '*' */
   origin: string | CorsOptionsOriginFunction
 }
 
