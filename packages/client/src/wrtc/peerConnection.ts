@@ -8,6 +8,7 @@ export default class PeerConnection {
   localPeerConnection: RTCPeerConnection
 
   async connect(connectionsManager: ConnectionsManagerClient) {
+    // @ts-ignore
     const webRTCPcSupported = RTCPeerConnection || webkitRTCPeerConnection // eslint-disable-line no-undef
 
     if (webRTCPcSupported) {

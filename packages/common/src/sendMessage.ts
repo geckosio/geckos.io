@@ -38,7 +38,7 @@ const SendMessage = (
       } else {
         send(JSON.stringify({ [eventName]: data }), false)
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error in sendMessage.ts: ', error.message)
       return error
     }

@@ -60,7 +60,7 @@ export class ClientChannel {
           'Content-Type': 'application/json'
         }
       })
-    } catch (error) {
+    } catch (error: any) {
       console.error(error.message)
     }
   }
@@ -116,8 +116,9 @@ export class ClientChannel {
       // set the userData
       if (response.userData) this.userData = response.userData
       // keep track of the maxMessageSize
-      this.maxMessageSize = this.connectionsManager.maxMessageSize =
-        this.peerConnection.localPeerConnection.sctp?.maxMessageSize
+      this.maxMessageSize = this.connectionsManager.maxMessageSize = (
+        this.peerConnection.localPeerConnection as any
+      ).sctp?.maxMessageSize
       // init onConnectionStateChange event
       this.onconnectionstatechange()
       // we are now ready

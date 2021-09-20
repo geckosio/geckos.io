@@ -90,7 +90,7 @@ export default class ConnectionsManagerClient {
       userData = json.userData
 
       this.remotePeerConnection = json
-    } catch (error) {
+    } catch (error: any) {
       console.error(error.message)
       return { error }
     }
@@ -129,6 +129,7 @@ export default class ConnectionsManagerClient {
       ...this.rtcConfiguration
     }
 
+    // @ts-ignore
     const RTCPc = RTCPeerConnection || webkitRTCPeerConnection // eslint-disable-line no-undef
 
     // create rtc peer connection
@@ -171,7 +172,7 @@ export default class ConnectionsManagerClient {
             'Content-Type': 'application/json'
           }
         })
-      } catch (error) {
+      } catch (error: any) {
         console.error(error.message)
         return { error }
       }
@@ -196,7 +197,7 @@ export default class ConnectionsManagerClient {
         dataChannel: this.dataChannel,
         id: id
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error(error.message)
       this.localPeerConnection.close()
       return { error }
