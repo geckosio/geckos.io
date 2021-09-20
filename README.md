@@ -74,6 +74,8 @@ npm install @geckos.io/client @geckos.io/server
 
 And now, read the [Documentation](#usage).
 
+_Btw, make sure you also check out [enable3d.io](https://enable3d.io/)._
+
 ---
 
 ## Changelog
