@@ -5,6 +5,7 @@ import CreateDataChannel from '../geckos/channel.js'
 import { EVENTS } from '@geckos.io/common/lib/constants.js'
 import WebRTCConnection from './webrtcConnection.js'
 import makeRandomId from '@geckos.io/common/lib/makeRandomId.js'
+import { pause } from '@geckos.io/common/lib/helpers.js'
 
 export default class ConnectionsManagerServer {
   connections: Map<ChannelId, WebRTCConnection> = new Map()
@@ -124,14 +125,6 @@ export default class ConnectionsManagerServer {
     const dc = pc.createDataChannel(label, dc_config)
 
     connection.channel = new CreateDataChannel(connection, dc, this.options, userData)
-
-    const pause = (ms: number = 0): Promise<void> => {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve()
-        }, ms)
-      })
-    }
 
     let waitForLocalDescription = 0
     while (typeof localDescription === 'undefined' && waitForLocalDescription < 20) {
