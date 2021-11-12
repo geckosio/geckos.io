@@ -16,7 +16,11 @@
         }
 
         channel.on('emit', data => {
-          if (data === 'emit') channel.emit('emit', 'emit back')
+          console.log('data', data)
+          if (typeof data === 'string' && data === 'emit') channel.emit('emit', 'emit back')
+          else if (typeof data === 'number' && data === 1234) channel.emit('emit', 'got 1234')
+          else if (data.data && data.type && data.type === 'Buffer') channel.emit('emit', 'got Buffer')
+          else channel.emit('emit', 'ERROR')
         })
 
         channel.on('emit room', data => {

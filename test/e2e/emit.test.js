@@ -1,10 +1,10 @@
 /* eslint-disable sort-imports */
-import express  from 'express'
+import express from 'express'
 import geckos from '../../packages/server/lib/index.js'
-import http  from 'http'
+import http from 'http'
 import path from 'path'
 
-import {__dirname} from './_dirname.js'
+import { __dirname } from './_dirname.js'
 
 const app = express()
 const server = http.createServer(app)
@@ -32,11 +32,21 @@ describe('connection', () => {
 
   describe('emit', () => {
     test('should emit to single', done => {
+      const responses = []
+
       channel.on('emit', data => {
-        expect(data).toBe('emit back')
-        done()
+        responses.push(data)
+
+        if (responses.length === 3) {
+          expect(responses[0]).toBe('emit back')
+          expect(responses[1]).toBe('got Buffer')
+          expect(responses[2]).toBe('got 1234')
+          done()
+        }
       })
       channel.emit('emit', 'emit')
+      channel.emit('emit', Buffer.alloc(8))
+      channel.emit('emit', 1234)
     })
   })
 
