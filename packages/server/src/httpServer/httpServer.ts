@@ -24,15 +24,17 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
     const headers = req.headers
     const method = req.method
 
+    const forGeckos = pathname && rootRegEx.test(pathname)
+
     // if the request is not part of the rootRegEx,
     // trigger the other server's (Express) events.
-    if (!pathname || !rootRegEx.test(pathname)) {
+    if (!forGeckos) {
       for (var i = 0; i < evs.length; i++) {
         evs[i].call(server, req, res)
       }
     }
 
-    if (pathname && rootRegEx.test(pathname)) {
+    if (forGeckos) {
       const path1 = pathname === `${root}/connections`
       const path2 = new RegExp(`${prefix}/${version}/connections/[0-9a-zA-Z]+/remote-description`).test(pathname)
       const path3 = new RegExp(`${prefix}/${version}/connections/[0-9a-zA-Z]+/additional-candidates`).test(pathname)
@@ -40,23 +42,18 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
 
       SetCORS(req, res, cors)
 
-      if (req.method === 'OPTIONS') {
-        end(res, 200)
-        return
-      }
+      if (req.method === 'OPTIONS') return end(res, 200)
 
       let body = ''
 
       try {
         body = (await ParseBody(req)) as string
       } catch (error) {
-        end(res, 400)
-        return
+        return end(res, 400)
       }
 
       res.on('error', _error => {
-        end(res, 500)
-        return
+        return end(res, 500)
       })
 
       res.setHeader('Content-Type', 'application/json')
@@ -73,22 +70,15 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
 
             // on http status code
             if (status !== 200) {
-              if (status >= 100 && status < 600) end(res, status)
-              else end(res, 500)
-              return
+              if (status >= 100 && status < 600) return end(res, status)
+              else return end(res, 500)
             }
 
-            if (!connection || !connection.id) {
-              end(res, 500)
-              return
-            }
+            if (!connection || !connection.id) return end(res, 500)
 
             const { id, localDescription } = connection
 
-            if (!id || !localDescription) {
-              end(res, 500)
-              return
-            }
+            if (!id || !localDescription) return end(res, 500)
 
             res.write(
               JSON.stringify({
@@ -97,12 +87,9 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
                 localDescription
               })
             )
-
-            res.end()
-            return
+            return res.end()
           } catch (error) {
-            end(res, 500)
-            return
+            return end(res, 500)
           }
         } else if (method === 'POST' && path2) {
           const ids = pathname.match(/[0-9a-zA-Z]{24}/g)
@@ -110,23 +97,18 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
             const id = ids[0]
             const connection = connectionsManager.getConnection(id)
 
-            if (!connection) {
-              end(res, 404)
-              return
-            }
+            if (!connection) return end(res, 404)
 
             try {
               const { sdp, type } = JSON.parse(body)
               connection.peerConnection.setRemoteDescription(sdp, type)
-              res.end()
-              return
+
+              return end(res, 200)
             } catch (error) {
-              end(res, 400)
-              return
+              return end(res, 400)
             }
           } else {
-            end(res, 400)
-            return
+            return end(res, 400)
           }
         } else if (method === 'GET' && path3) {
           const ids = pathname.match(/[0-9a-zA-Z]{24}/g)
@@ -135,23 +117,19 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
             const connection = connectionsManager.getConnection(id)
 
             if (!connection) {
-              end(res, 404)
-              return
+              return end(res, 404)
             }
 
             try {
               const additionalCandidates = [...connection.additionalCandidates]
               connection.additionalCandidates = []
               res.write(JSON.stringify(additionalCandidates))
-              res.end()
-              return
+              return res.end()
             } catch (error) {
-              end(res, 400)
-              return
+              return end(res, 400)
             }
           } else {
-            end(res, 400)
-            return
+            return end(res, 400)
           }
         } else if (method === 'POST' && closePath) {
           const ids = pathname.match(/[0-9a-zA-Z]{24}/g)
@@ -159,15 +137,12 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
             const id = ids[0]
             const connection = connectionsManager.getConnection(id)
             connection?.close()
-            res.end()
-            return
+            return end(res, 200)
           } else {
-            end(res, 400)
-            return
+            return end(res, 400)
           }
         } else {
-          end(res, 404)
-          return
+          return end(res, 404)
         }
       }
     }
