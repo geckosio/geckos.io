@@ -1,5 +1,5 @@
 import { ChannelId, ServerOptions } from '@geckos.io/common/lib/types.js'
-import type { DataChannelInitConfig, RtcConfig } from 'node-datachannel'
+import type { DataChannelInitConfig, RtcConfig } from './nodeDataChannel.js'
 import type { IncomingMessage, OutgoingMessage } from 'http'
 import CreateDataChannel from '../geckos/channel.js'
 import { EVENTS } from '@geckos.io/common/lib/constants.js'
@@ -20,8 +20,8 @@ export default class ConnectionsManagerServer {
     return id
   }
 
-  getConnection(id: ChannelId) {
-    return this.connections.get(id) || null
+  getConnection(id: ChannelId): WebRTCConnection | undefined {
+    return this.connections.get(id)
   }
 
   getConnections() {
@@ -88,12 +88,12 @@ export default class ConnectionsManagerServer {
     const connection = new WebRTCConnection(newId, rtc_config, this.connections, userData)
     const pc = connection.peerConnection
 
-    pc.onStateChange(state => {
+    pc.onStateChange(async state => {
       // keep track of the maxMessageSize
       if (state === 'connected') connection.channel.maxMessageSize = +connection.channel.dataChannel.maxMessageSize()
 
       if (state === 'disconnected' || state === 'failed' || state === 'closed') {
-        this.deleteConnection(connection, state)
+        await this.deleteConnection(connection, state)
       }
     })
 
@@ -144,8 +144,8 @@ export default class ConnectionsManagerServer {
     }
   }
 
-  deleteConnection(connection: WebRTCConnection, state: string) {
-    connection.close()
+  async deleteConnection(connection: WebRTCConnection, state: string) {
+    await connection.close()
 
     connection.channel.eventEmitter.on(EVENTS.DISCONNECT, () => {
       connection.removeAllListeners()
@@ -154,6 +154,6 @@ export default class ConnectionsManagerServer {
 
     connection.channel.eventEmitter.emit(EVENTS.DISCONNECT, state)
 
-    if (this.connections.get(connection.id)) this.connections.delete(connection.id)
+    if (this.connections.has(connection.id)) this.connections.delete(connection.id)
   }
 }

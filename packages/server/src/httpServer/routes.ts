@@ -103,7 +103,7 @@ export const close = async (
     if (ids && ids.length === 1) {
       const id = ids[0]
       const connection = connectionsManager.getConnection(id)
-      connection?.close()
+      await connection?.close()
       return sendStatus(res, 200)
     } else {
       return sendStatus(res, 400)

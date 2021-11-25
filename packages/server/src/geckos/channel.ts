@@ -1,6 +1,6 @@
 import * as Types from '@geckos.io/common/lib/types.js'
 import { ERRORS, EVENTS } from '@geckos.io/common/lib/constants.js'
-import type { DataChannel } from 'node-datachannel'
+import type { DataChannel } from '../wrtc/nodeDataChannel.js'
 import { Events } from '@yandeu/events'
 import ParseMessage from '@geckos.io/common/lib/parseMessage.js'
 import SendMessage from '@geckos.io/common/lib/sendMessage.js'
@@ -83,9 +83,9 @@ export default class ServerChannel {
   }
 
   /** Close the webRTC connection. */
-  close() {
+  async close() {
     const connection = this.webrtcConnection.connections.get(this.id)
-    if (connection) connection.close()
+    if (connection) await connection.close()
     else console.log('connection not found!')
   }
 

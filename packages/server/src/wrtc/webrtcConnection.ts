@@ -1,7 +1,9 @@
+import { ChannelId, ServerOptions } from '@geckos.io/common/lib/types.js'
+import { PeerConnection, RtcConfig, cleanup } from './nodeDataChannel.js'
+import { closeDataChannel, closePeerConnection, createPeerConnection, wait } from './nodeDataChannel.js'
 import Channel from '../geckos/channel.js'
-import { ChannelId } from '@geckos.io/common/lib/types.js'
-import { EventEmitter } from 'events'
-import nodeDataChannel from 'node-datachannel'
+import EventEmitter from 'events'
+import { promiseWithTimeout } from '@geckos.io/common/lib/helpers'
 
 // strangely something it takes a long time
 // so I set it to 10 seconds
@@ -11,14 +13,14 @@ export default class WebRTCConnection extends EventEmitter {
   id: ChannelId
   state: 'open' | 'closed'
 
-  public peerConnection: nodeDataChannel.PeerConnection
+  public peerConnection: PeerConnection
   public channel: Channel
   public additionalCandidates: RTCIceCandidate[] = []
   private options: any
 
   constructor(
     id: ChannelId,
-    configuration: nodeDataChannel.RtcConfig,
+    configuration: RtcConfig,
     public connections: Map<ChannelId, WebRTCConnection>,
     public userData: any
   ) {
@@ -31,21 +33,18 @@ export default class WebRTCConnection extends EventEmitter {
     }
 
     // this.peerConnection = new DefaultRTCPeerConnection(configuration)
-    this.peerConnection = new nodeDataChannel.PeerConnection(id as string, configuration)
+    this.peerConnection = createPeerConnection(id as string, configuration)
   }
 
-  close() {
-    if (this.channel.dataChannel?.isOpen()) this.channel.dataChannel.close()
-    if (this.peerConnection) this.peerConnection.close()
-
-    this.state = 'closed'
-    this.emit('closed')
+  async close() {
+    await promiseWithTimeout(closeDataChannel(this.channel.dataChannel), 2000)
+    await promiseWithTimeout(closePeerConnection(this.peerConnection), 2000)
 
     // @ts-ignore
     this.channel.dataChannel = null
     // @ts-ignore
     this.peerConnection = null
 
-    nodeDataChannel.cleanup()
+    await promiseWithTimeout(cleanup(), 2000)
   }
 }
