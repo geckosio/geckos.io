@@ -1,13 +1,16 @@
-import { ChannelId, ServerOptions } from '@geckos.io/common/lib/types.js'
 import Channel from '../geckos/channel.js'
-import Connection from './connection.js'
+import { ChannelId } from '@geckos.io/common/lib/types.js'
+import { EventEmitter } from 'events'
 import nodeDataChannel from 'node-datachannel'
 
 // strangely something it takes a long time
 // so I set it to 10 seconds
 const TIME_TO_HOST_CANDIDATES = 10000
 
-export default class WebRTCConnection extends Connection {
+export default class WebRTCConnection extends EventEmitter {
+  id: ChannelId
+  state: 'open' | 'closed'
+
   public peerConnection: nodeDataChannel.PeerConnection
   public channel: Channel
   public additionalCandidates: RTCIceCandidate[] = []
@@ -19,7 +22,9 @@ export default class WebRTCConnection extends Connection {
     public connections: Map<ChannelId, WebRTCConnection>,
     public userData: any
   ) {
-    super(id)
+    super()
+    this.id = id
+    this.state = 'open'
 
     this.options = {
       timeToHostCandidates: TIME_TO_HOST_CANDIDATES
@@ -32,7 +37,9 @@ export default class WebRTCConnection extends Connection {
   close() {
     if (this.channel.dataChannel?.isOpen()) this.channel.dataChannel.close()
     if (this.peerConnection) this.peerConnection.close()
-    super.close()
+
+    this.state = 'closed'
+    this.emit('closed')
 
     // @ts-ignore
     this.channel.dataChannel = null

@@ -1,5 +1,4 @@
 import * as Types from '@geckos.io/common/lib/types.js'
-import Connection from '../wrtc/connection.js'
 import ConnectionsManagerServer from '../wrtc/connectionsManager.js'
 import { EVENTS } from '@geckos.io/common/lib/constants.js'
 import HttpServer from '../httpServer/httpServer.js'
@@ -49,7 +48,7 @@ export class GeckosServer {
 
     // on server close event
     this.server.once('close', () => {
-      this.connectionsManager.connections.forEach((connection: Connection) => connection.close())
+      this.connectionsManager.connections.forEach((connection: WebRTCConnection) => connection.close())
       bridge.removeAllListeners()
     })
 
@@ -73,7 +72,7 @@ export class GeckosServer {
 
     // on server close event
     this.server.once('close', () => {
-      this.connectionsManager.connections.forEach((connection: Connection) => connection.close())
+      this.connectionsManager.connections.forEach((connection: WebRTCConnection) => connection.close())
       bridge.removeAllListeners()
     })
   }
