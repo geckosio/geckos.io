@@ -27,6 +27,11 @@ export class GeckosServer {
     this._cors = { ...this._cors, ...options.cors }
   }
 
+  /** Get cors settings. */
+  public get cors() {
+    return this._cors
+  }
+
   // @ts-ignore
   private get connections() {
     return this.connectionsManager.connections

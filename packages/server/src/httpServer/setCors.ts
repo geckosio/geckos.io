@@ -1,7 +1,7 @@
+import type { IncomingMessage, ServerResponse } from 'http'
 import { CorsOptions } from '@geckos.io/common/lib/types.js'
-import http from 'http'
 
-const SetCORS = (req: http.IncomingMessage, res: http.ServerResponse, cors: CorsOptions) => {
+const SetCORS = (req: IncomingMessage, res: ServerResponse, cors: CorsOptions) => {
   const { origin, allowAuthorization } = cors
 
   if (typeof origin === 'function') {

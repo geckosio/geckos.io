@@ -1,33 +1,26 @@
+import type { IncomingMessage, Server, ServerResponse } from 'http'
+import { additionalCandidates, close, connection, remoteDescription } from './routes.js'
 import ConnectionsManagerServer from '../wrtc/connectionsManager.js'
 import { CorsOptions } from '@geckos.io/common/lib/types.js'
-import ParseBody from './parseBody.js'
 import SetCORS from './setCors.js'
-import http from 'http'
-import url from 'url'
+import { sendStatus } from './helpers.js'
 
-const end = (res: http.ServerResponse, statusCode: number) => {
-  res.writeHead(statusCode)
-  res.end()
-}
+const PREFIX = '.wrtc/v2'
 
-const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerServer, cors: CorsOptions) => {
-  const prefix = '.wrtc'
-  const version = 'v2'
-  const root = `/${prefix}/${version}`
-  const rootRegEx = new RegExp(`/${prefix}/${version}`)
+const HttpServer = (server: Server, connectionsManager: ConnectionsManagerServer, cors: CorsOptions) => {
+  const root = `/${PREFIX}`
+  const rootRegEx = new RegExp(`/${PREFIX}`)
 
   const evs = server.listeners('request').slice(0)
   server.removeAllListeners('request')
 
-  server.on('request', async (req: http.IncomingMessage, res: http.ServerResponse) => {
-    const pathname = req.url ? url.parse(req.url, true).pathname : undefined
-    const headers = req.headers
+  server.on('request', async (req: IncomingMessage, res: ServerResponse) => {
+    const pathname = req.url ? new URL(req.url, `http://${req.headers.host}`).pathname : undefined
     const method = req.method
 
+    // check if the request should be handle by geckos or not
     const forGeckos = pathname && rootRegEx.test(pathname)
 
-    // if the request is not part of the rootRegEx,
-    // trigger the other server's (Express) events.
     if (!forGeckos) {
       for (var i = 0; i < evs.length; i++) {
         evs[i].call(server, req, res)
@@ -35,116 +28,24 @@ const HttpServer = (server: http.Server, connectionsManager: ConnectionsManagerS
     }
 
     if (forGeckos) {
-      const path1 = pathname === `${root}/connections`
-      const path2 = new RegExp(`${prefix}/${version}/connections/[0-9a-zA-Z]+/remote-description`).test(pathname)
-      const path3 = new RegExp(`${prefix}/${version}/connections/[0-9a-zA-Z]+/additional-candidates`).test(pathname)
-      const closePath = new RegExp(`${prefix}/${version}/connections/[0-9a-zA-Z]+/close`).test(pathname)
+      const reg_rd = new RegExp(`${PREFIX}/connections/[0-9a-zA-Z]+/remote-description`).test(pathname)
+      const reg_ac = new RegExp(`${PREFIX}/connections/[0-9a-zA-Z]+/additional-candidates`).test(pathname)
+      const reg_c = new RegExp(`${PREFIX}/connections/[0-9a-zA-Z]+/close`).test(pathname)
+
+      const _connections = method === 'POST' && pathname === `${root}/connections`
+      const _remote_description = method === 'POST' && reg_rd
+      const _additional_candidates = method === 'GET' && reg_ac
+      const _close = method === 'POST' && reg_c
 
       SetCORS(req, res, cors)
 
-      if (req.method === 'OPTIONS') return end(res, 200)
+      if (method === 'OPTIONS') return await sendStatus(res, 200)
 
-      let body = ''
-
-      try {
-        body = (await ParseBody(req)) as string
-      } catch (error) {
-        return end(res, 400)
-      }
-
-      res.on('error', _error => {
-        return end(res, 500)
-      })
-
-      res.setHeader('Content-Type', 'application/json')
-
-      if (pathname && method) {
-        if (method === 'POST' && path1) {
-          try {
-            // create connection (and check auth header)
-            const { status, connection, userData } = await connectionsManager.createConnection(
-              headers?.authorization,
-              req,
-              res
-            )
-
-            // on http status code
-            if (status !== 200) {
-              if (status >= 100 && status < 600) return end(res, status)
-              else return end(res, 500)
-            }
-
-            if (!connection || !connection.id) return end(res, 500)
-
-            const { id, localDescription } = connection
-
-            if (!id || !localDescription) return end(res, 500)
-
-            res.write(
-              JSON.stringify({
-                userData, // the userData for authentication
-                id,
-                localDescription
-              })
-            )
-            return res.end()
-          } catch (error) {
-            return end(res, 500)
-          }
-        } else if (method === 'POST' && path2) {
-          const ids = pathname.match(/[0-9a-zA-Z]{24}/g)
-          if (ids && ids.length === 1) {
-            const id = ids[0]
-            const connection = connectionsManager.getConnection(id)
-
-            if (!connection) return end(res, 404)
-
-            try {
-              const { sdp, type } = JSON.parse(body)
-              connection.peerConnection.setRemoteDescription(sdp, type)
-
-              return end(res, 200)
-            } catch (error) {
-              return end(res, 400)
-            }
-          } else {
-            return end(res, 400)
-          }
-        } else if (method === 'GET' && path3) {
-          const ids = pathname.match(/[0-9a-zA-Z]{24}/g)
-          if (ids && ids.length === 1) {
-            const id = ids[0]
-            const connection = connectionsManager.getConnection(id)
-
-            if (!connection) {
-              return end(res, 404)
-            }
-
-            try {
-              const additionalCandidates = [...connection.additionalCandidates]
-              connection.additionalCandidates = []
-              res.write(JSON.stringify(additionalCandidates))
-              return res.end()
-            } catch (error) {
-              return end(res, 400)
-            }
-          } else {
-            return end(res, 400)
-          }
-        } else if (method === 'POST' && closePath) {
-          const ids = pathname.match(/[0-9a-zA-Z]{24}/g)
-          if (ids && ids.length === 1) {
-            const id = ids[0]
-            const connection = connectionsManager.getConnection(id)
-            connection?.close()
-            return end(res, 200)
-          } else {
-            return end(res, 400)
-          }
-        } else {
-          return end(res, 404)
-        }
-      }
+      if (_connections) await connection(connectionsManager, req, res)
+      else if (_remote_description) await remoteDescription(connectionsManager, req, res)
+      else if (_additional_candidates) await additionalCandidates(connectionsManager, req, res)
+      else if (_close) await close(connectionsManager, req, res)
+      else await sendStatus(res, 404)
     }
   })
 }
