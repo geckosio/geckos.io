@@ -15,11 +15,4 @@ export default class Connection extends EventEmitter {
     this.state = 'closed'
     this.emit('closed')
   }
-
-  toJSON() {
-    return {
-      id: this.id,
-      state: this.state
-    }
-  }
 }

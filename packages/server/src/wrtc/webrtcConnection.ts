@@ -29,19 +29,6 @@ export default class WebRTCConnection extends Connection {
     this.peerConnection = new nodeDataChannel.PeerConnection(id as string, configuration)
   }
 
-  descriptionToJSON(description: RTCSessionDescription | null | any, shouldDisableTrickleIce = false) {
-    return !description
-      ? {}
-      : {
-          type: description.type,
-          sdp: shouldDisableTrickleIce ? this.disableTrickleIce(description.sdp) : description.sdp
-        }
-  }
-
-  disableTrickleIce(sdp: string) {
-    return sdp.replace(/\r\na=ice-options:trickle/g, '')
-  }
-
   close() {
     if (this.channel.dataChannel?.isOpen()) this.channel.dataChannel.close()
     if (this.peerConnection) this.peerConnection.close()
@@ -53,49 +40,5 @@ export default class WebRTCConnection extends Connection {
     this.peerConnection = null
 
     nodeDataChannel.cleanup()
-  }
-
-  async waitUntilIceGatheringStateComplete(peerConnection: RTCPeerConnection, options: any): Promise<void> {
-    if (peerConnection.iceGatheringState === 'complete') {
-      return
-    }
-
-    let totalIceCandidates = 0
-
-    const { timeToHostCandidates } = options
-
-    return new Promise((resolve, reject) => {
-      const timeout = setTimeout(() => {
-        peerConnection.removeEventListener('icecandidate', onIceCandidate)
-
-        // if time is up but we found some iceCandidates
-        if (totalIceCandidates > 0) {
-          // console.log('Timed out waiting for all host candidates, will continue with what we have so far.')
-          resolve()
-        } else {
-          reject(new Error(`Timed out waiting for host candidates State: ${peerConnection.iceGatheringState}`))
-        }
-      }, timeToHostCandidates)
-
-      // peerConnection.addEventListener('icegatheringstatechange', _ev => {
-      //   console.log('seconds', new Date().getSeconds(), peerConnection.iceGatheringState)
-      // })
-
-      const onIceCandidate = (ev: RTCPeerConnectionIceEvent) => {
-        const { candidate } = ev
-
-        totalIceCandidates++
-
-        if (candidate) this.additionalCandidates.push(candidate)
-
-        if (!candidate) {
-          clearTimeout(timeout)
-          peerConnection.removeEventListener('icecandidate', onIceCandidate)
-          resolve()
-        }
-      }
-
-      peerConnection.addEventListener('icecandidate', onIceCandidate)
-    })
   }
 }

@@ -45,10 +45,6 @@ const isBufferMessage = (data: any) => {
   return data instanceof ArrayBuffer || data instanceof ArrayBufferView
 }
 
-const isObject = (data: Data) => {
-  return typeof data === 'object'
-}
-
 const isJSONMessage = (data: Data) => {
   try {
     // check if it is a string
@@ -63,4 +59,4 @@ const isJSONMessage = (data: Data) => {
   }
 }
 
-export { isStringMessage, isBufferMessage, isObject, isJSONMessage }
+export { isStringMessage, isBufferMessage, isJSONMessage }
