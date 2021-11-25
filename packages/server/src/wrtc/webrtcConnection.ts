@@ -3,7 +3,7 @@ import { closeDataChannel, closePeerConnection, createPeerConnection, wait } fro
 import Channel from '../geckos/channel.js'
 import { ChannelId } from '@geckos.io/common/lib/types.js'
 import EventEmitter from 'events'
-import { promiseWithTimeout } from '@geckos.io/common/lib/helpers'
+import { promiseWithTimeout } from '@geckos.io/common/lib/helpers.js'
 
 // strangely something it takes a long time
 // so I set it to 10 seconds
