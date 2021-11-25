@@ -1,18 +1,18 @@
 import { ChannelId, ServerOptions } from '@geckos.io/common/lib/types.js'
-import type { DataChannelInitConfig, RtcConfig } from './nodeDataChannel.js'
+import { DataChannelInitConfig, RtcConfig, createDataChannel } from './nodeDataChannel.js'
 import type { IncomingMessage, OutgoingMessage } from 'http'
+import { pause, promiseWithTimeout } from '@geckos.io/common/lib/helpers.js'
 import CreateDataChannel from '../geckos/channel.js'
 import { EVENTS } from '@geckos.io/common/lib/constants.js'
 import WebRTCConnection from './webrtcConnection.js'
 import makeRandomId from '@geckos.io/common/lib/makeRandomId.js'
-import { pause } from '@geckos.io/common/lib/helpers.js'
 
 export default class ConnectionsManagerServer {
   connections: Map<ChannelId, WebRTCConnection> = new Map()
 
   constructor(public options: ServerOptions) {}
 
-  private createId(): ChannelId {
+  private createId(): string {
     let id = makeRandomId(24)
 
     while (this.connections.has(id)) id = makeRandomId(24)
@@ -86,7 +86,9 @@ export default class ConnectionsManagerServer {
 
     // create the webrtc connection
     const connection = new WebRTCConnection(newId, rtc_config, this.connections, userData)
-    const pc = connection.peerConnection
+    const pc = await connection.init()
+
+    if (!pc) return { status: 500 }
 
     pc.onStateChange(async state => {
       // keep track of the maxMessageSize
@@ -122,14 +124,14 @@ export default class ConnectionsManagerServer {
       candidates.push({ candidate, mid })
     })
 
-    const dc = pc.createDataChannel(label, dc_config)
+    const dc = await promiseWithTimeout(createDataChannel(pc, label, dc_config), 2000) // pc.createDataChannel(label, dc_config)
 
     connection.channel = new CreateDataChannel(connection, dc, this.options, userData)
 
     let waitForLocalDescription = 0
     while (typeof localDescription === 'undefined' && waitForLocalDescription < 20) {
       waitForLocalDescription++
-      await pause()
+      await pause(50)
     }
 
     const { id } = connection

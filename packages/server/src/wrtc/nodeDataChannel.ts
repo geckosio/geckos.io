@@ -11,8 +11,30 @@ export const wait = (ms: number = 1000): Promise<void> => {
   })
 }
 
-export const createPeerConnection = (peerName: string, config: ndc.RtcConfig) => {
-  return new ndc.PeerConnection(peerName, config)
+export const createDataChannel = (
+  pc: PeerConnection,
+  label: string,
+  config?: DataChannelInitConfig | undefined
+): Promise<DataChannel> => {
+  return new Promise((resolve, reject) => {
+    try {
+      const dc = pc.createDataChannel(label, config)
+      resolve(dc)
+    } catch (err) {
+      reject(err)
+    }
+  })
+}
+
+export const createPeerConnection = (peerName: string, config: RtcConfig): Promise<PeerConnection> => {
+  return new Promise((resolve, reject) => {
+    try {
+      const peerConnection = new ndc.PeerConnection(peerName, config)
+      resolve(peerConnection)
+    } catch (err) {
+      reject(err)
+    }
+  })
 }
 
 export const closePeerConnection = (peerConnection: PeerConnection): Promise<void> => {

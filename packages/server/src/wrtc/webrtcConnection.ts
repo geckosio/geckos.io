@@ -1,7 +1,7 @@
-import { ChannelId, ServerOptions } from '@geckos.io/common/lib/types.js'
 import { PeerConnection, RtcConfig, cleanup } from './nodeDataChannel.js'
 import { closeDataChannel, closePeerConnection, createPeerConnection, wait } from './nodeDataChannel.js'
 import Channel from '../geckos/channel.js'
+import { ChannelId } from '@geckos.io/common/lib/types.js'
 import EventEmitter from 'events'
 import { promiseWithTimeout } from '@geckos.io/common/lib/helpers'
 
@@ -10,7 +10,6 @@ import { promiseWithTimeout } from '@geckos.io/common/lib/helpers'
 const TIME_TO_HOST_CANDIDATES = 10000
 
 export default class WebRTCConnection extends EventEmitter {
-  id: ChannelId
   state: 'open' | 'closed'
 
   public peerConnection: PeerConnection
@@ -19,21 +18,23 @@ export default class WebRTCConnection extends EventEmitter {
   private options: any
 
   constructor(
-    id: ChannelId,
-    configuration: RtcConfig,
+    public id: string,
+    public configuration: RtcConfig,
     public connections: Map<ChannelId, WebRTCConnection>,
     public userData: any
   ) {
     super()
-    this.id = id
+
     this.state = 'open'
 
     this.options = {
       timeToHostCandidates: TIME_TO_HOST_CANDIDATES
     }
+  }
 
-    // this.peerConnection = new DefaultRTCPeerConnection(configuration)
-    this.peerConnection = createPeerConnection(id as string, configuration)
+  async init() {
+    this.peerConnection = await promiseWithTimeout(createPeerConnection(this.id, this.configuration), 2000)
+    return this.peerConnection
   }
 
   async close() {
