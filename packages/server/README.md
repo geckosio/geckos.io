@@ -4,12 +4,12 @@
 
 # @geckos.io/server
 
-[![Dependency Status](https://david-dm.org/geckosio/geckos.io/status.svg?path=packages/server&style=flat-square)](https://david-dm.org/geckosio/geckos.io?path=packages%2Fserver)
 [![NPM version](https://img.shields.io/npm/v/@geckos.io/server.svg?style=flat-square)](https://www.npmjs.com/package/@geckos.io/server)
 [![Downloads](https://img.shields.io/npm/dm/@geckos.io/server.svg?style=flat-square)](https://www.npmjs.com/package/@geckos.io/server)
 ![Node version](https://img.shields.io/node/v/@geckos.io/server.svg?style=flat-square)
 ![Snyk Vulnerabilities for GitHub Repo (Specific Manifest)](https://img.shields.io/snyk/vulnerabilities/github/geckosio/geckos.io/packages/server/package.json.svg?style=flat-square)
 ![NPM](https://img.shields.io/npm/l/@geckos.io/server.svg?style=flat-square)
+[![Codecov](https://img.shields.io/codecov/c/github/geckosio/geckos.io?logo=codecov&style=flat-square)](https://codecov.io/gh/geckosio/geckos.io)
 [![ES Modules Badge](https://img.shields.io/badge/Node.js-ES%20Modules-F7DF1E?style=flat-square)](https://github.com/yandeu/yandeu/blob/main/posts/2020-05-28-esm-for-nodejs.md)
 
 Real-time client/server communication over UDP using **WebRTC** and **Node.js**.
