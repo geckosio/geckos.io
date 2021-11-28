@@ -41,7 +41,7 @@ export const remoteDescription = async (
   res: ServerResponse
 ) => {
   try {
-    const pathname = req.url ? new URL(req.url, `http://${req.headers.host}`).pathname : undefined
+    const pathname = req.url
     const ids = pathname?.match(/[0-9a-zA-Z]{24}/g)
     const body: { sdp: any; type: any } = (await getJSONBody(req)) as any
 
@@ -71,7 +71,7 @@ export const additionalCandidates = async (
   res: ServerResponse
 ) => {
   try {
-    const pathname = req.url ? new URL(req.url, `http://${req.headers.host}`).pathname : undefined
+    const pathname = req.url
     const ids = pathname?.match(/[0-9a-zA-Z]{24}/g)
 
     if (ids && ids.length === 1) {
@@ -97,7 +97,7 @@ export const close = async (
   res: ServerResponse
 ) => {
   try {
-    const pathname = req.url ? new URL(req.url, `http://${req.headers.host}`).pathname : undefined
+    const pathname = req.url
     const ids = pathname?.match(/[0-9a-zA-Z]{24}/g)
 
     if (ids && ids.length === 1) {
