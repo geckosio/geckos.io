@@ -2,9 +2,12 @@ name: CI
 
 on:
   push:
-    branches:
-      - main
-      - master
+    paths-ignore:
+      - '.vscode/**'
+      - 'bundles/**'
+      - 'readme/**'
+      - '**.md'
+  pull_request:
     paths-ignore:
       - '.vscode/**'
       - 'bundles/**'
@@ -13,15 +16,17 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
 
     strategy:
       # max-parallel: 1
       matrix:
+        os: [ubuntu-latest, windows-latest]
         node-version: [14.x, 16.x]
 
     steps:
       - name: install required packages for puppeteer
+        if: ${{ matrix.os == 'ubuntu-latest' }}
         run: |
           sudo apt-get update
           sudo apt-get install -y libgbm-dev
