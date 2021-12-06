@@ -53,6 +53,7 @@ Want to know more? Join the [discussions](https://github.com/geckosio/geckos.io/
   - [Deployment](#deployment)
   - [ICE Servers](#ice-servers)
   - [TypeScript](#typescript)
+  - [Docker](#docker)
   - [Examples](#examples)
 - And some more things at the end of this file.
 
@@ -608,10 +609,15 @@ io.onConnection(channel => {
 })
 ```
 
+## Docker
+
+See the [docker example](https://github.com/geckosio/docker-example#readme).
+
 ## Examples
 
 - [Simple Chat App Example](https://github.com/geckosio/simple-chat-app-example#readme)
 - [Geckos v2 cjs example](https://github.com/geckosio/geckos-v2-cjs-example#readme)
+- [Geckos on Docker example](https://github.com/geckosio/docker-example#readme)
 - [Multiplayer Game with phaser.io](https://github.com/geckosio/phaser3-multiplayer-game-example#readme)
 
 ## socket&#46;io vs geckos&#46;io vs peerjs
