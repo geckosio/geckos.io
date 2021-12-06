@@ -610,8 +610,9 @@ io.onConnection(channel => {
 
 ## Examples
 
-- [Multiplayer Game with phaser.io](https://github.com/geckosio/phaser3-multiplayer-game-example#readme)
 - [Simple Chat App Example](https://github.com/geckosio/simple-chat-app-example#readme)
+- [Geckos v2 cjs example](https://github.com/geckosio/geckos-v2-cjs-example#readme)
+- [Multiplayer Game with phaser.io](https://github.com/geckosio/phaser3-multiplayer-game-example#readme)
 
 ## socket&#46;io vs geckos&#46;io vs peerjs
 
