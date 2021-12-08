@@ -1,10 +1,10 @@
 /* eslint-disable sort-imports */
-import express  from 'express'
+import { express, Static } from 'express6'
 import geckos from '../../packages/server/lib/index.js'
-import http  from 'http'
+import http from 'http'
 import path from 'path'
 
-import {__dirname} from './_dirname.js'
+import { __dirname } from './_dirname.js'
 
 const app = express()
 const server = http.createServer(app)
@@ -14,7 +14,7 @@ const io = geckos({
   }
 })
 
-app.use('/', express.static(path.join(__dirname, '../')))
+app.use('/', Static(path.join(__dirname, '../')))
 
 io.addServer(server)
 server.listen(5900)

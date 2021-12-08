@@ -7,12 +7,12 @@ import { fileURLToPath } from 'url'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
-// using with express
-import express from 'express'
+// using with express6
+import { express, Static } from 'express6'
 import http from 'http'
 import { join } from 'path'
 const app = express()
-const server = http.createServer(app)
+const server = http.createServer(app as any)
 const io: GeckosServer = geckos({
   iceServers: process.env.NODE_ENV === 'production' ? iceServers : [],
   authorization: async (auth, request) => {
@@ -33,7 +33,7 @@ const io: GeckosServer = geckos({
 
 io.addServer(server)
 
-app.use('/static/client', express.static(join(__dirname, '../dist/client')))
+app.use('/static/client', Static(join(__dirname, '../dist/client')))
 
 app.get('/', (req: any, res: any) => res.sendFile(join(__dirname, '../dist/client/index.html')))
 
@@ -71,4 +71,8 @@ io.onConnection(channel => {
   channel.onRaw((rawMessage: RawMessage) => {
     channel.raw.emit('RAW_MESSAGE')
   })
+})
+
+process.on('SIGTERM', () => {
+  server.close()
 })

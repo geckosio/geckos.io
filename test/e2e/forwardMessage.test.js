@@ -1,15 +1,15 @@
 /* eslint-disable sort-imports */
-import express  from 'express'
+import { express, Static } from 'express6'
 import geckos from '../../packages/server/lib/index.js'
-import http  from 'http'
+import http from 'http'
 import path from 'path'
 
-import {__dirname} from './_dirname.js'
+import { __dirname } from './_dirname.js'
 
 const io = geckos()
 const app = express()
 
-app.use('/', express.static(path.join(__dirname, '../')))
+app.use('/', Static(path.join(__dirname, '../')))
 
 app.listen(5600)
 io.listen(5601)

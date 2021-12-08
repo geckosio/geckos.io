@@ -1,11 +1,11 @@
 /* eslint-disable sort-imports */
-import {jest} from '@jest/globals';
-import express  from 'express'
+import { jest } from '@jest/globals'
+import { express, Static } from 'express6'
 import geckos from '../../packages/server/lib/index.js'
-import http  from 'http'
+import http from 'http'
 import path from 'path'
 
-import {__dirname} from './_dirname.js'
+import { __dirname } from './_dirname.js'
 
 const io = geckos()
 const app = express()
@@ -13,7 +13,7 @@ const app = express()
 // give enough time for io.server.close to be called on github workflow
 jest.setTimeout(120_000)
 
-app.use('/', express.static(path.join(__dirname, '../')))
+app.use('/', Static(path.join(__dirname, '../')))
 
 app.listen(5301)
 io.listen(5302)
