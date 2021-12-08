@@ -11,7 +11,7 @@ export class ClientChannel {
 
   private bridge: Bridge
   private connectionsManager: ConnectionsManagerClient
-  private peerConnection: PeerConnection
+  private peerConnection!: PeerConnection
   // stores all reliable messages for about 15 seconds
   private receivedReliableMessages: { id: string; timestamp: Date; expire: number }[] = []
   private url: string

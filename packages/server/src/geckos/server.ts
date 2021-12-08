@@ -10,9 +10,9 @@ import { makeReliable } from '@geckos.io/common/lib/reliableMessage.js'
 
 export class GeckosServer {
   public connectionsManager: ConnectionsManagerServer
-  public server: http.Server
+  public server!: http.Server
 
-  private _port: number
+  private _port!: number
   private _cors: Types.CorsOptions = { origin: '*', allowAuthorization: false }
 
   constructor(options: Types.ServerOptions) {

@@ -3,9 +3,9 @@ import ConnectionsManagerClient from './connectionsManager.js'
 import { ERRORS } from '@geckos.io/common/lib/constants.js'
 
 export default class PeerConnection {
-  dataChannel: RTCDataChannel
+  dataChannel!: RTCDataChannel
   id: ChannelId
-  localPeerConnection: RTCPeerConnection
+  localPeerConnection!: RTCPeerConnection
 
   async connect(connectionsManager: ConnectionsManagerClient) {
     // @ts-ignore

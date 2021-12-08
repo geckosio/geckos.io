@@ -13,8 +13,8 @@ const TIME_TO_HOST_CANDIDATES = 10000
 export default class WebRTCConnection extends EventEmitter {
   state: 'open' | 'closed'
 
-  public peerConnection: PeerConnection
-  public channel: Channel
+  public peerConnection!: PeerConnection
+  public channel!: Channel
   public additionalCandidates: RTCIceCandidate[] = []
   private options: any
 
