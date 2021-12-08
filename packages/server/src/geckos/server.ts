@@ -47,8 +47,13 @@ export class GeckosServer {
     this.server = http.createServer()
 
     // on server close event
-    this.server.once('close', () => {
-      this.connectionsManager.connections.forEach((connection: WebRTCConnection) => connection.close())
+    const promises: Promise<void>[] = []
+    this.server.once('close', async () => {
+      for (const [_, connection] of Array.from(this.connectionsManager.connections)) {
+        promises.push(connection.close())
+      }
+      await Promise.all(promises)
+
       bridge.removeAllListeners()
     })
 
@@ -68,13 +73,18 @@ export class GeckosServer {
   public addServer(server: http.Server) {
     this.server = server
 
-    HttpServer(this.server, this.connectionsManager, this._cors)
-
     // on server close event
-    this.server.once('close', () => {
-      this.connectionsManager.connections.forEach((connection: WebRTCConnection) => connection.close())
+    const promises: Promise<void>[] = []
+    this.server.once('close', async () => {
+      for (const [_, connection] of Array.from(this.connectionsManager.connections)) {
+        promises.push(connection.close())
+      }
+      await Promise.all(promises)
+
       bridge.removeAllListeners()
     })
+
+    HttpServer(this.server, this.connectionsManager, this._cors)
   }
 
   get port() {

@@ -84,7 +84,7 @@ describe('connection', () => {
   })
 
   describe('close', () => {
-    const delay = ms => {
+    const pause = ms => {
       return new Promise(resolve => {
         setTimeout(resolve, ms)
       })
@@ -98,13 +98,19 @@ describe('connection', () => {
         disconnected = /^closed|disconnected$/.test(reason)
       })
 
-      io.server.close(() => {
+      io.server.close(async () => {
         closed = true
-        delay(10_000).then(() => {
-          expect(closed).toBe(true)
-          expect(disconnected).toBe(true)
-          done()
-        })
+
+        let retries = 0
+
+        while (!disconnected && retries < 15) {
+          retries++
+          await pause(1000)
+        }
+
+        expect(closed).toBe(true)
+        expect(disconnected).toBe(true)
+        done()
       })
     })
 

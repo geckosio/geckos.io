@@ -1,7 +1,8 @@
 import { PeerConnection, RtcConfig, cleanup } from './nodeDataChannel.js'
-import { closeDataChannel, closePeerConnection, createPeerConnection, wait } from './nodeDataChannel.js'
+import { closeDataChannel, closePeerConnection, createPeerConnection } from './nodeDataChannel.js'
 import Channel from '../geckos/channel.js'
 import { ChannelId } from '@geckos.io/common/lib/types.js'
+import { EVENTS } from '@geckos.io/common/lib/constants.js'
 import EventEmitter from 'events'
 import { promiseWithTimeout } from '@geckos.io/common/lib/helpers.js'
 
@@ -37,7 +38,7 @@ export default class WebRTCConnection extends EventEmitter {
     return this.peerConnection
   }
 
-  async close() {
+  async close(state = 'closed') {
     await promiseWithTimeout(closeDataChannel(this.channel.dataChannel), 2000)
     await promiseWithTimeout(closePeerConnection(this.peerConnection), 2000)
 
@@ -47,5 +48,14 @@ export default class WebRTCConnection extends EventEmitter {
     this.peerConnection = null
 
     await promiseWithTimeout(cleanup(), 2000)
+
+    this.channel.eventEmitter.on(EVENTS.DISCONNECT, () => {
+      this.removeAllListeners()
+      this.channel.eventEmitter.removeAllListeners()
+    })
+
+    this.channel.eventEmitter.emit(EVENTS.DISCONNECT, state)
+
+    if (this.connections.has(this.id)) this.connections.delete(this.id)
   }
 }

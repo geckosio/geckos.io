@@ -147,15 +147,6 @@ export default class ConnectionsManagerServer {
   }
 
   async deleteConnection(connection: WebRTCConnection, state: string) {
-    await connection.close()
-
-    connection.channel.eventEmitter.on(EVENTS.DISCONNECT, () => {
-      connection.removeAllListeners()
-      connection.channel.eventEmitter.removeAllListeners()
-    })
-
-    connection.channel.eventEmitter.emit(EVENTS.DISCONNECT, state)
-
-    if (this.connections.has(connection.id)) this.connections.delete(connection.id)
+    await connection.close(state)
   }
 }
