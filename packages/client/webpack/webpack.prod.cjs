@@ -7,6 +7,7 @@ const TerserPlugin = require('terser-webpack-plugin')
 module.exports = env => {
   return {
     mode: 'production',
+    stats: 'errors-warnings',
     entry: path.resolve(__dirname, '../lib/bundle.js'),
     output: {
       path: path.resolve(__dirname, `${env.path}`),

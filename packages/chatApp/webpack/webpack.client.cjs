@@ -5,6 +5,7 @@ const webpack = require('webpack')
 
 module.exports = {
   mode: 'development',
+  stats: 'errors-warnings',
   devtool: 'inline-source-map',
   entry: ['./src/client.ts'],
   output: {
