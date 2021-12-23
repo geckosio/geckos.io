@@ -642,6 +642,7 @@ For now WebRTC in the best way to send fast (unordered and unreliable) messages 
 ## Who is using geckos.io
 
 - [DatTank.io](https://dattank.io/) - is a free multiplayer browser online tank game.
+- [DinoBattle.one](https://dinobattle.one/) - is a free multiplayer browser online dino battle royale 2D.
 
 ## Other cool Packages
 
