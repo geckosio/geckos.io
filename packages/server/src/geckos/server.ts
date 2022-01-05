@@ -5,8 +5,10 @@ import HttpServer from '../httpServer/httpServer.js'
 import ServerChannel from './channel.js'
 import WebRTCConnection from '../wrtc/webrtcConnection.js'
 import bridge from '@geckos.io/common/lib/bridge.js'
+import { cleanup } from '../wrtc/nodeDataChannel.js'
 import http from 'http'
 import { makeReliable } from '@geckos.io/common/lib/reliableMessage.js'
+import { promiseWithTimeout } from '@geckos.io/common/lib/helpers'
 
 export class GeckosServer {
   public connectionsManager: ConnectionsManagerServer
@@ -54,6 +56,8 @@ export class GeckosServer {
       }
       await Promise.all(promises)
 
+      await promiseWithTimeout(cleanup(), 2000)
+
       bridge.removeAllListeners()
     })
 
@@ -80,6 +84,8 @@ export class GeckosServer {
         promises.push(connection.close())
       }
       await Promise.all(promises)
+
+      await promiseWithTimeout(cleanup(), 2000)
 
       bridge.removeAllListeners()
     })

@@ -47,8 +47,6 @@ export default class WebRTCConnection extends EventEmitter {
     // @ts-ignore
     this.peerConnection = null
 
-    await promiseWithTimeout(cleanup(), 2000)
-
     this.channel.eventEmitter.on(EVENTS.DISCONNECT, () => {
       this.removeAllListeners()
       this.channel.eventEmitter.removeAllListeners()
