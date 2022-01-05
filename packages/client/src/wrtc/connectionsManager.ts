@@ -148,7 +148,7 @@ export default class ConnectionsManagerClient {
 
     showBackOffIntervals().forEach(ms => {
       setTimeout(() => {
-        this.fetchAdditionalCandidates(host, id)
+        this.fetchAdditionalCandidates(host, id).catch(() => {})
       }, ms)
     })
 
