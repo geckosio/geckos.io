@@ -10,7 +10,7 @@ const appendMessage = (msg: Data) => {
   if (list) {
     const li = document.createElement('li')
     li.innerHTML = msg as string
-    list.appendChild(li)
+    list.prepend(li)
   }
 }
 
@@ -24,8 +24,6 @@ channel.onConnect(error => {
   } else {
     console.log('You are connected', channel.id)
   }
-
-  channel.emit('chat message', `Hello everyone, I'm ${channel.id}`)
 
   channel.onDisconnect(() => {
     console.log('You got disconnected')
@@ -49,22 +47,4 @@ channel.onConnect(error => {
   channel.on('some reliable event', (data: Data) => {
     appendMessage(`[RELIABLE] ${data}`)
   })
-
-  channel.emit('number', 33)
-
-  // send a very important number to the server
-  channel.emit('number', 128, { reliable: true })
-
-  channel.onRaw((rawMessage: RawMessage) => {
-    console.log('rawMessage', rawMessage)
-  })
-
-  // sending a raw message
-  setTimeout(() => {
-    const buffer = new ArrayBuffer(2)
-    const bufferView = new DataView(buffer)
-    bufferView.setInt8(0, 5)
-    bufferView.setInt8(1, 12)
-    channel.raw.emit(buffer)
-  }, 5000)
 })
