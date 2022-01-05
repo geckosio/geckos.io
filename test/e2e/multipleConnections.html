@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="/.tmp/geckos.io-client.latest.min.js"></script>
+  </head>
+  <body>
+    <script>
+      'use strict'
+
+      var channel = geckos({ port: 6150 })
+
+      channel.onConnect(error => {
+        if (error) {
+          console.error(error.message)
+          return
+        }
+
+        channel.on('msg', data => {
+          channel.emit('msg', `Response: ${data}`)
+        })
+      })
+    </script>
+  </body>
+</html>
