@@ -19,6 +19,14 @@ let firstPage
 let secondPage
 const regId = /^[\w]{24}$/
 
+const pause = (ms = 2500) => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      return resolve()
+    }, ms)
+  })
+}
+
 const messages = []
 const waitForNewMessage = toBe => {
   return new Promise(resolve => {
@@ -50,6 +58,7 @@ beforeAll(async () => {
 
   firstPage = await browser.newPage()
   secondPage = await browser.newPage()
+  await pause()
 })
 
 describe('test with multiple users', () => {
@@ -57,18 +66,20 @@ describe('test with multiple users', () => {
     const count = messages.length
     await firstPage.goto('http://localhost:6150/e2e/multipleConnections.html')
 
-    await waitForNewMessage()
+    await waitForNewMessage(count + 1)
     expect(messages.length).toBe(count + 1)
     expect(messages[0]).toMatch(regId)
+    await pause()
   })
 
   test('connect user 2', async () => {
     const count = messages.length
     await secondPage.goto('http://localhost:6150/e2e/multipleConnections.html')
 
-    await waitForNewMessage()
+    await waitForNewMessage(count + 1)
     expect(messages.length).toBe(count + 1)
     expect(messages[0]).toMatch(regId)
+    await pause()
   })
 
   test('two users connected', async () => {
@@ -81,18 +92,20 @@ describe('test with multiple users', () => {
 
     io.emit('msg', 'hello')
 
-    await waitForNewMessage(4)
+    await waitForNewMessage(count + 2)
     expect(messages.length).toBe(count + 2)
     expect(messages[0]).toMatch('Response: hello')
     expect(messages[1]).toMatch('Response: hello')
+    await pause()
   })
 
   test('close browser of user 1', async () => {
     firstPage.goto('http://localhost:6150')
 
-    await waitForNewMessage()
+    await waitForNewMessage(5)
     expect(messages.length).toBe(5)
     expect(messages[0]).toMatch('disconnected')
+    await pause()
   })
 
   test('only user 1 remaining', async () => {
@@ -103,23 +116,27 @@ describe('test with multiple users', () => {
   test('send message to all users (only user 1 is remaining)', async () => {
     io.emit('msg', 'hey')
 
-    await waitForNewMessage()
+    await waitForNewMessage(6)
     expect(messages.length).toBe(6)
     expect(messages[0]).toMatch('Response: hey')
+    await pause()
   })
 })
 
 afterAll(async () => {
   const close = () => {
     return new Promise(resolve => {
+      setTimeout(() => {
+        return resolve()
+      }, 5000)
       server.close(() => {
-        resolve()
+        return resolve()
       })
     })
   }
 
+  await firstPage.close()
+  await secondPage.close()
   await close()
-  // await secondPage()
-  // await page.close()
-  // await browser.close()
+  await pause()
 })
