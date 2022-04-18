@@ -22,7 +22,7 @@ jobs:
       # max-parallel: 1
       matrix:
         os: [ubuntu-latest, windows-latest]
-        node-version: [14.x, 16.x]
+        node-version: [14.x, 16.x, 17.x]
 
     steps:
       - name: install required packages for puppeteer
