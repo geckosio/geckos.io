@@ -19,10 +19,10 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     strategy:
-      # max-parallel: 1
+      max-parallel: 1
       matrix:
+        node-version: [17.x, 16.x, 14.x]
         os: [ubuntu-latest, windows-latest]
-        node-version: [14.x, 16.x, 17.x]
 
     steps:
       - name: install required packages for puppeteer
