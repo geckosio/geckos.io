@@ -46,6 +46,8 @@ export default class ConnectionsManagerClient {
 
   // fetch additional candidates
   async fetchAdditionalCandidates(host: string, id: ChannelId) {
+    if (this.dataChannel?.readyState === 'closed') return
+
     const res = await fetch(`${host}/connections/${id}/additional-candidates`, {
       method: 'GET',
       headers: {
