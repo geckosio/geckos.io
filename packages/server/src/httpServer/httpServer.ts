@@ -27,11 +27,12 @@ const HttpServer = (server: Server, connectionsManager: ConnectionsManagerServer
     }
 
     if (forGeckos) {
-      const reg_rd = new RegExp(`${PREFIX}/connections/[0-9a-zA-Z]+/remote-description`).test(pathname)
-      const reg_ac = new RegExp(`${PREFIX}/connections/[0-9a-zA-Z]+/additional-candidates`).test(pathname)
-      const reg_c = new RegExp(`${PREFIX}/connections/[0-9a-zA-Z]+/close`).test(pathname)
+      const reg_co = new RegExp(`${PREFIX}/connections$`).test(pathname)
+      const reg_rd = new RegExp(`${PREFIX}/connections/[0-9a-zA-Z]+/remote-description$`).test(pathname)
+      const reg_ac = new RegExp(`${PREFIX}/connections/[0-9a-zA-Z]+/additional-candidates$`).test(pathname)
+      const reg_c = new RegExp(`${PREFIX}/connections/[0-9a-zA-Z]+/close$`).test(pathname)
 
-      const _connections = method === 'POST' && pathname === `${PREFIX}/connections`
+      const _connections = method === 'POST' && reg_co
       const _remote_description = method === 'POST' && reg_rd
       const _additional_candidates = method === 'GET' && reg_ac
       const _close = method === 'POST' && reg_c
