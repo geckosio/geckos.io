@@ -1,6 +1,6 @@
 {
   "name": "@geckos.io/client",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Real-time client/server communication over UDP using WebRTC and Node.js",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -45,7 +45,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@geckos.io/common": "^2.2.0"
+    "@geckos.io/common": "^2.2.1"
   },
   "funding": {
     "url": "https://github.com/sponsors/yandeu"
