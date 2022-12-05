@@ -60,6 +60,7 @@ export default class ConnectionsManagerServer {
       iceServers = [],
       portRange,
       iceTransportPolicy = 'all',
+      bindAddress = undefined,
       maxPacketLifeTime = undefined,
       maxRetransmits = 0
     } = this.options
@@ -77,7 +78,8 @@ export default class ConnectionsManagerServer {
     let rtc_config: RtcConfig = {
       // sdpSemantics: 'unified-plan',
       iceTransportPolicy: iceTransportPolicy,
-      iceServers: iceServers.map(ice => ice.urls as string)
+      iceServers: iceServers.map(ice => ice.urls as string),
+      bindAddress: bindAddress
     }
 
     // portRange is a nonstandard API

@@ -45,7 +45,7 @@
   "dependencies": {
     "@geckos.io/common": "^2.2.3",
     "@yandeu/events": "0.0.6",
-    "node-datachannel": "0.4.0"
+    "node-datachannel": "git://github.com/murat-dogan/node-datachannel.git#040bf82bba3b11aa45732e24878e2948f6655de4"
   },
   "funding": {
     "url": "https://github.com/sponsors/yandeu"
