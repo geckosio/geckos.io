@@ -204,7 +204,7 @@ const io: GeckosServer = geckos({
    * @param request The incoming http request
    * @param response The outgoing http response
    */
-  authorization: async (auth: string | undefined, request: http.IncomingMessage, response: http.OutgoingMessage)) => {
+  authorization: async (auth: string | undefined, request: http.IncomingMessage, response: http.OutgoingMessage) => {
     const token = auth.split(' ') // ['Yannick', '12E45']
     const username = token[0] // 'Yannick'
     const password = token[1] // '12E45'
