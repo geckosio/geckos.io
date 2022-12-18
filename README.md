@@ -11,8 +11,8 @@
 #### _Geckos&#46;io fits perfectly with your next HTML5 real-time multiplayer games or chat app._
 
 [![NPM version](https://img.shields.io/npm/v/@geckos.io/server.svg?style=flat-square)](https://www.npmjs.com/package/@geckos.io/server)
-[![Github Workflow](https://img.shields.io/github/workflow/status/geckosio/geckos.io/CI/master?label=build&logo=github&style=flat-square)](https://github.com/geckosio/geckos.io/actions?query=workflow%3ACI)
-[![Github Workflow](https://img.shields.io/github/workflow/status/geckosio/geckos.io/CodeQL/master?label=CodeQL&logo=github&style=flat-square)](https://github.com/geckosio/geckos.io/actions?query=workflow%3ACodeQL)
+[![Github Workflow](https://img.shields.io/github/actions/workflow/status/geckosio/geckos.io/main.yml?branch=master&label=build&logo=github&style=flat-square)](https://github.com/geckosio/geckos.io/actions?query=workflow%3ACI)
+[![Github Workflow](https://img.shields.io/github/actions/workflow/status/geckosio/geckos.io/codeql-analysis.yml?branch=master&label=CodeQL&logo=github&style=flat-square)](https://github.com/geckosio/geckos.io/actions?query=workflow%3ACodeQL)
 [![Downloads](https://img.shields.io/npm/dm/@geckos.io/server.svg?style=flat-square)](https://www.npmjs.com/package/@geckos.io/server)
 ![Node version](https://img.shields.io/node/v/@geckos.io/server.svg?style=flat-square)
 [![Codecov](https://img.shields.io/codecov/c/github/geckosio/geckos.io?logo=codecov&style=flat-square)](https://codecov.io/gh/geckosio/geckos.io)
