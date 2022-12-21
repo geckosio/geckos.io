@@ -1,6 +1,6 @@
 {
   "name": "@geckos.io/common",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "description": "The common module for @geckos.io/server and @geckos.io/client.",
   "main": "lib",
   "type": "module",
