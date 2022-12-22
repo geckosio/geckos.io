@@ -213,7 +213,10 @@ const io: GeckosServer = geckos({
     // ("request.headers['x-forwarded-for']" if your server is behind a proxy)
 
     // add a custom response header if you want
-    response.setHeader('www-authenticate', 'Bearer realm="example", error="invalid_token", error_description="The access token expired"')
+    response.setHeader(
+      'www-authenticate',
+      'Bearer realm="example", error="invalid_token", error_description="The access token expired"'
+    )
 
     // reach out to a database if needed (this code is completely fictitious)
     const user = await database.getByName(username)
@@ -370,8 +373,8 @@ import geckos from '@geckos.io/server'
  * @param options.maxRetransmits The maximum number of times the user agent should attempt to retransmit a message which fails the first time in unreliable mode. While this value is a16-bit unsigned number, each user agent may clamp it to whatever maximum it deems appropriate. Default: 0.
  * @param options.ordered Indicates whether or not messages sent on the RTCDataChannel are required to arrive at their destination in the same order in which they were sent (true), or if they're allowed to arrive out-of-order (false). Default: false.
  * @param options.portRange Custom port range for the WebRTC connection (available in >= v1.7.0)
+ * @param options.portRange.min Default: 1025
  * @param options.portRange.max Default: 65535
- * @param options.portRange.min Default: 0
  */
 io = geckos(options)
 
@@ -563,9 +566,9 @@ server.listen(3000)
 
 ## Deployment
 
-You have to make sure you deploy it to a server which forwards all traffic on ports **9208/tcp** (or another port you define) and **0-65535/udp** to your application.
+You have to make sure you deploy it to a server which forwards all traffic on ports **9208/tcp** (or another port you define) and **1025-65535/udp** to your application.
 
-Port 9208/tcp (or another port you define) is used for the peer signaling. The peer connection itself will be on a random port between 0-65535/udp.
+Port 9208/tcp (or another port you define) is used for the peer signaling. The peer connection itself will be on a random port between 1025-65535/udp.
 
 ## ICE Servers
 

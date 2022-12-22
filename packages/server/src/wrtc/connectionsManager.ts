@@ -81,8 +81,11 @@ export default class ConnectionsManagerServer {
     }
 
     // portRange is a nonstandard API
-    if (portRange?.min && portRange?.max)
+    if (portRange?.min && portRange?.max) {
+      portRange.min = Math.max(portRange.min, 1025)
+      portRange.max = Math.min(portRange.max, 65535)
       rtc_config = { ...rtc_config, portRangeBegin: portRange.min, portRangeEnd: portRange.max }
+    }
 
     // create the webrtc connection
     const connection = new WebRTCConnection(newId, rtc_config, this.connections, userData)
