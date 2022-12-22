@@ -38,6 +38,13 @@ Geckos.io is now shipped as ECMAScript modules and will only support `Node.js ^1
 
 Want to know more? Join the [discussions](https://github.com/geckosio/geckos.io/discussions)!
 
+## How should NOT use this library?
+
+- People who have never build a multiplayer game, should probably use a library like socket&#46;io instead, since there are way more examples/tutorial available.  
+  Socket&#46;io and geckos&#46;io use a similar API. The switch from socket&#46;io to geckos&#46;io should be easy.
+
+- People who have no experiences setting up their own servers with UDP port forwarding, should probably look for a simple solution like websocket, although it is slower.
+
 ## Menu
 
 - [What is it made for?](#what-is-it-made-for)
