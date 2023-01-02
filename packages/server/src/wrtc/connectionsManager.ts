@@ -61,7 +61,8 @@ export default class ConnectionsManagerServer {
       portRange,
       iceTransportPolicy = 'all',
       maxPacketLifeTime = undefined,
-      maxRetransmits = 0
+      maxRetransmits = 0,
+      multiplex = true
     } = this.options
 
     // DataChannel configuration
@@ -77,7 +78,8 @@ export default class ConnectionsManagerServer {
     let rtc_config: RtcConfig = {
       // sdpSemantics: 'unified-plan',
       iceTransportPolicy: iceTransportPolicy,
-      iceServers: iceServers.map(ice => ice.urls as string)
+      iceServers: iceServers.map(ice => ice.urls as string),
+      enableIceUdpMux: multiplex
     }
 
     // portRange is a nonstandard API

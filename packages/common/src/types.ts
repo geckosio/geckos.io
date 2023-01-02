@@ -47,6 +47,8 @@ export interface ServerOptions {
     /** Minimum port range (defaults to 65535) */
     max: number
   }
+  /** When true (default), a single UDP port will be used for all clients, instead of assigning ports from the port range. */
+  multiplex?: boolean;
 }
 
 export interface ClientOptions {
