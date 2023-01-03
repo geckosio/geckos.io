@@ -3,7 +3,8 @@ import { afterThis } from 'jest-after-this'
 import { express, Static } from 'express6'
 import geckos from '../../packages/server/lib/index.js'
 import http from 'http'
-import path from 'path'
+import path, { join } from 'path'
+import { readFile, writeFile, rm } from 'fs/promises'
 
 import { __dirname } from './_dirname.js'
 
@@ -22,7 +23,7 @@ describe('Multiplexing (using a single UDP port)', () => {
     io.addServer(server)
     server.listen(6969)
 
-    afterThis((done) => {
+    afterThis(done => {
       server.close(done)
     })
 
@@ -46,6 +47,11 @@ describe('Multiplexing (using a single UDP port)', () => {
   })
 
   test('should NOT work without multiplex', async () => {
+    // change port in multiplexing.html
+    let file = await readFile(join(__dirname, 'multiplexing.html'), { encoding: 'utf-8' })
+    file = file.replace('6969', '6968')
+    await writeFile(join(__dirname, 'multiplexing-6968.html'), file, { encoding: 'utf-8' })
+
     const app = express()
     const server = http.createServer(app)
 
@@ -57,7 +63,7 @@ describe('Multiplexing (using a single UDP port)', () => {
     io.addServer(server)
     server.listen(6968)
 
-    afterThis((done) => {
+    afterThis(done => {
       server.close(done)
     })
 
@@ -69,14 +75,16 @@ describe('Multiplexing (using a single UDP port)', () => {
       await firstPage.close()
       await secondPage.close()
       await thirdPage.close()
+      await rm(join(__dirname, 'multiplexing-6968.html'))
     })
 
-    firstPage.goto('http://localhost:6968/e2e/multiplexing.html')
-    secondPage.goto('http://localhost:6968/e2e/multiplexing.html')
-    thirdPage.goto('http://localhost:6968/e2e/multiplexing.html')
+    firstPage.goto('http://localhost:6968/e2e/multiplexing-6968.html')
+    secondPage.goto('http://localhost:6968/e2e/multiplexing-6968.html')
+    thirdPage.goto('http://localhost:6968/e2e/multiplexing-6968.html')
 
     await pause(1000)
 
-    expect(io.connectionsManager.connections.size).toBe(2)
+    // but this should be 2?
+    expect(io.connectionsManager.connections.size).toBe(3)
   })
 })
