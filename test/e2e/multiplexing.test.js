@@ -15,8 +15,11 @@ describe('Multiplexing (using a single UDP port)', () => {
     const app = express()
     const server = http.createServer(app)
 
+    const connections = new Set()
+
     // If multiplexing is working, that single port should be enough for multiple clients.
     const io = geckos({ portRange: { min: 20000, max: 20001 }, multiplex: true })
+    io.onConnection(c => connections.add(c))
 
     app.use('/', Static(path.join(__dirname, '../')))
 
@@ -43,6 +46,7 @@ describe('Multiplexing (using a single UDP port)', () => {
 
     await pause(1000)
 
+    expect(connections.size).toBe(3)
     expect(io.connectionsManager.connections.size).toBe(3)
   })
 
@@ -55,8 +59,11 @@ describe('Multiplexing (using a single UDP port)', () => {
     const app = express()
     const server = http.createServer(app)
 
+    const connections = new Set()
+
     // Without multiplex, two ports should not be enough for all clients.
     const io = geckos({ portRange: { min: 20002, max: 20003 }, multiplex: false })
+    io.onConnection(c => connections.add(c))
 
     app.use('/', Static(path.join(__dirname, '../')))
 
@@ -84,7 +91,7 @@ describe('Multiplexing (using a single UDP port)', () => {
 
     await pause(1000)
 
-    // but this should be 2?
+    expect(connections.size).toBe(2)
     expect(io.connectionsManager.connections.size).toBe(2)
   })
 })
