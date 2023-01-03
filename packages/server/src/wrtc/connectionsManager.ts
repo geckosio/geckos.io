@@ -102,8 +102,6 @@ export default class ConnectionsManagerServer {
       }
     })
 
-    this.connections.set(connection.id, connection)
-
     let gatheringState
     let localDescription
     const candidates = []
@@ -138,6 +136,9 @@ export default class ConnectionsManagerServer {
     }
 
     const { id } = connection
+    if (!id) return { status: 500 }
+
+    this.connections.set(id, connection)
 
     return {
       connection: {
