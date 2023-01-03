@@ -20,7 +20,8 @@ export const createDataChannel = (
     try {
       const dc = pc.createDataChannel(label, config)
       resolve(dc)
-    } catch (err) {
+    } catch (err: any) {
+      console.log('ERROR:', err.message)
       reject(err)
     }
   })
