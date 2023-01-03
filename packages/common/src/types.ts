@@ -47,8 +47,11 @@ export interface ServerOptions {
     /** Minimum port range (defaults to 65535) */
     max: number
   }
-  /** When true (default), a single UDP port will be used for all clients, instead of assigning ports from the port range. */
-  multiplex?: boolean;
+  /**
+   * When true (default), the first available port in the port range will be used for all connections, instead of assigning a new port for each connection.
+   * Enabling this option has a drawback: a peer will not be able to establish more than one multiplexed connection to the server at once.
+   */
+  multiplex?: boolean
 }
 
 export interface ClientOptions {
