@@ -1,27 +1,13 @@
 /* eslint-disable sort-imports */
 import { express, Static } from 'express6'
+import { afterThis } from 'jest-after-this'
 import geckos from '../../packages/server/lib/index.js'
 import http from 'http'
-import path, { join } from 'path'
-import { readFile, writeFile, rm } from 'fs/promises'
-
+import path from 'path'
+import { kill } from '../helpers.js'
 import { __dirname } from './_dirname.js'
 
 const pause = t => new Promise(r => setTimeout(r, t))
-
-/** Immediately kill the server. */
-const kill = async (httpServer, sockets = new Set()) => {
-  for (const socket of sockets) {
-    socket.destroy()
-    sockets.delete(socket)
-  }
-
-  return new Promise(resolve => {
-    httpServer.close(() => {
-      return resolve()
-    })
-  })
-}
 
 describe('Multiplexing (using a single UDP port)', () => {
   test('should work with multiplex', async () => {
@@ -31,6 +17,10 @@ describe('Multiplexing (using a single UDP port)', () => {
     const server = http.createServer(app)
     server.on('connection', socket => {
       sockets.add(socket)
+    })
+
+    afterThis(async () => {
+      await kill(server, sockets)
     })
 
     const connections = new Set()
@@ -48,6 +38,12 @@ describe('Multiplexing (using a single UDP port)', () => {
     const secondPage = await browser.newPage()
     const thirdPage = await browser.newPage()
 
+    afterThis(async () => {
+      await firstPage.close()
+      await secondPage.close()
+      await thirdPage.close()
+    })
+
     firstPage.goto('http://localhost:6969/e2e/multiplexing.html')
     secondPage.goto('http://localhost:6969/e2e/multiplexing.html')
     thirdPage.goto('http://localhost:6969/e2e/multiplexing.html')
@@ -56,16 +52,15 @@ describe('Multiplexing (using a single UDP port)', () => {
 
     expect(connections.size).toBe(3)
     expect(io.connectionsManager.connections.size).toBe(3)
-
-    await firstPage.close()
-    await secondPage.close()
-    await thirdPage.close()
-    await kill(server, sockets)
   })
 
   test('should NOT work without multiplex', async () => {
     const app = express()
     const server = http.createServer(app)
+
+    afterThis(async () => {
+      await kill(server)
+    })
 
     const connections = new Set()
 
@@ -82,6 +77,12 @@ describe('Multiplexing (using a single UDP port)', () => {
     const secondPage = await browser.newPage()
     const thirdPage = await browser.newPage()
 
+    afterThis(async () => {
+      await firstPage.close()
+      await secondPage.close()
+      await thirdPage.close()
+    })
+
     firstPage.goto('http://localhost:6969/e2e/multiplexing.html')
     secondPage.goto('http://localhost:6969/e2e/multiplexing.html')
     thirdPage.goto('http://localhost:6969/e2e/multiplexing.html')
@@ -90,10 +91,5 @@ describe('Multiplexing (using a single UDP port)', () => {
 
     expect(connections.size).toBe(2)
     expect(io.connectionsManager.connections.size).toBe(2)
-
-    await firstPage.close()
-    await secondPage.close()
-    await thirdPage.close()
-    await kill(server)
   })
 })
