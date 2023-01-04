@@ -21,7 +21,7 @@ export const createDataChannel = (
       const dc = pc.createDataChannel(label, config)
       resolve(dc)
     } catch (err: any) {
-      console.log('ERROR:', err.message)
+      console.error('ERROR:', err.message)
       reject(err)
     }
   })
