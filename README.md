@@ -87,6 +87,20 @@ _Btw, make sure you also check out [enable3d.io](https://enable3d.io/)._
 
 ## Changelog
 
+### New in version 2.3.0
+
+#### Multiplexing
+
+When true (default), the first available port in the port range will be used for all connections, instead of assigning a new port for each connection. Enabling this option has a drawback: a peer will not be able to establish more than one multiplexed connection to the server at once.  
+_Thanks to @arthuro555 and @paullouisageneau._
+
+```js
+// server.js
+const io = geckos({
+  multiplex: true // default
+})
+```
+
 ### New in version 1.7.1
 
 You can now pass a more complex url to the client when you set port to `null`. This is useful if, for example, you use the geckos.io server behind a proxy.
@@ -382,6 +396,7 @@ import geckos from '@geckos.io/server'
  * @param options.portRange Custom port range for the WebRTC connection (available in >= v1.7.0)
  * @param options.portRange.min Default: 1025
  * @param options.portRange.max Default: 65535
+ * @param options.multiplex When true (default), the first available port in the port range will be used for all connections, instead of assigning a new port for each connection. Enabling this option has a drawback: a peer will not be able to establish more than one multiplexed connection to the server at once.
  */
 io = geckos(options)
 
