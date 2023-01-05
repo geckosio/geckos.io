@@ -91,7 +91,7 @@ _Btw, make sure you also check out [enable3d.io](https://enable3d.io/)._
 
 #### Multiplexing
 
-When true (default), the first available port in the port range will be used for all connections, instead of assigning a new port for each connection. Enabling this option has a drawback: a peer will not be able to establish more than one multiplexed connection to the server at once.  
+When true (default), the first available port in the port range will be used for all connections, instead of assigning a new port for each connection.  
 _Thanks to @arthuro555 and @paullouisageneau._
 
 ```js
@@ -396,7 +396,7 @@ import geckos from '@geckos.io/server'
  * @param options.portRange Custom port range for the WebRTC connection (available in >= v1.7.0)
  * @param options.portRange.min Default: 1025
  * @param options.portRange.max Default: 65535
- * @param options.multiplex When true (default), the first available port in the port range will be used for all connections, instead of assigning a new port for each connection. Enabling this option has a drawback: a peer will not be able to establish more than one multiplexed connection to the server at once.
+ * @param options.multiplex When true (default), the first available port in the port range will be used for all connections, instead of assigning a new port for each connection.
  */
 io = geckos(options)
 
