@@ -44,11 +44,13 @@ export interface ServerOptions {
   ordered?: boolean
   /** Set a custom port range for the WebRTC connection. */
   portRange?: {
-    /** Minimum port range (defaults to 0) */
+    /** Minimum port range (defaults to 1025) */
     min: number
     /** Minimum port range (defaults to 65535) */
     max: number
   }
+  /** When true (default), the first available port in the port range will be used for all connections, instead of assigning a new port for each connection. */
+  multiplex?: boolean
 }
 
 export interface ClientOptions {

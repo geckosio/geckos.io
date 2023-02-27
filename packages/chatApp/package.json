@@ -1,7 +1,7 @@
 {
   "name": "chat-app",
   "description": "Real-time client/server communication over UDP using WebRTC and Node.js",
-  "version": "2.2.3",
+  "version": "2.3.0",
   "main": "dist",
   "type": "module",
   "private": true,
@@ -38,8 +38,8 @@
     "lib": "lib"
   },
   "dependencies": {
-    "@geckos.io/client": "^2.2.3",
-    "@geckos.io/server": "^2.2.3"
+    "@geckos.io/client": "^2.3.0",
+    "@geckos.io/server": "^2.3.0"
   },
   "funding": {
     "url": "https://github.com/sponsors/yandeu"

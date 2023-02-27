@@ -62,7 +62,8 @@ export default class ConnectionsManagerServer {
       iceTransportPolicy = 'all',
       bindAddress = undefined,
       maxPacketLifeTime = undefined,
-      maxRetransmits = 0
+      maxRetransmits = 0,
+      multiplex = true
     } = this.options
 
     // DataChannel configuration
@@ -79,12 +80,16 @@ export default class ConnectionsManagerServer {
       // sdpSemantics: 'unified-plan',
       iceTransportPolicy: iceTransportPolicy,
       iceServers: iceServers.map(ice => ice.urls as string),
-      bindAddress: bindAddress
+      bindAddress: bindAddress,
+      enableIceUdpMux: multiplex
     }
 
     // portRange is a nonstandard API
-    if (portRange?.min && portRange?.max)
+    if (portRange?.min && portRange?.max) {
+      portRange.min = Math.max(portRange.min, 1025)
+      portRange.max = Math.min(portRange.max, 65535)
       rtc_config = { ...rtc_config, portRangeBegin: portRange.min, portRangeEnd: portRange.max }
+    }
 
     // create the webrtc connection
     const connection = new WebRTCConnection(newId, rtc_config, this.connections, userData)
@@ -100,8 +105,6 @@ export default class ConnectionsManagerServer {
         await this.deleteConnection(connection, state)
       }
     })
-
-    this.connections.set(connection.id, connection)
 
     let gatheringState
     let localDescription
@@ -137,6 +140,9 @@ export default class ConnectionsManagerServer {
     }
 
     const { id } = connection
+    if (!id) return { status: 500 }
+
+    this.connections.set(id, connection)
 
     return {
       connection: {

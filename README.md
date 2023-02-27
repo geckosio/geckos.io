@@ -11,8 +11,8 @@
 #### _Geckos&#46;io fits perfectly with your next HTML5 real-time multiplayer games or chat app._
 
 [![NPM version](https://img.shields.io/npm/v/@geckos.io/server.svg?style=flat-square)](https://www.npmjs.com/package/@geckos.io/server)
-[![Github Workflow](https://img.shields.io/github/workflow/status/geckosio/geckos.io/CI/master?label=build&logo=github&style=flat-square)](https://github.com/geckosio/geckos.io/actions?query=workflow%3ACI)
-[![Github Workflow](https://img.shields.io/github/workflow/status/geckosio/geckos.io/CodeQL/master?label=CodeQL&logo=github&style=flat-square)](https://github.com/geckosio/geckos.io/actions?query=workflow%3ACodeQL)
+[![Github Workflow](https://img.shields.io/github/actions/workflow/status/geckosio/geckos.io/main.yml?branch=master&label=build&logo=github&style=flat-square)](https://github.com/geckosio/geckos.io/actions?query=workflow%3ACI)
+[![Github Workflow](https://img.shields.io/github/actions/workflow/status/geckosio/geckos.io/codeql-analysis.yml?branch=master&label=CodeQL&logo=github&style=flat-square)](https://github.com/geckosio/geckos.io/actions?query=workflow%3ACodeQL)
 [![Downloads](https://img.shields.io/npm/dm/@geckos.io/server.svg?style=flat-square)](https://www.npmjs.com/package/@geckos.io/server)
 ![Node version](https://img.shields.io/node/v/@geckos.io/server.svg?style=flat-square)
 [![Codecov](https://img.shields.io/codecov/c/github/geckosio/geckos.io?logo=codecov&style=flat-square)](https://codecov.io/gh/geckosio/geckos.io)
@@ -37,6 +37,13 @@ Geckos.io is now shipped as ECMAScript modules and will only support `Node.js ^1
 ```
 
 Want to know more? Join the [discussions](https://github.com/geckosio/geckos.io/discussions)!
+
+## Who should NOT use this library?
+
+- People who have never build a multiplayer game, should probably use a library like socket&#46;io instead, since there are way more examples/tutorial available.  
+  Socket&#46;io and geckos&#46;io use a similar API. The switch from socket&#46;io to geckos&#46;io should be easy.
+
+- People who have no experiences setting up their own servers with UDP port forwarding, should probably look for a simple solution like websocket, although it is slower.
 
 ## Menu
 
@@ -79,6 +86,20 @@ _Btw, make sure you also check out [enable3d.io](https://enable3d.io/)._
 ---
 
 ## Changelog
+
+### New in version 2.3.0
+
+#### Multiplexing
+
+When true (default), the first available port in the port range will be used for all connections, instead of assigning a new port for each connection.  
+_Thanks to @arthuro555 and @paullouisageneau._
+
+```js
+// server.js
+const io = geckos({
+  multiplex: true // default
+})
+```
 
 ### New in version 1.7.1
 
@@ -204,7 +225,7 @@ const io: GeckosServer = geckos({
    * @param request The incoming http request
    * @param response The outgoing http response
    */
-  authorization: async (auth: string | undefined, request: http.IncomingMessage, response: http.OutgoingMessage)) => {
+  authorization: async (auth: string | undefined, request: http.IncomingMessage, response: http.OutgoingMessage) => {
     const token = auth.split(' ') // ['Yannick', '12E45']
     const username = token[0] // 'Yannick'
     const password = token[1] // '12E45'
@@ -213,7 +234,10 @@ const io: GeckosServer = geckos({
     // ("request.headers['x-forwarded-for']" if your server is behind a proxy)
 
     // add a custom response header if you want
-    response.setHeader('www-authenticate', 'Bearer realm="example", error="invalid_token", error_description="The access token expired"')
+    response.setHeader(
+      'www-authenticate',
+      'Bearer realm="example", error="invalid_token", error_description="The access token expired"'
+    )
 
     // reach out to a database if needed (this code is completely fictitious)
     const user = await database.getByName(username)
@@ -371,8 +395,9 @@ import geckos from '@geckos.io/server'
  * @param options.maxRetransmits The maximum number of times the user agent should attempt to retransmit a message which fails the first time in unreliable mode. While this value is a16-bit unsigned number, each user agent may clamp it to whatever maximum it deems appropriate. Default: 0.
  * @param options.ordered Indicates whether or not messages sent on the RTCDataChannel are required to arrive at their destination in the same order in which they were sent (true), or if they're allowed to arrive out-of-order (false). Default: false.
  * @param options.portRange Custom port range for the WebRTC connection (available in >= v1.7.0)
+ * @param options.portRange.min Default: 1025
  * @param options.portRange.max Default: 65535
- * @param options.portRange.min Default: 0
+ * @param options.multiplex When true (default), the first available port in the port range will be used for all connections, instead of assigning a new port for each connection.
  */
 io = geckos(options)
 
@@ -564,9 +589,9 @@ server.listen(3000)
 
 ## Deployment
 
-You have to make sure you deploy it to a server which forwards all traffic on ports **9208/tcp** (or another port you define) and **0-65535/udp** to your application.
+You have to make sure you deploy it to a server which forwards all traffic on ports **9208/tcp** (or another port you define) and **1025-65535/udp** to your application.
 
-Port 9208/tcp (or another port you define) is used for the peer signaling. The peer connection itself will be on a random port between 0-65535/udp.
+Port 9208/tcp (or another port you define) is used for the peer signaling. The peer connection itself will be on a random port between 1025-65535/udp.
 
 ## ICE Servers
 
