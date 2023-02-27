@@ -60,6 +60,7 @@ export default class ConnectionsManagerServer {
       iceServers = [],
       portRange,
       iceTransportPolicy = 'all',
+      bindAddress = undefined,
       maxPacketLifeTime = undefined,
       maxRetransmits = 0,
       multiplex = true
@@ -79,6 +80,7 @@ export default class ConnectionsManagerServer {
       // sdpSemantics: 'unified-plan',
       iceTransportPolicy: iceTransportPolicy,
       iceServers: iceServers.map(ice => ice.urls as string),
+      bindAddress: bindAddress,
       enableIceUdpMux: multiplex
     }
 

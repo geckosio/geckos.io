@@ -32,6 +32,8 @@ export interface ServerOptions {
   iceServers?: RTCIceServer[]
   /** RTCIceTransportPolicy enum defines string constants which can be used to limit the transport policies of the ICE candidates to be considered during the connection process. */
   iceTransportPolicy?: RTCIceTransportPolicy
+  /** If defined, bind only to the given local address. Default: undefined */
+  bindAddress?: string
   /** A human-readable name for the channel. This string may not be longer than 65,535 bytes. Default: 'geckos.io'. */
   label?: string
   /** The maximum number of milliseconds that attempts to transfer a message may take in unreliable mode. While this value is a 16-bit unsigned number, each user agent may clamp it to whatever maximum it deems appropriate. Default: undefined. */
