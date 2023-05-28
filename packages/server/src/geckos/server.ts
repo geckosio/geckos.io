@@ -45,24 +45,10 @@ export class GeckosServer {
   listen(port: number = 9208) {
     this._port = port
 
-    // create the server
-    this.server = http.createServer()
-
-    // on server close event
-    const promises: Promise<void>[] = []
-    this.server.once('close', async () => {
-      for (const [_, connection] of Array.from(this.connectionsManager.connections)) {
-        promises.push(connection.close())
-      }
-      await Promise.all(promises)
-
-      await promiseWithTimeout(cleanup(), 2000)
-
-      bridge.removeAllListeners()
-    })
-
-    // add all routes
-    HttpServer(this.server, this.connectionsManager, this._cors)
+    // add a new server if not added already
+    if (!this.server) {
+      this.addServer(http.createServer())
+    }
 
     // start the server
     this.server.listen(port, () => {
