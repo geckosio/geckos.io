@@ -38,6 +38,18 @@ export class GeckosServer {
     return this.connectionsManager.connections
   }
 
+  private _onServerCloseEvent() {
+    const promises: Promise<void>[] = []
+    this.server.once('close', async () => {
+      for (const [_, connection] of Array.from(this.connectionsManager.connections)) {
+        promises.push(connection.close())
+      }
+      await Promise.all(promises)
+      await promiseWithTimeout(cleanup(), 2000)
+      bridge.removeAllListeners()
+    })
+  }
+
   /**
    * Make the server listen on a specific port.
    * @param port Default port is 9208.
@@ -49,17 +61,7 @@ export class GeckosServer {
     this.server = http.createServer()
 
     // on server close event
-    const promises: Promise<void>[] = []
-    this.server.once('close', async () => {
-      for (const [_, connection] of Array.from(this.connectionsManager.connections)) {
-        promises.push(connection.close())
-      }
-      await Promise.all(promises)
-
-      await promiseWithTimeout(cleanup(), 2000)
-
-      bridge.removeAllListeners()
-    })
+    this._onServerCloseEvent()
 
     // add all routes
     HttpServer(this.server, this.connectionsManager, this._cors)
@@ -78,18 +80,9 @@ export class GeckosServer {
     this.server = server
 
     // on server close event
-    const promises: Promise<void>[] = []
-    this.server.once('close', async () => {
-      for (const [_, connection] of Array.from(this.connectionsManager.connections)) {
-        promises.push(connection.close())
-      }
-      await Promise.all(promises)
+    this._onServerCloseEvent()
 
-      await promiseWithTimeout(cleanup(), 2000)
-
-      bridge.removeAllListeners()
-    })
-
+    // add all routes
     HttpServer(this.server, this.connectionsManager, this._cors)
   }
 
