@@ -331,7 +331,39 @@ io.onConnection(channel => {
 
 ## Troubleshooting
 
-Geckos does not run on `http://localhost:PORT/`? Try `http://127.0.0.1:PORT/` instead.
+- Geckos does not run on `http://localhost:PORT/`? Try `http://127.0.0.1:PORT/` instead.
+- If server listener is listening but never establishes a connection, that might be due to your machine not exposing OPENSSL environment variables (see https://github.com/geckosio/geckos.io/pull/260). To add them try the following:
+
+<details>
+<summary>Exposing OPENSSL environment variables</summary>
+
+1. Find the path to OpenSSL:
+
+```bash
+brew --prefix openssl
+```
+
+2. Set the environment variables. You can set the environment variables in your shell by adding the following lines to your shell profile file (usually ~/.bash_profile, ~/.bashrc, or ~/.zshrc for Zsh):
+
+```bash
+export OPENSSL_ROOT_DIR=/usr/local/opt/openssl@1.1
+export OPENSSL_CRYPTO_LIBRARY=/usr/local/opt/openssl@1.1/lib
+export OPENSSL_INCLUDE_DIR=/usr/local/opt/openssl@1.1/include
+```
+
+Replace `/usr/local/opt/openssl@1.1` with the path you got from the second step. Then, save the file and restart your terminal for the changes to take effect.
+
+3. Check that the environment variables are set (maybe you'll need to restart your terminal):
+
+```bash
+echo $OPENSSL_ROOT_DIR
+echo $OPENSSL_CRYPTO_LIBRARY
+echo $OPENSSL_INCLUDE_DIR
+```
+
+4. Done ✅
+
+</details>
 
 ## Cheatsheet
 
