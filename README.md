@@ -332,7 +332,7 @@ io.onConnection(channel => {
 ## Troubleshooting
 
 - Geckos does not run on `http://localhost:PORT/`? Try `http://127.0.0.1:PORT/` instead.
-- If server listener is listening but never establishes a connection, that might be due to your machine not exposing OPENSSL environment variables. To add them try the following:
+- If server listener is listening but never establishes a connection, that might be due to your machine not exposing OPENSSL environment variables (see https://github.com/geckosio/geckos.io/pull/260). To add them try the following:
 
 <details>
 <summary>Exposing OPENSSL environment variables</summary>
