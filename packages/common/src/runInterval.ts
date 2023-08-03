@@ -18,4 +18,4 @@ const runInterval = (interval: number = 200, runs: number = 1, cb: Function) => 
   cb()
 }
 
-export default runInterval
+export { runInterval}
