@@ -1,10 +1,7 @@
 /* eslint-disable sort-imports */
-import { jest } from '@jest/globals'
-import { express, Static } from 'express6'
-import geckos from '../../packages/server/lib/index.js'
-import path from 'path'
-
-import { __dirname } from './_dirname.js'
+const { express, Static } = require('express6')
+const geckos = require('../../packages/server/cjs/index.js').default
+const path = require('path')
 
 const io = geckos()
 const app = express()
