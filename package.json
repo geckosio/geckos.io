@@ -18,7 +18,7 @@
     "build:client": "tsc --build packages/client/tsconfig.json",
     "build:server": "tsc --build packages/server/tsconfig.json",
     "build:cjs": "tsc --build packages/common/tsconfig.cjs.json && node ./scripts/changeImports.mjs && tsc --build packages/server/tsconfig.cjs.json && node ./scripts/changeImports.mjs --reverse && node ./scripts/packageType.mjs",
-    "build": "npm run clear && npm run build:common && npm run build:client && npm run build:server",
+    "build": "npm run clear && npm run build:common && npm run build:client && npm run build:server && npm run build:cjs",
     "publish": "npm-run-all build publish:*",
     "publish:common": "cd packages/common/ && npm publish",
     "publish:server": "cd packages/server/ && npm publish",
