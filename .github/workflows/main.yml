@@ -19,9 +19,9 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     strategy:
-      max-parallel: 1
+      max-parallel: 2
       matrix:
-        node-version: [16, 17, 18, 19]
+        node-version: [16, 18, 17, 19]
         os: [ubuntu-latest]
 
     steps:
@@ -32,10 +32,10 @@ jobs:
           sudo apt-get install -y libgbm-dev
 
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
 
