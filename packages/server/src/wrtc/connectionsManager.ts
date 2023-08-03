@@ -4,7 +4,7 @@ import type { IncomingMessage, OutgoingMessage } from 'http'
 import { pause, promiseWithTimeout } from '../deps.js'
 import CreateDataChannel from '../geckos/channel.js'
 import WebRTCConnection from './webrtcConnection.js'
-import {makeRandomId} from '../deps.js'
+import { makeRandomId } from '../deps.js'
 
 export default class ConnectionsManagerServer {
   connections: Map<ChannelId, WebRTCConnection> = new Map()
@@ -78,7 +78,7 @@ export default class ConnectionsManagerServer {
     let rtc_config: RtcConfig = {
       // sdpSemantics: 'unified-plan',
       iceTransportPolicy: iceTransportPolicy,
-      iceServers: iceServers.map((ice:any) => ice.urls as string),
+      iceServers: iceServers.map((ice: any) => ice.urls as string),
       bindAddress: bindAddress,
       enableIceUdpMux: multiplex
     }
