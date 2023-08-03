@@ -1,6 +1,6 @@
-import { ChannelId, Data, RawMessage } from '@geckos.io/common/lib/types.js'
+import { ChannelId, Data, RawMessage } from './deps.js'
 import server, { GeckosServer, ServerChannel } from './geckos/server.js'
-import iceServers from '@geckos.io/common/lib/iceServers.js'
+import { iceServers } from './deps.js'
 
 export default server
 export { server as geckos, iceServers }

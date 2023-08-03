@@ -41,4 +41,4 @@ const ParseMessage = (ev: MessageEvent) => {
   return { key: 'error', data: new Error(ERRORS.COULD_NOT_PARSE_MESSAGE) }
 }
 
-export default ParseMessage
+export { ParseMessage }

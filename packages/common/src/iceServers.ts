@@ -9,4 +9,4 @@ const defaultIceServers: RTCIceServer[] = [
   { urls: 'stun:stun4.l.google.com:19302' }
 ]
 
-export default defaultIceServers
+export { defaultIceServers }

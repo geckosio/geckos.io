@@ -1,10 +1,10 @@
 import { PeerConnection, RtcConfig, cleanup } from './nodeDataChannel.js'
 import { closeDataChannel, closePeerConnection, createPeerConnection } from './nodeDataChannel.js'
 import Channel from '../geckos/channel.js'
-import { ChannelId } from '@geckos.io/common/lib/types.js'
-import { EVENTS } from '@geckos.io/common/lib/constants.js'
+import { ChannelId } from '../deps.js'
+import { EVENTS } from '../deps.js'
 import EventEmitter from 'events'
-import { promiseWithTimeout } from '@geckos.io/common/lib/helpers.js'
+import { promiseWithTimeout } from '../deps.js'
 
 // strangely something it takes a long time
 // so I set it to 10 seconds

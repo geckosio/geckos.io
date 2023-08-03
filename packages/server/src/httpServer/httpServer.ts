@@ -1,7 +1,7 @@
 import type { IncomingMessage, Server, ServerResponse } from 'http'
 import { additionalCandidates, close, connection, remoteDescription } from './routes.js'
 import ConnectionsManagerServer from '../wrtc/connectionsManager.js'
-import { CorsOptions } from '@geckos.io/common/lib/types.js'
+import { CorsOptions } from '../deps.js'
 import SetCORS from './setCors.js'
 import { sendStatus } from './helpers.js'
 

@@ -1,14 +1,14 @@
-import * as Types from '@geckos.io/common/lib/types.js'
+import { Types } from '../deps.js'
 import ConnectionsManagerServer from '../wrtc/connectionsManager.js'
-import { EVENTS } from '@geckos.io/common/lib/constants.js'
+import { EVENTS } from '../deps.js'
 import HttpServer from '../httpServer/httpServer.js'
 import ServerChannel from './channel.js'
 import WebRTCConnection from '../wrtc/webrtcConnection.js'
-import bridge from '@geckos.io/common/lib/bridge.js'
+import { bridge } from '../deps.js'
 import { cleanup } from '../wrtc/nodeDataChannel.js'
 import http from 'http'
-import { makeReliable } from '@geckos.io/common/lib/reliableMessage.js'
-import { promiseWithTimeout } from '@geckos.io/common/lib/helpers.js'
+import { makeReliable } from '../deps.js'
+import { promiseWithTimeout } from '../deps.js'
 
 export class GeckosServer {
   public connectionsManager: ConnectionsManagerServer

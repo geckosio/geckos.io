@@ -1,12 +1,12 @@
-import * as Types from '@geckos.io/common/lib/types.js'
-import { ERRORS, EVENTS } from '@geckos.io/common/lib/constants.js'
+import { Types } from '../deps.js'
+import { ERRORS, EVENTS } from '../deps.js'
 import type { DataChannel } from '../wrtc/nodeDataChannel.js'
 import { Events } from '@yandeu/events'
-import ParseMessage from '@geckos.io/common/lib/parseMessage.js'
-import SendMessage from '@geckos.io/common/lib/sendMessage.js'
+import { ParseMessage } from '../deps.js'
+import { SendMessage } from '../deps.js'
 import WebRTCConnection from '../wrtc/webrtcConnection.js'
-import bridge from '@geckos.io/common/lib/bridge.js'
-import { makeReliable } from '@geckos.io/common/lib/reliableMessage.js'
+import { bridge } from '../deps.js'
+import { makeReliable } from '../deps.js'
 
 export default class ServerChannel {
   public autoManageBuffering: boolean
