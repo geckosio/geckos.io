@@ -21,7 +21,7 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        node-version: [16, 17, 18, 19]
+        node-version: [16, 18, 20]
         os: [ubuntu-latest]
 
     steps:
