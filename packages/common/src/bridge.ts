@@ -33,4 +33,4 @@ export class Bridge {
 
 const bridge = new Bridge()
 
-export default bridge
+export { bridge }

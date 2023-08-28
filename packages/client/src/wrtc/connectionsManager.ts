@@ -1,7 +1,7 @@
 import { ChannelId, Data, EventName, RawMessage } from '@geckos.io/common/lib/types.js'
 import { Bridge } from '@geckos.io/common/lib/bridge.js'
-import ParseMessage from '@geckos.io/common/lib/parseMessage.js'
-import SendMessage from '@geckos.io/common/lib/sendMessage.js'
+import { ParseMessage } from '@geckos.io/common/lib/parseMessage.js'
+import { SendMessage } from '@geckos.io/common/lib/sendMessage.js'
 
 interface RTCRemotePeerConnection {
   id: ChannelId

@@ -45,4 +45,4 @@ const SendMessage = (
   }
 }
 
-export default SendMessage
+export { SendMessage }

@@ -19,7 +19,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     strategy:
-      max-parallel: 1
+      max-parallel: 2
       matrix:
         node-version: [16, 18, 20]
         os: [ubuntu-latest]
@@ -32,10 +32,10 @@ jobs:
           sudo apt-get install -y libgbm-dev
 
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -45,14 +45,23 @@ jobs:
       - name: Build Packages
         run: npm run build
 
-      - name: Run Tests
-        run: npm test
+      - name: Run Tests (mjs)
+        run: |
+          npm run build-client-bundle
+          npm run test:mjs
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+
+      - name: Run Tests (cjs)
+        run: |
+          npm run test:cjs
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
 
       - name: Run ESLint
         run: npm run lint
 
       - name: Run Prettier
         run: npm run format
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2

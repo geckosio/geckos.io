@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="/.tmp/geckos.io-client.latest.min.js"></script>
+  </head>
+  <body>
+    <script>
+      'use strict'
+
+      var channel = geckos({ port: 5302 })
+
+      channel.onConnect(error => {
+        if (error) {
+          console.error(error.message)
+          return
+        }
+
+        channel.on('chat message 2', () => {
+          channel.emit('chat message 2', 'Hello 2')
+        })
+
+        // works without setTimeout locally, but not on github workflow :/
+        setTimeout(() => {
+          channel.emit('chat message 1', 'Hello 1')
+        })
+      })
+    </script>
+  </body>
+</html>

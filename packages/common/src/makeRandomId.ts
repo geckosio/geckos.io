@@ -7,4 +7,4 @@ const makeRandomId = (length: number = 24) => {
   return id
 }
 
-export default makeRandomId
+export { makeRandomId }
