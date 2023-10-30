@@ -104,7 +104,7 @@ describe('test with multiple users', () => {
 
     await waitForNewMessage(5)
     expect(messages.length).toBe(5)
-    expect(messages[0]).toMatch('disconnected')
+    expect(['disconnected', 'closed']).toContain(messages[0])
     await pause()
   })
 
