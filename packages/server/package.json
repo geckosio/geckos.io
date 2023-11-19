@@ -36,7 +36,7 @@
     "lib": "lib"
   },
   "engines": {
-    "node": "^14.15 || >=16"
+    "node": ">=16"
   },
   "scripts": {
     "build": "tsc --build tsconfig.json",
@@ -45,7 +45,7 @@
   "dependencies": {
     "@geckos.io/common": "^2.3.2",
     "@yandeu/events": "0.0.6",
-    "node-datachannel": "0.5.0"
+    "node-datachannel": "0.5.1"
   },
   "funding": {
     "url": "https://github.com/sponsors/yandeu"
