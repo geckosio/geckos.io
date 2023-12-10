@@ -22,9 +22,11 @@
 
 ---
 
-# :mega: Version 2 Available!
+## :mega: Version 3 Available!
 
-👉🏻 [Tweet about it!](http://twitter.com/share?text=geckos.io%20v2.0.0%20is%20now%20finally%20available!&url=https://github.com/geckosio/geckos.io)
+Version 3 of geckos.io is based on [node-datachannel@0.5.x](https://www.npmjs.com/package/node-datachannel) and only supports **ESM** and **Node.js >=16**. There are no other breaking changes.
+
+## Version 2
 
 Version 2 has huge performance improvements. I switched from [wrtc](https://www.npmjs.com/package/wrtc) to [node-datachannel](https://www.npmjs.com/package/node-datachannel), which is much lighter and faster compared to wrtc.
 
@@ -37,6 +39,8 @@ Geckos.io is now shipped as ECMAScript modules and will only support `Node.js ^1
 ```
 
 Want to know more? Join the [discussions](https://github.com/geckosio/geckos.io/discussions)!
+
+---
 
 ## Who should NOT use this library?
 
