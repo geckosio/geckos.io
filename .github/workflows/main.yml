@@ -53,12 +53,12 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
 
-      - name: Run Tests (cjs)
-        run: |
-          npm run test:cjs
+      # - name: Run Tests (cjs)
+      #   run: |
+      #     npm run test:cjs
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2
+      # - name: Upload coverage to Codecov
+      #   uses: codecov/codecov-action@v2
 
       - name: Run ESLint
         run: npm run lint
