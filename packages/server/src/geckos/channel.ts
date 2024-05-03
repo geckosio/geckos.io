@@ -38,7 +38,7 @@ export default class ServerChannel {
     this.autoManageBuffering = autoManageBuffering
 
     this.dataChannel.onOpen(() => {
-      this.dataChannel.onMessage(msg => {
+      this.dataChannel.onMessage((msg: any) => {
         const { key, data } = ParseMessage(msg as any)
         this.eventEmitter.emit(key, data)
       })
@@ -67,7 +67,7 @@ export default class ServerChannel {
    */
   onDisconnect(callback: Types.DisconnectEventCallbackServer) {
     this.eventEmitter.on(EVENTS.DISCONNECT, (connectionState: 'disconnected' | 'failed' | 'closed') => {
-      const cb: Types.DisconnectEventCallbackServer = connectionState => callback(connectionState)
+      const cb: Types.DisconnectEventCallbackServer = (connectionState: any) => callback(connectionState)
       cb(connectionState)
     })
   }

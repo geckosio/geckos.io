@@ -96,7 +96,7 @@ export default class ConnectionsManagerServer {
 
     if (!pc) return { status: 500 }
 
-    pc.onStateChange(async state => {
+    pc.onStateChange(async (state: string) => {
       // keep track of the maxMessageSize
       if (state === 'connected') connection.channel.maxMessageSize = +connection.channel.dataChannel.maxMessageSize()
 
@@ -109,20 +109,20 @@ export default class ConnectionsManagerServer {
     let localDescription
     const candidates = []
 
-    pc.onDataChannel(dc => {
+    pc.onDataChannel((dc: any) => {
       // TODO(yandeu) This does not work :/
       console.log('Peer1 Got DataChannel: ', dc.getLabel())
     })
 
-    pc.onGatheringStateChange(state => {
+    pc.onGatheringStateChange((state: string) => {
       gatheringState = state
     })
 
-    pc.onLocalDescription((sdp, type) => {
+    pc.onLocalDescription((sdp: any, type: any) => {
       localDescription = { sdp, type }
     })
 
-    pc.onLocalCandidate((candidate, mid) => {
+    pc.onLocalCandidate((candidate: any, mid: any) => {
       // @ts-ignore
       connection.additionalCandidates.push({ candidate, sdpMid: mid })
       candidates.push({ candidate, mid })
