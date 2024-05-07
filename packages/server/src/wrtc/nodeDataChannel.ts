@@ -1,6 +1,6 @@
 /* eslint-disable sort-imports */
-import ndc from 'node-datachannel'
-import type { DataChannel, DataChannelInitConfig, PeerConnection, RtcConfig } from 'node-datachannel'
+import { PeerConnection, cleanup as ndc_cleanup } from 'node-datachannel'
+import type { DataChannel, DataChannelInitConfig, RtcConfig } from 'node-datachannel'
 export type { DataChannel, DataChannelInitConfig, PeerConnection, RtcConfig }
 
 export const wait = (ms: number = 1000): Promise<void> => {
@@ -30,7 +30,7 @@ export const createDataChannel = (
 export const createPeerConnection = (peerName: string, config: RtcConfig): Promise<PeerConnection> => {
   return new Promise((resolve, reject) => {
     try {
-      const peerConnection = new ndc.PeerConnection(peerName, config)
+      const peerConnection = new PeerConnection(peerName, config)
       resolve(peerConnection)
     } catch (err) {
       reject(err)
@@ -63,7 +63,7 @@ export const closeDataChannel = (dataChannel: DataChannel): Promise<void> => {
 export const cleanup = (): Promise<void> => {
   return new Promise(resolve => {
     try {
-      ndc.cleanup()
+      ndc_cleanup()
       resolve()
     } catch (err) {
       resolve()
