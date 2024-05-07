@@ -5,9 +5,19 @@ import http from 'http'
 import path from 'path'
 
 import { __dirname } from './_dirname.js'
+import { sleep, serverListenPromise, kill } from '../helpers.js'
 
 const app = express()
+
 const server = http.createServer(app)
+const sockets = new Set()
+server.on('connection', socket => {
+  sockets.add(socket)
+  server.once('close', () => {
+    sockets.delete(socket)
+  })
+})
+
 let theToken
 const io = geckos({
   authorization: async token => {
@@ -19,21 +29,23 @@ const io = geckos({
 app.use('/', Static(path.join(__dirname, '../')))
 
 io.addServer(server)
-server.listen(4000)
+await serverListenPromise(server, 4001)
 
 io.onConnection(ch => {})
 
 describe('connection', () => {
-  test('should have no connection', done => {
+  test('should have no connection', async () => {
     let connections = 0
+
     io.onConnection(ch => {
       connections++
     })
 
-    setTimeout(() => {
-      expect(connections).toBe(0)
-      done()
-    }, 1000)
+    await page.goto('http://localhost:4001/e2e/unauthorized.html', { timeout: 2000 })
+
+    await sleep(2000)
+
+    expect(connections).toBe(0)
   })
 })
 
@@ -43,18 +55,6 @@ describe('unauthorized', () => {
   })
 })
 
-page.goto('http://localhost:4000/e2e/unauthorized.html')
-
 afterAll(async () => {
-  const close = () => {
-    return new Promise(resolve => {
-      server.close(() => {
-        resolve()
-      })
-    })
-  }
-
-  await close()
-  // await page.close()
-  // await browser.close()
+  await kill(server, sockets)
 })
