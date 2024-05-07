@@ -41,7 +41,7 @@ export const createPeerConnection = (peerName: string, config: RtcConfig): Promi
 export const closePeerConnection = (peerConnection: PeerConnection): Promise<void> => {
   return new Promise(resolve => {
     if (peerConnection) {
-      peerConnection.destroy()
+      peerConnection.close()
       resolve()
     } else {
       resolve()
