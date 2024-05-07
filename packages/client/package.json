@@ -36,7 +36,7 @@
     "lib": "lib"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=18"
   },
   "scripts": {
     "bundle": "npm run bundle:version",
