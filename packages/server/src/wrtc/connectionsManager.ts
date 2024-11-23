@@ -69,9 +69,7 @@ export default class ConnectionsManagerServer {
     const dc_config: DataChannelInitConfig = {
       maxPacketLifeTime,
       maxRetransmits,
-      reliability: {
-        unordered: !ordered
-      }
+      unordered: !ordered
     }
 
     // WebRTCConnection configuration
