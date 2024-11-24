@@ -9,6 +9,7 @@
 /lib
 /node_modules
 /output
+/packages/**/*.tsbuildinfo
 /packages/chatApp/dist
 /packages/chatApp/lib
 bundles/test*
