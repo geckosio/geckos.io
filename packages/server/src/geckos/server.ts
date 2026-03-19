@@ -118,13 +118,23 @@ export class GeckosServer {
    */
   room(roomId: Types.RoomId = undefined) {
     return {
-      emit: (eventName: Types.EventName, data: Types.Data) => {
+      emit: (eventName: Types.EventName, data: Types.Data, options?: Types.EmitOptions) => {
         this.connections.forEach((connection: WebRTCConnection) => {
           const { channel } = connection
           const { roomId: channelRoomId } = channel
 
           if (roomId === channelRoomId) {
-            channel.emit(eventName, data)
+            if (options && options.reliable) {
+              makeReliable(options, (id: string) =>
+                channel.emit(eventName, {
+                  MESSAGE: data,
+                  RELIABLE: 1,
+                  ID: id
+                })
+              )
+            } else {
+              channel.emit(eventName, data)
+            }
           }
         })
       }
