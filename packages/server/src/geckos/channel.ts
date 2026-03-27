@@ -113,17 +113,7 @@ export default class ServerChannel {
           const { roomId } = channel
 
           if (roomId === this._roomId) {
-            if (options && options.reliable) {
-              makeReliable(options, (id: string) =>
-                channel.emit(eventName, {
-                  MESSAGE: data,
-                  RELIABLE: 1,
-                  ID: id
-                })
-              )
-            } else {
-              channel.emit(eventName, data)
-            }
+            channel.emit(eventName, data, options)
           }
         })
       }
@@ -144,17 +134,7 @@ export default class ServerChannel {
           const { roomId, id } = channel
 
           if (roomId === this._roomId && id !== this._id) {
-            if (options && options.reliable) {
-              makeReliable(options, (id: string) =>
-                channel.emit(eventName, {
-                  MESSAGE: data,
-                  RELIABLE: 1,
-                  ID: id
-                })
-              )
-            } else {
-              channel.emit(eventName, data)
-            }
+            channel.emit(eventName, data, options)
           }
         })
       }
