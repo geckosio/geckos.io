@@ -7,7 +7,6 @@ import WebRTCConnection from '../wrtc/webrtcConnection.js'
 import { bridge } from '../deps.js'
 import { cleanup } from '../wrtc/nodeDataChannel.js'
 import http from 'http'
-import { makeReliable } from '../deps.js'
 import { promiseWithTimeout } from '../deps.js'
 
 export class GeckosServer {
@@ -99,16 +98,7 @@ export class GeckosServer {
   emit(eventName: Types.EventName, data: Types.Data, options?: Types.EmitOptions) {
     this.connections.forEach((connection: WebRTCConnection) => {
       const { channel } = connection
-
-      if (options && options.reliable) {
-        makeReliable(options, (id: string) =>
-          channel.emit(eventName, {
-            MESSAGE: data,
-            RELIABLE: 1,
-            ID: id
-          })
-        )
-      } else channel.emit(eventName, data)
+      channel.emit(eventName, data, options)
     })
   }
 
@@ -118,13 +108,13 @@ export class GeckosServer {
    */
   room(roomId: Types.RoomId = undefined) {
     return {
-      emit: (eventName: Types.EventName, data: Types.Data) => {
+      emit: (eventName: Types.EventName, data: Types.Data, options?: Types.EmitOptions) => {
         this.connections.forEach((connection: WebRTCConnection) => {
           const { channel } = connection
           const { roomId: channelRoomId } = channel
 
           if (roomId === channelRoomId) {
-            channel.emit(eventName, data)
+            channel.emit(eventName, data, options)
           }
         })
       }
