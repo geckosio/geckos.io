@@ -55,6 +55,52 @@ describe('connection', () => {
         reliable: true
       })
     })
+
+    test('should send reliable messages (to specific room via io.room()) back and forth', done => {
+      channel.on('reliable-message-io-room', data => {
+        expect(data).toBe('hello io room back')
+        done()
+      })
+      io.room(channel.roomId).emit('reliable-message-io-room', 'hello io room', {
+        reliable: true
+      })
+    })
+
+    test('server-to-client: should receive multiple raw copies but deduplicate to one', done => {
+      channel.on('server-dedup-result', data => {
+        console.log(`server-to-client: rawCount=${data.rawCount}, dedupCount=${data.dedupCount}`)
+        expect(data.rawCount).toBeGreaterThan(1)
+        expect(data.dedupCount).toBe(1)
+        done()
+      })
+      channel.emit('server-dedup-test', 'ping', { reliable: true })
+    })
+
+    test('client-to-server: should receive multiple raw copies but deduplicate to one', done => {
+      let rawCount = 0
+      let dedupCount = 0
+
+      // count every raw arrival (before deduplication)
+      channel.eventEmitter.on('dedup-count-test', () => {
+        rawCount++
+      })
+
+      // count deduplicated arrivals
+      channel.on('dedup-count-test', () => {
+        dedupCount++
+      })
+
+      // tell the client to send a reliable message back
+      channel.emit('dedup-count-test', 'go')
+
+      // wait for all retransmissions to arrive (10 runs × 150ms = ~1.5s)
+      setTimeout(() => {
+        console.log(`client-to-server: rawCount=${rawCount}, dedupCount=${dedupCount}`)
+        expect(rawCount).toBeGreaterThan(1)
+        expect(dedupCount).toBe(1)
+        done()
+      }, 2500)
+    })
   })
 })
 

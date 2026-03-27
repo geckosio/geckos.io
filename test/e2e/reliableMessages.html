@@ -1,41 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <script src="/.tmp/geckos.io-client.latest.min.js"></script>
-  </head>
-  <body>
-    <script>
-      'use strict'
 
-      var channel = geckos({ port: 5400 })
+<head>
+  <script src="/.tmp/geckos.io-client.latest.min.js"></script>
+</head>
 
-      channel.onConnect(error => {
-        if (error) {
-          console.error(error.message)
-          return
-        }
+<body>
+  <script>
+    'use strict'
 
-        channel.on('reliable-message', data => {
-          if (data === 'hello')
-            channel.emit('reliable-message', 'hello back', {
-              reliable: true
-            })
-        })
+    var channel = geckos({ port: 5400 })
 
-        channel.on('reliable-message-room', data => {
-          if (data === 'hello room')
-            channel.emit('reliable-message-room', 'hello room back', {
-              reliable: true
-            })
-        })
+    channel.onConnect(error => {
+      if (error) {
+        console.error(error.message)
+        return
+      }
 
-        channel.on('reliable-message-global', data => {
-          if (data === 'hello global')
-            channel.emit('reliable-message-global', 'hello global back', {
-              reliable: true
-            })
-        })
+      channel.on('reliable-message', data => {
+        if (data === 'hello')
+          channel.emit('reliable-message', 'hello back', {
+            reliable: true
+          })
       })
-    </script>
-  </body>
+
+      channel.on('reliable-message-room', data => {
+        if (data === 'hello room')
+          channel.emit('reliable-message-room', 'hello room back', {
+            reliable: true
+          })
+      })
+
+      channel.on('reliable-message-global', data => {
+        if (data === 'hello global')
+          channel.emit('reliable-message-global', 'hello global back', {
+            reliable: true
+          })
+      })
+
+      channel.on('reliable-message-io-room', data => {
+        if (data === 'hello io room')
+          channel.emit('reliable-message-io-room', 'hello io room back', {
+            reliable: true
+          })
+      })
+
+      // server-to-client dedup test: count raw vs deduplicated arrivals
+      var serverDedupRawCount = 0
+      var serverDedupCount = 0
+      // raw arrivals (before deduplication) via the internal bridge
+      channel.bridge.on('server-dedup-test', function () {
+        serverDedupRawCount++
+      })
+      // deduplicated arrivals via channel.on()
+      channel.on('server-dedup-test', function () {
+        serverDedupCount++
+      })
+      // after 2s report both counts back to the server
+      setTimeout(function () {
+        if (serverDedupRawCount > 0) {
+          channel.emit('server-dedup-result', {
+            rawCount: serverDedupRawCount,
+            dedupCount: serverDedupCount
+          })
+        }
+      }, 2000)
+
+      // when server says 'go', client sends a reliable message back
+      // makeReliable will send it 10 times with the same ID
+      channel.on('dedup-count-test', function (data) {
+        if (data === 'go') {
+          channel.emit('dedup-count-test', 'counted', { reliable: true })
+        }
+      })
+    })
+  </script>
+</body>
+
 </html>
