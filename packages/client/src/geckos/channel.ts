@@ -12,8 +12,6 @@ export class ClientChannel {
   private bridge: Bridge
   private connectionsManager: ConnectionsManagerClient
   private peerConnection!: PeerConnection
-  // stores all reliable messages for about 15 seconds
-  private receivedReliableMessages: { id: string; timestamp: Date; expire: number }[] = []
   private url: string
 
   constructor(
@@ -140,29 +138,29 @@ export class ClientChannel {
    * @param callback The event callback.
    */
   on(eventName: Types.EventName, callback: Types.EventCallbackClient) {
+    // Every listener keeps its own list of reliable message ids for about 15
+    // seconds. A shared list would make the second listener of an event drop
+    // the message as a duplicate of the copy the first listener just got.
+    const expireTime = 15_000 // 15 seconds
+    const receivedReliableMessages: { id: string; expire: number }[] = []
+    const deleteExpiredReliableMessages = () => {
+      const currentTime = new Date().getTime()
+      for (let i = receivedReliableMessages.length - 1; i >= 0; i--) {
+        if (receivedReliableMessages[i].expire <= currentTime) receivedReliableMessages.splice(i, 1)
+      }
+    }
+
     this.bridge.on(eventName, (data: any) => {
       // check if message is reliable
       // and reject it if it has already been submitted
       const isReliableMessage: boolean = data && data.RELIABLE === 1 && data.ID !== 'undefined'
 
-      const expireTime = 15_000 // 15 seconds
-
-      const deleteExpiredReliableMessages = () => {
-        const currentTime = new Date().getTime()
-        this.receivedReliableMessages.forEach((msg, index, object) => {
-          if (msg.expire <= currentTime) {
-            object.splice(index, 1)
-          }
-        })
-      }
-
       if (isReliableMessage) {
         deleteExpiredReliableMessages()
 
-        if (this.receivedReliableMessages.filter(obj => obj.id === data.ID).length === 0) {
-          this.receivedReliableMessages.push({
+        if (!receivedReliableMessages.some(msg => msg.id === data.ID)) {
+          receivedReliableMessages.push({
             id: data.ID,
-            timestamp: new Date(),
             expire: new Date().getTime() + expireTime
           })
           callback(data.MESSAGE)

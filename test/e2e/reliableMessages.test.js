@@ -101,6 +101,30 @@ describe('connection', () => {
         done()
       }, 2500)
     })
+
+    test('client-to-server: every listener of an event gets a reliable message once', done => {
+      let first = 0
+      let second = 0
+      channel.on('two-listeners', () => first++)
+      channel.on('two-listeners', () => second++)
+
+      // tell the client to send a reliable message back
+      channel.emit('two-listeners-go', 'go')
+
+      setTimeout(() => {
+        expect(first).toBe(1)
+        expect(second).toBe(1)
+        done()
+      }, 2500)
+    })
+
+    test('server-to-client: every listener of an event gets a reliable message once', done => {
+      channel.on('two-listeners-result', data => {
+        expect(data).toEqual({ first: 1, second: 1 })
+        done()
+      })
+      channel.emit('two-listeners-down', 'ping', { reliable: true })
+    })
   })
 })
 

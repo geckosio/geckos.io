@@ -73,6 +73,25 @@
           channel.emit('dedup-count-test', 'counted', { reliable: true })
         }
       })
+
+      // two listeners for the same event must both get a reliable message
+      channel.on('two-listeners-go', function () {
+        channel.emit('two-listeners', 'counted', { reliable: true })
+      })
+      var twoListenersFirst = 0
+      var twoListenersSecond = 0
+      channel.on('two-listeners-down', function () {
+        twoListenersFirst++
+      })
+      channel.on('two-listeners-down', function () {
+        twoListenersSecond++
+        if (twoListenersSecond === 1) {
+          // wait for the retransmissions, then report
+          setTimeout(function () {
+            channel.emit('two-listeners-result', { first: twoListenersFirst, second: twoListenersSecond })
+          }, 2000)
+        }
+      })
     })
   </script>
 </body>
